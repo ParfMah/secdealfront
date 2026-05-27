@@ -651,74 +651,109 @@
 
     <!-- ═══════════════════════════════ SIMULATEUR ESCROW ════════ -->
     <section class="escrow-section" style="overflow-x: hidden">
-  <div class="container">
-    <div class="escrow-inner">
-      <div class="escrow-content reveal">
-        <div class="section-label">Transparence totale</div>
-        <h2 class="text-h2 mb-4">Calculez votre transaction en toute clarté</h2>
-        <p>
-          Frais dégressifs selon le montant. Dès 2,6% pour les petites transactions, jusqu'à 0,38% pour les grandes. Aucun frais caché.
-        </p>
-        </div>
+      <div class="container">
+        <div class="escrow-inner">
+          <div class="escrow-content reveal">
+            <div class="section-label">Transparence totale</div>
+            <h2 class="text-h2 mb-4">
+              Calculez votre transaction en toute clarté
+            </h2>
+            <p>
+              Frais dégressifs selon le montant. Dès 2,6% pour les petites
+              transactions, jusqu'à 0,38% pour les grandes. Aucun frais caché.
+            </p>
 
-      <div class="escrow-calc reveal" style="transition-delay: 0.15s">
-        <div class="calc-title">💰 Simulateur de transaction</div>
-        <div class="calc-form">
-          <div class="form-group">
-            <label class="form-label" for="calc-price">Prix du produit (€)</label>
-            <input type="number" id="calc-price" class="form-control" placeholder="Ex: 15000" min="0" step="100" />
-          </div>
-          <div class="form-group">
-            <label class="form-label" for="calc-acompte">Acompte (%)</label>
-            <select id="calc-acompte" class="form-control">
-              <option value="30">30%</option>
-              <option value="40">40%</option>
-              <option value="50" selected>50% (recommandé)</option>
-              <option value="60">60%</option>
-              <option value="70">70%</option>
-            </select>
-          </div>
+            <div class="escrow-list">
+              <div class="escrow-list-item">
+                <span class="escrow-check">✓</span> Fonds bloqués jusqu'à
+                confirmation de livraison
+              </div>
+              <div class="escrow-list-item">
+                <span class="escrow-check">✓</span> Acompte modulable entre 30%
+                et 70%
+              </div>
+              <div class="escrow-list-item">
+                <span class="escrow-check">✓</span> Frais dégressifs dès 2,6% —
+                parmi les plus bas du marché
+              </div>
+              <div class="escrow-list-item">
+                <span class="escrow-check">✓</span> Libération des fonds en
+                moins de 24h après confirmation
+              </div>
+            </div>
 
-          <div style="display: none;">
-            <input type="checkbox" id="idx-card" />
-            <input type="checkbox" id="idx-intl" />
-          </div>
-
-          <button type="button" id="calc-btn" class="btn btn--gold" style="width: 100%; justify-content: center">
-            Calculer →
-          </button>
-        </div>
-
-        <div class="calc-results" id="calc-results">
-          <div class="calc-row">
-            <span>Prix total</span><span class="calc-row-value" id="r-total">—</span>
-          </div>
-          <div class="calc-row">
-            <span>Acompte</span><span class="calc-row-value" id="r-acompte">—</span>
-          </div>
-          <div class="calc-row">
-            <span>Solde à la livraison</span><span class="calc-row-value" id="r-reste">—</span>
-          </div>
-          
-          <div class="calc-row" id="r-card-row" style="display: none;">
-            <span>Frais de carte</span><span class="calc-row-value" id="r-card">—</span>
-          </div>
-          <div class="calc-row" id="r-intl-row" style="display: none;">
-            <span>Frais International</span><span class="calc-row-value" id="r-intl">—</span>
+            <a href="/pages/how-it-works.html" class="btn btn--outline-white">
+              En savoir plus sur l'escrow →
+            </a>
           </div>
 
-          <div class="calc-row">
-            <span>Frais escrow <span id="r-fee-label-home" style="font-size: 11px; opacity: 0.7"></span></span>
-            <span class="calc-row-value" id="r-commission">—</span>
-          </div>
-          <div class="calc-row calc-row--total">
-            <span>Net pour le vendeur</span><span class="calc-row-value" id="r-net">—</span>
+          <div class="escrow-calc reveal" style="transition-delay: 0.15s">
+            <div class="calc-title">💰 Simulateur de transaction</div>
+            <div class="calc-form">
+              <div class="form-group">
+                <label class="form-label" for="calc-price"
+                  >Prix du produit (€)</label
+                >
+                <input
+                  type="number"
+                  id="calc-price"
+                  class="form-control"
+                  placeholder="Ex: 15000"
+                  min="0"
+                  step="100"
+                />
+              </div>
+              <div class="form-group">
+                <label class="form-label" for="calc-acompte">Acompte (%)</label>
+                <select id="calc-acompte" class="form-control">
+                  <option value="30">30%</option>
+                  <option value="40">40%</option>
+                  <option value="50" selected>50% (recommandé)</option>
+                  <option value="60">60%</option>
+                  <option value="70">70%</option>
+                </select>
+              </div>
+              <button
+                type="button"
+                id="calc-btn"
+                class="btn btn--gold"
+                onclick="idxCalc()"
+                style="width: 100%; justify-content: center"
+              >
+                Calculer →
+              </button>
+            </div>
+            <div class="calc-results" id="calc-results">
+              <div class="calc-row">
+                <span>Prix total</span
+                ><span class="calc-row-value" id="r-total">—</span>
+              </div>
+              <div class="calc-row">
+                <span>Acompte</span
+                ><span class="calc-row-value" id="r-acompte">—</span>
+              </div>
+              <div class="calc-row">
+                <span>Solde à la livraison</span
+                ><span class="calc-row-value" id="r-reste">—</span>
+              </div>
+              <div class="calc-row">
+                <span
+                  >Frais escrow
+                  <span
+                    id="r-fee-label-home"
+                    style="font-size: 11px; opacity: 0.7"
+                  ></span></span
+                ><span class="calc-row-value" id="r-commission">—</span>
+              </div>
+              <div class="calc-row calc-row--total">
+                <span>Net pour le vendeur</span
+                ><span class="calc-row-value" id="r-net">—</span>
+              </div>
+            </div>
           </div>
         </div>
       </div>
-    </div>
-  </div>
-</section>
+    </section>
 
     <!-- ══════════════════════════════════════ MENTIONS LÉGALES ══ -->
     <section style="background: var(--color-dark); padding: 40px 0">
@@ -1075,109 +1110,78 @@
       // ─── CALCULATEUR ESCROW (nouveau pricing dynamique) ─────────
       var idxLevel = "standard";
 
-window.idxSetLevel = function (lv) {
-  idxLevel = lv;
-  var s = document.getElementById("idx-std");
-  var n = document.getElementById("idx-cnc");
-  if (s && n) {
-    if (lv === "standard") {
-      s.style.background = "linear-gradient(135deg,#1a1400,#2a2100)";
-      s.style.color = "var(--color-gold)";
-      s.style.border = "1px solid rgba(201,162,39,0.25)";
-      n.style.background = "transparent";
-      n.style.color = "rgba(255,255,255,0.35)";
-      n.style.border = "none";
-    } else {
-      n.style.background = "linear-gradient(135deg,#0d001a,#1a0030)";
-      n.style.color = "#A78BFA";
-      n.style.border = "1px solid rgba(167,139,250,0.25)";
-      s.style.background = "transparent";
-      s.style.color = "rgba(255,255,255,0.35)";
-      s.style.border = "none";
-    }
-  }
-  idxCalc();
-};
+      window.idxSetLevel = function (lv) {
+        idxLevel = lv;
+        var s = document.getElementById("idx-std");
+        var n = document.getElementById("idx-cnc");
+        if (lv === "standard") {
+          s.style.background = "linear-gradient(135deg,#1a1400,#2a2100)";
+          s.style.color = "var(--color-gold)";
+          s.style.border = "1px solid rgba(201,162,39,0.25)";
+          n.style.background = "transparent";
+          n.style.color = "rgba(255,255,255,0.35)";
+          n.style.border = "none";
+        } else {
+          n.style.background = "linear-gradient(135deg,#0d001a,#1a0030)";
+          n.style.color = "#A78BFA";
+          n.style.border = "1px solid rgba(167,139,250,0.25)";
+          s.style.background = "transparent";
+          s.style.color = "rgba(255,255,255,0.35)";
+          s.style.border = "none";
+        }
+        idxCalc();
+      };
 
-window.idxCalc = function () {
-  var priceInput = document.getElementById("calc-price");
-  if (!priceInput) return;
-  
-  var price = parseFloat(priceInput.value);
-  if (!price || price <= 0) return;
+      window.idxCalc = function () {
+        var price = parseFloat(document.getElementById("calc-price").value);
+        if (!price || price <= 0) return;
+        var P = window.SecureDealPricing;
+        if (!P) return;
+        var result = P.compute({
+          amount: price,
+          level: idxLevel,
+          paymentMethod: document.getElementById("idx-card").checked
+            ? "card_paypal"
+            : "transfer",
+          isInternational: document.getElementById("idx-intl").checked,
+          depositPct: parseInt(document.getElementById("calc-acompte").value),
+        });
+        if (!result || result.isQuote) {
+          document.getElementById("r-total").textContent =
+            "> 10 000 000 € — Sur devis";
+          return;
+        }
+        var feeLabel = result.fmt.rate;
+        if (result.minimumApplied) feeLabel += " ⚠ min.";
+        var fl = document.getElementById("r-fee-label-home");
+        if (fl) fl.textContent = "(" + feeLabel + ")";
+        document.getElementById("r-total").textContent = result.fmt.amount;
+        document.getElementById("r-commission").textContent =
+          result.fmt.baseFee;
+        document.getElementById("r-acompte").textContent = result.fmt.deposit;
+        document.getElementById("r-reste").textContent = result.fmt.balance;
+        document.getElementById("r-net").textContent = result.fmt.netToVendor;
+        // Carte
+        var cRow = document.getElementById("r-card-row");
+        if (result.cardFee > 0) {
+          document.getElementById("r-card").textContent =
+            "+ " + result.fmt.cardFee;
+          cRow.style.display = "";
+        } else {
+          cRow.style.display = "none";
+        }
+        // International
+        var iRow = document.getElementById("r-intl-row");
+        if (result.internationalFee > 0) {
+          document.getElementById("r-intl").textContent =
+            "+ " + result.fmt.internationalFee;
+          iRow.style.display = "";
+        } else {
+          iRow.style.display = "none";
+        }
+        document.getElementById("calc-results").classList.add("show");
+      };
 
-  var P = window.SecureDealPricing;
-  if (!P) {
-    console.error("SecureDealPricing n'est pas chargé depuis pricing.js");
-    return;
-  }
-
-  // Sécurisation des éléments optionnels
-  var cardChecked = document.getElementById("idx-card") ? document.getElementById("idx-card").checked : false;
-  var intlChecked = document.getElementById("idx-intl") ? document.getElementById("idx-intl").checked : false;
-  var acompteSelect = document.getElementById("calc-acompte");
-  var depositPct = acompteSelect ? parseInt(acompteSelect.value) : 50;
-
-  var result = P.compute({
-    amount: price,
-    level: idxLevel,
-    paymentMethod: cardChecked ? "card_paypal" : "transfer",
-    isInternational: intlChecked,
-    depositPct: depositPct,
-  });
-
-  if (!result || result.isQuote) {
-    document.getElementById("r-total").textContent = "> 10 000 000 € — Sur devis";
-    return;
-  }
-
-  var feeLabel = result.fmt.rate;
-  if (result.minimumApplied) feeLabel += " ⚠ min.";
-  
-  var fl = document.getElementById("r-fee-label-home");
-  if (fl) fl.textContent = "(" + feeLabel + ")";
-
-  document.getElementById("r-total").textContent = result.fmt.amount;
-  document.getElementById("r-commission").textContent = result.fmt.baseFee;
-  document.getElementById("r-acompte").textContent = result.fmt.deposit;
-  document.getElementById("r-reste").textContent = result.fmt.balance;
-  document.getElementById("r-net").textContent = Spine = result.fmt.netToVendor;
-
-  // Gestion Carte
-  var cRow = document.getElementById("r-card-row");
-  var cElem = document.getElementById("r-card");
-  if (cRow && cElem) {
-    if (result.cardFee > 0) {
-      cElem.textContent = "+ " + result.fmt.cardFee;
-      cRow.style.display = "";
-    } else {
-      cRow.style.display = "none";
-    }
-  }
-
-  // Gestion International
-  var iRow = document.getElementById("r-intl-row");
-  var iElem = document.getElementById("r-intl");
-  if (iRow && iElem) {
-    if (result.internationalFee > 0) {
-      iElem.textContent = "+ " + result.fmt.internationalFee;
-      iRow.style.display = "";
-    } else {
-      iRow.style.display = "none";
-    }
-  }
-
-  var resultsContainer = document.getElementById("calc-results");
-  if (resultsContainer) resultsContainer.classList.add("show");
-};
-
-// ════════════ BRANCHEMENT DE L'ÉVÉNEMENT CLIC ════════════
-document.addEventListener("DOMContentLoaded", function () {
-  var calcBtn = document.getElementById("calc-btn");
-  if (calcBtn) {
-    calcBtn.addEventListener("click", window.idxCalc);
-  }
-});
       // ─── AUTH HEADER ─────────────────────────────────────────────
       try {
         const user =
