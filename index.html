@@ -1,343 +1,672 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="fr">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="SecureDeal — Plateforme internationale sécurisée pour l'achat et la vente de véhicules, équipements et produits. Paiements escrow, traçabilité complète.">
-  <meta name="theme-color" content="#0a0a0a">
-  <link rel="icon" href="/images/logo/favicon.svg" type="image/svg+xml">
-  <title>SecureDeal — Commerce International Sécurisé</title>
-  <script src="/js/pricing.js"></script>
-  <script src="/js/loader.js"></script>
-  <link rel="stylesheet" href="/css/loader.css">
-  <link rel="stylesheet" href="/css/main.css">
-  <link rel="stylesheet" href="/css/brand.css">
-  <link rel="stylesheet" href="/css/backgrounds.css">
-  <link rel="stylesheet" href="/css/responsive-fixes.css">
-  <meta property="og:type" content="website">
-  <meta property="og:url" content="https://securedeal.fr/">
-  <meta property="og:title" content="SecureDeal — Commerce international sécurisé par escrow">
-  <meta property="og:description" content="Achetez et vendez en sécurité : véhicules, tracteurs, équipements, téléphones. Paiement bloqué en escrow jusqu'à réception. Transactions de 1 000 € à 10 M€.">
-  <meta property="og:image" content="https://securedeal.fr/images/og-image.jpg">
-  <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="SecureDeal — Escrow international">
-  <meta name="twitter:description" content="Paiement sécurisé par escrow pour vos transactions B2B et C2C.">
-  <link rel="canonical" href="https://securedeal.fr/">
-</head>
-<body>
-
-<!-- ═══════════════════════════════════════════════ HEADER ═══ -->
-<header class="site-header" id="site-header">
-  <div class="header-inner">
-    <a href="/index.html" class="header-logo" aria-label="SecureDeal">
-      <svg width="150" height="36" viewBox="0 0 160 40" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <path d="M18 3L31 8V17.5C31 25.5 25 31.5 18 34C11 31.5 5 25.5 5 17.5V8Z" fill="none" stroke="#C9A227" stroke-width="1.5"/>
-        <path d="M18 7.5L27 11.5V17.5C27 23 23 27.5 18 30C13 27.5 9 23 9 17.5V11.5Z" fill="rgba(201,162,39,0.08)" stroke="#C9A227" stroke-width="0.8"/>
-        <polyline points="13 18 16.5 21.5 23 14" stroke="#C9A227" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
-        <text x="39" y="26" font-family="Sora, sans-serif" font-size="16" font-weight="800" fill="white" letter-spacing="-0.5">SECURE</text>
-        <text x="106" y="26" font-family="Sora, sans-serif" font-size="16" font-weight="300" fill="#C9A227" letter-spacing="2">DEAL</text>
-      </svg>
-    </a>
-    <nav class="header-nav" id="main-nav">
-      <a href="/index.html"              class="header-nav-link active">Accueil</a>
-      <a href="/pages/how-it-works.html" class="header-nav-link">Fonctionnement</a>
-      <div class="nav-dropdown">
-        <a href="/pages/categories.html" class="header-nav-link">Catégories ▾</a>
-        <div class="nav-dropdown-menu">
-          <a href="/pages/categories.html?cat=cars"       class="nav-dropdown-item">🚗 Voitures &amp; Véhicules</a>
-          <a href="/pages/categories.html?cat=tractors"   class="nav-dropdown-item">🚜 Tracteurs &amp; Engins</a>
-          <a href="/pages/categories.html?cat=containers" class="nav-dropdown-item">📦 Conteneurs</a>
-          <a href="/pages/categories.html?cat=phones"     class="nav-dropdown-item">📱 Téléphones Portables</a>
-          <a href="/pages/categories.html?cat=equipment"  class="nav-dropdown-item">⚙️ Équipements Divers</a>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="SecureDeal — Plateforme internationale sécurisée pour l'achat et la vente de véhicules, équipements et produits. Paiements escrow, traçabilité complète."
+    />
+    <meta name="theme-color" content="#0a0a0a" />
+    <link rel="icon" href="/images/logo/favicon.svg" type="image/svg+xml" />
+    <title>SecureDeal — Commerce International Sécurisé</title>
+    <script src="/js/pricing.js"></script>
+    <script src="/js/loader.js"></script>
+    <link rel="stylesheet" href="/css/loader.css" />
+    <link rel="stylesheet" href="/css/main.css" />
+    <link rel="stylesheet" href="/css/brand.css" />
+    <link rel="stylesheet" href="/css/backgrounds.css" />
+    <link rel="stylesheet" href="/css/responsive-fixes.css" />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://securedeal.fr/" />
+    <meta
+      property="og:title"
+      content="SecureDeal — Commerce international sécurisé par escrow"
+    />
+    <meta
+      property="og:description"
+      content="Achetez et vendez en sécurité : véhicules, tracteurs, équipements, téléphones. Paiement bloqué en escrow jusqu'à réception. Transactions de 1 000 € à 10 M€."
+    />
+    <meta
+      property="og:image"
+      content="https://securedeal.fr/images/og-image.jpg"
+    />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="SecureDeal — Escrow international" />
+    <meta
+      name="twitter:description"
+      content="Paiement sécurisé par escrow pour vos transactions B2B et C2C."
+    />
+    <link rel="canonical" href="https://securedeal.fr/" />
+  </head>
+  <body>
+    <!-- ═══════════════════════════════════════════════ HEADER ═══ -->
+    <header class="site-header" id="site-header">
+      <div class="header-inner">
+        <a href="/index.html" class="header-logo" aria-label="SecureDeal">
+          <svg
+            width="150"
+            height="36"
+            viewBox="0 0 160 40"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M18 3L31 8V17.5C31 25.5 25 31.5 18 34C11 31.5 5 25.5 5 17.5V8Z"
+              fill="none"
+              stroke="#C9A227"
+              stroke-width="1.5"
+            />
+            <path
+              d="M18 7.5L27 11.5V17.5C27 23 23 27.5 18 30C13 27.5 9 23 9 17.5V11.5Z"
+              fill="rgba(201,162,39,0.08)"
+              stroke="#C9A227"
+              stroke-width="0.8"
+            />
+            <polyline
+              points="13 18 16.5 21.5 23 14"
+              stroke="#C9A227"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              fill="none"
+            />
+            <text
+              x="39"
+              y="26"
+              font-family="Sora, sans-serif"
+              font-size="16"
+              font-weight="800"
+              fill="white"
+              letter-spacing="-0.5"
+            >
+              SECURE
+            </text>
+            <text
+              x="106"
+              y="26"
+              font-family="Sora, sans-serif"
+              font-size="16"
+              font-weight="300"
+              fill="#C9A227"
+              letter-spacing="2"
+            >
+              DEAL
+            </text>
+          </svg>
+        </a>
+        <nav class="header-nav" id="main-nav">
+          <a href="/index.html" class="header-nav-link active">Accueil</a>
+          <a href="/pages/how-it-works.html" class="header-nav-link"
+            >Fonctionnement</a
+          >
+          <div class="nav-dropdown">
+            <a href="/pages/categories.html" class="header-nav-link"
+              >Catégories ▾</a
+            >
+            <div class="nav-dropdown-menu">
+              <a
+                href="/pages/categories.html?cat=cars"
+                class="nav-dropdown-item"
+                >🚗 Voitures &amp; Véhicules</a
+              >
+              <a
+                href="/pages/categories.html?cat=tractors"
+                class="nav-dropdown-item"
+                >🚜 Tracteurs &amp; Engins</a
+              >
+              <a
+                href="/pages/categories.html?cat=containers"
+                class="nav-dropdown-item"
+                >📦 Conteneurs</a
+              >
+              <a
+                href="/pages/categories.html?cat=phones"
+                class="nav-dropdown-item"
+                >📱 Téléphones Portables</a
+              >
+              <a
+                href="/pages/categories.html?cat=equipment"
+                class="nav-dropdown-item"
+                >⚙️ Équipements Divers</a
+              >
+            </div>
+          </div>
+          <a href="/pages/tracking.html" class="header-nav-link">Suivi</a>
+          <a href="/pages/about.html" class="header-nav-link">À propos</a>
+          <a href="/pages/contact.html" class="header-nav-link">Contact</a>
+        </nav>
+        <div class="header-actions">
+          <button class="header-lang" id="lang-btn" title="Langue">
+            🌐 FR
+          </button>
+          <div
+            class="header-auth-actions"
+            id="header-auth"
+            style="display: flex; gap: 10px; align-items: center"
+          >
+            <a
+              href="/pages/auth/login.html"
+              class="btn btn--outline-white btn--sm"
+              >Connexion</a
+            >
+            <a
+              href="/pages/auth/register.html"
+              class="btn btn--gold btn--sm btn--shimmer"
+              >Créer un compte</a
+            >
+          </div>
         </div>
+        <button
+          class="hamburger"
+          id="hamburger"
+          aria-label="Menu"
+          aria-expanded="false"
+        >
+          <span></span><span></span><span></span>
+        </button>
       </div>
-      <a href="/pages/tracking.html"  class="header-nav-link">Suivi</a>
-      <a href="/pages/about.html"     class="header-nav-link">À propos</a>
-      <a href="/pages/contact.html"   class="header-nav-link">Contact</a>
+    </header>
+
+    <!-- Menu mobile -->
+    <nav class="mobile-menu" id="mobile-menu">
+      <a href="/index.html" class="active">🏠 Accueil</a>
+      <a href="/pages/how-it-works.html">⚙️ Fonctionnement</a>
+      <a href="/pages/categories.html">📦 Catégories</a>
+      <a href="/pages/tracking.html">📡 Suivi</a>
+      <a href="/pages/about.html">ℹ️ À propos</a>
+      <a href="/pages/pricing.html">💰 Tarifs</a>
+      <a href="/pages/contact.html">✉️ Contact</a>
+      <div class="mobile-menu-divider"></div>
+      <div class="mobile-menu-actions">
+        <a
+          href="/pages/auth/login.html"
+          class="btn btn--outline-white"
+          style="width: 100%; justify-content: center"
+          >Se connecter</a
+        >
+        <a
+          href="/pages/auth/register.html"
+          class="btn btn--gold btn--shimmer"
+          style="width: 100%; justify-content: center"
+          >Créer un compte</a
+        >
+      </div>
     </nav>
-    <div class="header-actions">
-      <button class="header-lang" id="lang-btn" title="Langue">🌐 FR</button>
-      <div class="header-auth-actions" id="header-auth" style="display:flex;gap:10px;align-items:center">
-        <a href="/pages/auth/login.html"    class="btn btn--outline-white btn--sm">Connexion</a>
-        <a href="/pages/auth/register.html" class="btn btn--gold btn--sm btn--shimmer">Créer un compte</a>
-      </div>
-    </div>
-    <button class="hamburger" id="hamburger" aria-label="Menu" aria-expanded="false">
-      <span></span><span></span><span></span>
-    </button>
-  </div>
-</header>
 
-<!-- Menu mobile -->
-<nav class="mobile-menu" id="mobile-menu">
-  <a href="/index.html" class="active">🏠 Accueil</a>
-  <a href="/pages/how-it-works.html">⚙️ Fonctionnement</a>
-  <a href="/pages/categories.html">📦 Catégories</a>
-  <a href="/pages/tracking.html">📡 Suivi</a>
-  <a href="/pages/about.html">ℹ️ À propos</a>
-  <a href="/pages/pricing.html">💰 Tarifs</a>
-  <a href="/pages/contact.html">✉️ Contact</a>
-  <div class="mobile-menu-divider"></div>
-  <div class="mobile-menu-actions">
-    <a href="/pages/auth/login.html"    class="btn btn--outline-white" style="width:100%;justify-content:center">Se connecter</a>
-    <a href="/pages/auth/register.html" class="btn btn--gold btn--shimmer" style="width:100%;justify-content:center">Créer un compte</a>
-  </div>
-</nav>
+    <!-- ═══════════════════════════════════════════════ HERO ══════ -->
+    <section class="hero" id="hero">
+      <div class="hero-bg" aria-hidden="true"></div>
+      <div class="hero-orb hero-orb--1" aria-hidden="true"></div>
+      <div class="hero-orb hero-orb--2" aria-hidden="true"></div>
+      <div class="hero-orb hero-orb--3" aria-hidden="true"></div>
 
-<!-- ═══════════════════════════════════════════════ HERO ══════ -->
-<section class="hero" id="hero">
-  <div class="hero-bg" aria-hidden="true"></div>
-  <div class="hero-orb hero-orb--1" aria-hidden="true"></div>
-  <div class="hero-orb hero-orb--2" aria-hidden="true"></div>
-  <div class="hero-orb hero-orb--3" aria-hidden="true"></div>
+      <div class="hero-inner">
+        <!-- Contenu texte -->
+        <div class="hero-content">
+          <div class="hero-eyebrow" id="hero-eyebrow">
+            Plateforme internationale certifiée
+          </div>
 
-  <div class="hero-inner">
-    <!-- Contenu texte -->
-    <div class="hero-content">
-      <div class="hero-eyebrow" id="hero-eyebrow">Plateforme internationale certifiée</div>
+          <h1 class="hero-title" id="hero-title">
+            Le commerce<br />
+            international<br />
+            <span>100% sécurisé</span>
+          </h1>
 
-      <h1 class="hero-title" id="hero-title">
-        Le commerce<br>
-        international<br>
-        <span>100% sécurisé</span>
-      </h1>
+          <p class="hero-subtitle">
+            SecureDeal agit comme intermédiaire de confiance entre acheteurs et
+            vendeurs du monde entier. Paiements escrow, traçabilité complète,
+            livraison organisée.
+          </p>
 
-      <p class="hero-subtitle">
-        SecureDeal agit comme intermédiaire de confiance entre acheteurs et vendeurs du monde entier. Paiements escrow, traçabilité complète, livraison organisée.
-      </p>
+          <div class="hero-actions">
+            <a
+              href="/pages/auth/register.html"
+              class="btn btn--gold btn--lg btn--shimmer"
+            >
+              <svg
+                width="16"
+                height="16"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2.5"
+                stroke-linecap="round"
+              >
+                <path
+                  d="M12 2L20 5.5V12C20 17 16.5 21 12 23C7.5 21 4 17 4 12V5.5Z"
+                />
+                <polyline points="8.5 12 11 14.5 15.5 9.5" />
+              </svg>
+              Commencer maintenant
+            </a>
+            <a
+              href="/pages/how-it-works.html"
+              class="btn btn--outline-white btn--lg"
+            >
+              Fonctionnement
+            </a>
+          </div>
 
-      <div class="hero-actions">
-        <a href="/pages/auth/register.html" class="btn btn--gold btn--lg btn--shimmer">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M12 2L20 5.5V12C20 17 16.5 21 12 23C7.5 21 4 17 4 12V5.5Z"/><polyline points="8.5 12 11 14.5 15.5 9.5"/></svg>
-          Commencer maintenant
-        </a>
-        <a href="/pages/how-it-works.html" class="btn btn--outline-white btn--lg">
-          Fonctionnement
-        </a>
-      </div>
-
-      <div class="hero-stats">
-        <div>
-          <div class="hero-stat-value" data-counter="12400">0</div>
-          <div class="hero-stat-label">Transactions sécurisées</div>
-        </div>
-        <div>
-          <div class="hero-stat-value" data-counter="94">0</div>
-          <div class="hero-stat-label">Pays couverts</div>
-        </div>
-        <div>
-          <div class="hero-stat-value" data-counter="99.8" data-counter-duration="2500">0</div>
-          <div class="hero-stat-label">% de satisfaction</div>
-        </div>
-      </div>
-    </div>
-
-    <!-- Carte de suivi — visible sur TOUS les écrans -->
-    <div class="hero-visual" aria-label="Aperçu du suivi de transaction">
-      <div class="hero-card">
-        <div class="hero-card-header">
-          <span class="hero-card-title">Suivi transaction</span>
-          <span class="tracking-id">#SD-2024-8847</span>
-        </div>
-        <div class="hero-card-steps">
-          <div class="hero-step">
-            <div class="hero-step-icon" style="background:rgba(16,185,129,0.12)">✅</div>
-            <div style="flex:1;min-width:0">
-              <div class="hero-step-text">Acompte 50% reçu</div>
-              <div style="font-size:10px;color:rgba(255,255,255,0.30);margin-top:2px">12 mai 2025 · 09:42</div>
+          <div class="hero-stats">
+            <div>
+              <div class="hero-stat-value" data-counter="12400">0</div>
+              <div class="hero-stat-label">Transactions sécurisées</div>
             </div>
-            <span class="badge badge--active hero-step-status">Confirmé</span>
-          </div>
-          <div class="hero-step">
-            <div class="hero-step-icon" style="background:rgba(16,185,129,0.12)">📦</div>
-            <div style="flex:1;min-width:0">
-              <div class="hero-step-text">Produit récupéré</div>
-              <div style="font-size:10px;color:rgba(255,255,255,0.30);margin-top:2px">14 mai 2025 · 14:18</div>
+            <div>
+              <div class="hero-stat-value" data-counter="94">0</div>
+              <div class="hero-stat-label">Pays couverts</div>
             </div>
-            <span class="badge badge--active hero-step-status">OK</span>
-          </div>
-          <div class="hero-step" style="background:rgba(201,162,39,0.06);border:1px solid rgba(201,162,39,0.15);border-radius:12px">
-            <div class="hero-step-icon" style="background:rgba(201,162,39,0.12)">🚛</div>
-            <div style="flex:1;min-width:0">
-              <div class="hero-step-text">En transit — Lyon → Dubai</div>
-              <div style="font-size:10px;color:rgba(201,162,39,0.6);margin-top:2px">ETA : 21 mai 2025</div>
+            <div>
+              <div
+                class="hero-stat-value"
+                data-counter="99.8"
+                data-counter-duration="2500"
+              >
+                0
+              </div>
+              <div class="hero-stat-label">% de satisfaction</div>
             </div>
-            <span class="badge badge--escrow hero-step-status">Live</span>
-          </div>
-          <div class="hero-step" style="opacity:0.4">
-            <div class="hero-step-icon" style="background:rgba(255,255,255,0.04)">🏠</div>
-            <div style="flex:1;min-width:0">
-              <div class="hero-step-text">Livraison finale</div>
-              <div style="font-size:10px;color:rgba(255,255,255,0.20);margin-top:2px">En attente</div>
-            </div>
-            <span class="badge badge--pending hero-step-status">Pending</span>
           </div>
         </div>
-        <!-- Montant escrow -->
-        <div style="margin-top:16px;padding:12px;background:rgba(201,162,39,0.06);border:1px solid rgba(201,162,39,0.15);border-radius:12px">
-          <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px">
-            <span style="font-size:11px;color:rgba(255,255,255,0.40);font-weight:500">Montant sous escrow</span>
-            <span style="font-family:'JetBrains Mono',monospace;font-size:18px;font-weight:700;color:#C9A227">€ 14 250</span>
+
+        <!-- Carte de suivi — visible sur TOUS les écrans -->
+        <div class="hero-visual" aria-label="Aperçu du suivi de transaction">
+          <div class="hero-card">
+            <div class="hero-card-header">
+              <span class="hero-card-title">Suivi transaction</span>
+              <span class="tracking-id">#SD-2024-8847</span>
+            </div>
+            <div class="hero-card-steps">
+              <div class="hero-step">
+                <div
+                  class="hero-step-icon"
+                  style="background: rgba(16, 185, 129, 0.12)"
+                >
+                  ✅
+                </div>
+                <div style="flex: 1; min-width: 0">
+                  <div class="hero-step-text">Acompte 50% reçu</div>
+                  <div
+                    style="
+                      font-size: 10px;
+                      color: rgba(255, 255, 255, 0.3);
+                      margin-top: 2px;
+                    "
+                  >
+                    12 mai 2025 · 09:42
+                  </div>
+                </div>
+                <span class="badge badge--active hero-step-status"
+                  >Confirmé</span
+                >
+              </div>
+              <div class="hero-step">
+                <div
+                  class="hero-step-icon"
+                  style="background: rgba(16, 185, 129, 0.12)"
+                >
+                  📦
+                </div>
+                <div style="flex: 1; min-width: 0">
+                  <div class="hero-step-text">Produit récupéré</div>
+                  <div
+                    style="
+                      font-size: 10px;
+                      color: rgba(255, 255, 255, 0.3);
+                      margin-top: 2px;
+                    "
+                  >
+                    14 mai 2025 · 14:18
+                  </div>
+                </div>
+                <span class="badge badge--active hero-step-status">OK</span>
+              </div>
+              <div
+                class="hero-step"
+                style="
+                  background: rgba(201, 162, 39, 0.06);
+                  border: 1px solid rgba(201, 162, 39, 0.15);
+                  border-radius: 12px;
+                "
+              >
+                <div
+                  class="hero-step-icon"
+                  style="background: rgba(201, 162, 39, 0.12)"
+                >
+                  🚛
+                </div>
+                <div style="flex: 1; min-width: 0">
+                  <div class="hero-step-text">En transit — Lyon → Dubai</div>
+                  <div
+                    style="
+                      font-size: 10px;
+                      color: rgba(201, 162, 39, 0.6);
+                      margin-top: 2px;
+                    "
+                  >
+                    ETA : 21 mai 2025
+                  </div>
+                </div>
+                <span class="badge badge--escrow hero-step-status">Live</span>
+              </div>
+              <div class="hero-step" style="opacity: 0.4">
+                <div
+                  class="hero-step-icon"
+                  style="background: rgba(255, 255, 255, 0.04)"
+                >
+                  🏠
+                </div>
+                <div style="flex: 1; min-width: 0">
+                  <div class="hero-step-text">Livraison finale</div>
+                  <div
+                    style="
+                      font-size: 10px;
+                      color: rgba(255, 255, 255, 0.2);
+                      margin-top: 2px;
+                    "
+                  >
+                    En attente
+                  </div>
+                </div>
+                <span class="badge badge--pending hero-step-status"
+                  >Pending</span
+                >
+              </div>
+            </div>
+            <!-- Montant escrow -->
+            <div
+              style="
+                margin-top: 16px;
+                padding: 12px;
+                background: rgba(201, 162, 39, 0.06);
+                border: 1px solid rgba(201, 162, 39, 0.15);
+                border-radius: 12px;
+              "
+            >
+              <div
+                style="
+                  display: flex;
+                  justify-content: space-between;
+                  align-items: center;
+                  flex-wrap: wrap;
+                  gap: 8px;
+                "
+              >
+                <span
+                  style="
+                    font-size: 11px;
+                    color: rgba(255, 255, 255, 0.4);
+                    font-weight: 500;
+                  "
+                  >Montant sous escrow</span
+                >
+                <span
+                  style="
+                    font-family: &quot;JetBrains Mono&quot;, monospace;
+                    font-size: 18px;
+                    font-weight: 700;
+                    color: #c9a227;
+                  "
+                  >€ 14 250</span
+                >
+              </div>
+              <div
+                style="
+                  font-size: 10px;
+                  color: rgba(255, 255, 255, 0.25);
+                  margin-top: 4px;
+                "
+              >
+                Sécurisé par SecureDeal · Commission 2.6% incluse
+              </div>
+            </div>
           </div>
-          <div style="font-size:10px;color:rgba(255,255,255,0.25);margin-top:4px">Sécurisé par SecureDeal · Commission 2.6% incluse</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ══════════════════════════════════════════ TRUST BAR ══════ -->
+    <div class="trust-bar" style="background: rgba(10, 10, 10, 0.97)">
+      <div class="trust-bar-inner">
+        <div class="trust-item">
+          <span class="trust-icon">🔒</span> Paiements 100% sécurisés
+        </div>
+        <div class="trust-item">
+          <span class="trust-icon">🌍</span> 94 pays couverts
+        </div>
+        <div class="trust-item">
+          <span class="trust-icon">✓</span> Vérification KYC complète
+        </div>
+        <div class="trust-item">
+          <span class="trust-icon">📋</span> Traçabilité temps réel
+        </div>
+        <div class="trust-item">
+          <span class="trust-icon">⚡</span> Support 24h/7j
         </div>
       </div>
     </div>
-  </div>
-</section>
 
-<!-- ══════════════════════════════════════════ TRUST BAR ══════ -->
-<div class="trust-bar" style="background:rgba(10,10,10,0.97)">
-  <div class="trust-bar-inner">
-    <div class="trust-item"><span class="trust-icon">🔒</span> Paiements 100% sécurisés</div>
-    <div class="trust-item"><span class="trust-icon">🌍</span> 94 pays couverts</div>
-    <div class="trust-item"><span class="trust-icon">✓</span> Vérification KYC complète</div>
-    <div class="trust-item"><span class="trust-icon">📋</span> Traçabilité temps réel</div>
-    <div class="trust-item"><span class="trust-icon">⚡</span> Support 24h/7j</div>
-  </div>
-</div>
+    <!-- ═══════════════════════════════════ COMMENT ÇA MARCHE ════ -->
+    <section class="how-section section" id="how-it-works">
+      <div class="container">
+        <div class="text-center mb-12 reveal">
+          <div class="section-label">Processus simplifié</div>
+          <h2 class="text-h2 mb-4">Comment ça fonctionne ?</h2>
+          <p
+            style="
+              font-size: var(--text-md);
+              color: rgba(255, 255, 255, 0.45);
+              max-width: 560px;
+              margin: 0 auto;
+              line-height: 1.7;
+            "
+          >
+            De la publication du produit jusqu'au paiement final — chaque étape
+            est sécurisée et tracée.
+          </p>
+        </div>
 
-<!-- ═══════════════════════════════════ COMMENT ÇA MARCHE ════ -->
-<section class="how-section section" id="how-it-works">
-  <div class="container">
-    <div class="text-center mb-12 reveal">
-      <div class="section-label">Processus simplifié</div>
-      <h2 class="text-h2 mb-4">Comment ça fonctionne ?</h2>
-      <p style="font-size:var(--text-md);color:rgba(255,255,255,0.45);max-width:560px;margin:0 auto;line-height:1.7">
-        De la publication du produit jusqu'au paiement final — chaque étape est sécurisée et tracée.
-      </p>
-    </div>
+        <div class="steps-grid">
+          <div class="step-card reveal">
+            <div class="step-number">1</div>
+            <div class="step-icon">📋</div>
+            <div class="step-title">Publiez votre annonce</div>
+            <p class="step-desc">
+              Le vendeur liste son produit avec photos, prix et conditions de
+              livraison.
+            </p>
+          </div>
+          <div class="step-card reveal" style="transition-delay: 0.1s">
+            <div class="step-number">2</div>
+            <div class="step-icon">💳</div>
+            <div class="step-title">Paiement escrow</div>
+            <p class="step-desc">
+              L'acheteur verse un acompte sécurisé. Les fonds sont bloqués chez
+              SecureDeal.
+            </p>
+          </div>
+          <div class="step-card reveal" style="transition-delay: 0.2s">
+            <div class="step-number">3</div>
+            <div class="step-icon">🚛</div>
+            <div class="step-title">Expédition tracée</div>
+            <p class="step-desc">
+              Le produit est expédié avec suivi temps réel visible par les deux
+              parties.
+            </p>
+          </div>
+          <div class="step-card reveal" style="transition-delay: 0.3s">
+            <div class="step-number">4</div>
+            <div class="step-icon">✅</div>
+            <div class="step-title">Confirmation &amp; paiement</div>
+            <p class="step-desc">
+              À réception validée, le solde est libéré au vendeur. Transaction
+              complète.
+            </p>
+          </div>
+        </div>
 
-    <div class="steps-grid">
-      <div class="step-card reveal">
-        <div class="step-number">1</div>
-        <div class="step-icon">📋</div>
-        <div class="step-title">Publiez votre annonce</div>
-        <p class="step-desc">Le vendeur liste son produit avec photos, prix et conditions de livraison.</p>
+        <div class="text-center" style="margin-top: var(--space-10)">
+          <a href="/pages/how-it-works.html" class="btn btn--outline-white">
+            Voir le processus complet →
+          </a>
+        </div>
       </div>
-      <div class="step-card reveal" style="transition-delay:0.1s">
-        <div class="step-number">2</div>
-        <div class="step-icon">💳</div>
-        <div class="step-title">Paiement escrow</div>
-        <p class="step-desc">L'acheteur verse un acompte sécurisé. Les fonds sont bloqués chez SecureDeal.</p>
-      </div>
-      <div class="step-card reveal" style="transition-delay:0.2s">
-        <div class="step-number">3</div>
-        <div class="step-icon">🚛</div>
-        <div class="step-title">Expédition tracée</div>
-        <p class="step-desc">Le produit est expédié avec suivi temps réel visible par les deux parties.</p>
-      </div>
-      <div class="step-card reveal" style="transition-delay:0.3s">
-        <div class="step-number">4</div>
-        <div class="step-icon">✅</div>
-        <div class="step-title">Confirmation &amp; paiement</div>
-        <p class="step-desc">À réception validée, le solde est libéré au vendeur. Transaction complète.</p>
-      </div>
-    </div>
+    </section>
 
-    <div class="text-center" style="margin-top:var(--space-10)">
-      <a href="/pages/how-it-works.html" class="btn btn--outline-white">
-        Voir le processus complet →
-      </a>
-    </div>
-  </div>
-</section>
+    <!-- ══════════════════════════════════════ AVANTAGES CLÉS ════ -->
+    <section class="features-section section" style="overflow-x: hidden">
+      <div class="container">
+        <div class="features-header reveal">
+          <div class="section-label">Pourquoi SecureDeal ?</div>
+          <h2 class="text-h2 mb-4">
+            La sécurité au cœur de chaque transaction
+          </h2>
+          <p style="color: rgba(255, 255, 255, 0.45); line-height: 1.7">
+            Des garanties concrètes pour les acheteurs et vendeurs du monde
+            entier.
+          </p>
+        </div>
 
-<!-- ══════════════════════════════════════ AVANTAGES CLÉS ════ -->
-<section class="features-section section" style="overflow-x:hidden">
-  <div class="container">
-    <div class="features-header reveal">
-      <div class="section-label">Pourquoi SecureDeal ?</div>
-      <h2 class="text-h2 mb-4">La sécurité au cœur de chaque transaction</h2>
-      <p style="color:rgba(255,255,255,0.45);line-height:1.7">
-        Des garanties concrètes pour les acheteurs et vendeurs du monde entier.
-      </p>
-    </div>
+        <div class="features-grid">
+          <div class="feature-card reveal">
+            <div class="feature-icon-wrap">🛡️</div>
+            <div class="feature-title">Fonds sous escrow</div>
+            <p class="feature-desc">
+              Votre argent reste bloqué jusqu'à la confirmation de réception.
+              Aucun risque d'arnaque possible.
+            </p>
+          </div>
+          <div class="feature-card reveal" style="transition-delay: 0.1s">
+            <div class="feature-icon-wrap">📡</div>
+            <div class="feature-title">Traçabilité complète</div>
+            <p class="feature-desc">
+              Suivez votre commande en temps réel à chaque étape, de
+              l'expédition jusqu'à la livraison finale.
+            </p>
+          </div>
+          <div class="feature-card reveal" style="transition-delay: 0.2s">
+            <div class="feature-icon-wrap">✅</div>
+            <div class="feature-title">KYC & Vérification</div>
+            <p class="feature-desc">
+              Chaque acheteur et vendeur est vérifié (identité, documents).
+              Seuls les acteurs légitimes opèrent.
+            </p>
+          </div>
+          <div class="feature-card reveal" style="transition-delay: 0s">
+            <div class="feature-icon-wrap">🤝</div>
+            <div class="feature-title">Arbitrage intégré</div>
+            <p class="feature-desc">
+              En cas de litige, notre équipe arbitre et protège les intérêts des
+              deux parties en toute impartialité.
+            </p>
+          </div>
+          <div class="feature-card reveal" style="transition-delay: 0.1s">
+            <div class="feature-icon-wrap">🌍</div>
+            <div class="feature-title">Couverture mondiale</div>
+            <p class="feature-desc">
+              Opérations dans 94 pays, multi-devises, conformité aux
+              réglementations internationales en vigueur.
+            </p>
+          </div>
+          <div class="feature-card reveal" style="transition-delay: 0.2s">
+            <div class="feature-icon-wrap">⚡</div>
+            <div class="feature-title">Support 24/7</div>
+            <p class="feature-desc">
+              Une équipe dédiée disponible à toute heure pour vous accompagner
+              dans vos transactions internationales.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
 
-    <div class="features-grid">
-      <div class="feature-card reveal">
-        <div class="feature-icon-wrap">🛡️</div>
-        <div class="feature-title">Fonds sous escrow</div>
-        <p class="feature-desc">Votre argent reste bloqué jusqu'à la confirmation de réception. Aucun risque d'arnaque possible.</p>
-      </div>
-      <div class="feature-card reveal" style="transition-delay:0.1s">
-        <div class="feature-icon-wrap">📡</div>
-        <div class="feature-title">Traçabilité complète</div>
-        <p class="feature-desc">Suivez votre commande en temps réel à chaque étape, de l'expédition jusqu'à la livraison finale.</p>
-      </div>
-      <div class="feature-card reveal" style="transition-delay:0.2s">
-        <div class="feature-icon-wrap">✅</div>
-        <div class="feature-title">KYC & Vérification</div>
-        <p class="feature-desc">Chaque acheteur et vendeur est vérifié (identité, documents). Seuls les acteurs légitimes opèrent.</p>
-      </div>
-      <div class="feature-card reveal" style="transition-delay:0s">
-        <div class="feature-icon-wrap">🤝</div>
-        <div class="feature-title">Arbitrage intégré</div>
-        <p class="feature-desc">En cas de litige, notre équipe arbitre et protège les intérêts des deux parties en toute impartialité.</p>
-      </div>
-      <div class="feature-card reveal" style="transition-delay:0.1s">
-        <div class="feature-icon-wrap">🌍</div>
-        <div class="feature-title">Couverture mondiale</div>
-        <p class="feature-desc">Opérations dans 94 pays, multi-devises, conformité aux réglementations internationales en vigueur.</p>
-      </div>
-      <div class="feature-card reveal" style="transition-delay:0.2s">
-        <div class="feature-icon-wrap">⚡</div>
-        <div class="feature-title">Support 24/7</div>
-        <p class="feature-desc">Une équipe dédiée disponible à toute heure pour vous accompagner dans vos transactions internationales.</p>
-      </div>
-    </div>
-  </div>
-</section>
+    <!-- ══════════════════════════════════════ CATÉGORIES ════════ -->
+    <section class="categories-section">
+      <div class="container">
+        <div class="text-center mb-12 reveal">
+          <div class="section-label">Marketplace internationale</div>
+          <h2 class="text-h2 mb-4">Explorez toutes les catégories</h2>
+          <p
+            style="
+              color: rgba(255, 255, 255, 0.45);
+              max-width: 480px;
+              margin: 0 auto;
+            "
+          >
+            Des milliers de produits vérifiés dans les secteurs à forte valeur.
+          </p>
+        </div>
 
-<!-- ══════════════════════════════════════ CATÉGORIES ════════ -->
-<section class="categories-section">
-  <div class="container">
-    <div class="text-center mb-12 reveal">
-      <div class="section-label">Marketplace internationale</div>
-      <h2 class="text-h2 mb-4">Explorez toutes les catégories</h2>
-      <p style="color:rgba(255,255,255,0.45);max-width:480px;margin:0 auto">
-        Des milliers de produits vérifiés dans les secteurs à forte valeur.
-      </p>
-    </div>
+        <div class="categories-grid">
+          <a href="/pages/categories.html?cat=cars" class="category-card reveal"
+            ><div class="category-emoji">🚗</div>
+            <div class="category-name">Voitures</div>
+            <div class="category-count" data-counter="2840">annonces</div></a
+          >
+          <a
+            href="/pages/categories.html?cat=tractors"
+            class="category-card reveal"
+            style="transition-delay: 0.05s"
+            ><div class="category-emoji">🚜</div>
+            <div class="category-name">Tracteurs</div>
+            <div class="category-count" data-counter="1240">annonces</div></a
+          >
+          <a
+            href="/pages/categories.html?cat=containers"
+            class="category-card reveal"
+            style="transition-delay: 0.1s"
+            ><div class="category-emoji">📦</div>
+            <div class="category-name">Conteneurs</div>
+            <div class="category-count" data-counter="560">annonces</div></a
+          >
+          <a
+            href="/pages/categories.html?cat=phones"
+            class="category-card reveal"
+            style="transition-delay: 0.15s"
+            ><div class="category-emoji">📱</div>
+            <div class="category-name">Téléphones</div>
+            <div class="category-count" data-counter="3860">annonces</div></a
+          >
+          <a
+            href="/pages/categories.html?cat=equipment"
+            class="category-card reveal"
+            style="transition-delay: 0.2s"
+            ><div class="category-emoji">⚙️</div>
+            <div class="category-name">Équipements</div>
+            <div class="category-count" data-counter="1890">annonces</div></a
+          >
+          <a
+            href="/pages/categories.html"
+            class="category-card reveal"
+            style="transition-delay: 0.25s"
+            ><div class="category-emoji">🔍</div>
+            <div class="category-name">Voir tout</div>
+            <div class="category-count">+12 catégories</div></a
+          >
+        </div>
+      </div>
+    </section>
 
-    <div class="categories-grid">
-      <a href="/pages/categories.html?cat=cars"       class="category-card reveal"><div class="category-emoji">🚗</div><div class="category-name">Voitures</div><div class="category-count" data-counter="2840"> annonces</div></a>
-      <a href="/pages/categories.html?cat=tractors"   class="category-card reveal" style="transition-delay:.05s"><div class="category-emoji">🚜</div><div class="category-name">Tracteurs</div><div class="category-count" data-counter="1240"> annonces</div></a>
-      <a href="/pages/categories.html?cat=containers" class="category-card reveal" style="transition-delay:.1s"><div class="category-emoji">📦</div><div class="category-name">Conteneurs</div><div class="category-count" data-counter="560"> annonces</div></a>
-      <a href="/pages/categories.html?cat=phones"     class="category-card reveal" style="transition-delay:.15s"><div class="category-emoji">📱</div><div class="category-name">Téléphones</div><div class="category-count" data-counter="3860"> annonces</div></a>
-      <a href="/pages/categories.html?cat=equipment"  class="category-card reveal" style="transition-delay:.2s"><div class="category-emoji">⚙️</div><div class="category-name">Équipements</div><div class="category-count" data-counter="1890"> annonces</div></a>
-      <a href="/pages/categories.html"                class="category-card reveal" style="transition-delay:.25s"><div class="category-emoji">🔍</div><div class="category-name">Voir tout</div><div class="category-count">+12 catégories</div></a>
-    </div>
-  </div>
-</section>
-
-<!-- ═══════════════════════════════ SIMULATEUR ESCROW ════════ -->
-<section class="escrow-section" style="overflow-x:hidden">
+    <!-- ═══════════════════════════════ SIMULATEUR ESCROW ════════ -->
+    <section class="escrow-section" style="overflow-x: hidden">
   <div class="container">
     <div class="escrow-inner">
       <div class="escrow-content reveal">
         <div class="section-label">Transparence totale</div>
         <h2 class="text-h2 mb-4">Calculez votre transaction en toute clarté</h2>
-        <p>Frais dégressifs selon le montant. Dès 2,6% pour les petites transactions, jusqu'à 0,38% pour les grandes. Aucun frais caché.</p>
-
-        <div class="escrow-list">
-          <div class="escrow-list-item"><span class="escrow-check">✓</span> Fonds bloqués jusqu'à confirmation de livraison</div>
-          <div class="escrow-list-item"><span class="escrow-check">✓</span> Acompte modulable entre 30% et 70%</div>
-          <div class="escrow-list-item"><span class="escrow-check">✓</span> Frais dégressifs dès 2,6% — parmi les plus bas du marché</div>
-          <div class="escrow-list-item"><span class="escrow-check">✓</span> Libération des fonds en moins de 24h après confirmation</div>
+        <p>
+          Frais dégressifs selon le montant. Dès 2,6% pour les petites transactions, jusqu'à 0,38% pour les grandes. Aucun frais caché.
+        </p>
         </div>
 
-        <a href="/pages/how-it-works.html" class="btn btn--outline-white">
-          En savoir plus sur l'escrow →
-        </a>
-      </div>
-
-      <div class="escrow-calc reveal" style="transition-delay:0.15s">
+      <div class="escrow-calc reveal" style="transition-delay: 0.15s">
         <div class="calc-title">💰 Simulateur de transaction</div>
         <div class="calc-form">
           <div class="form-group">
             <label class="form-label" for="calc-price">Prix du produit (€)</label>
-            <input type="number" id="calc-price" class="form-control" placeholder="Ex: 15000" min="0" step="100">
+            <input type="number" id="calc-price" class="form-control" placeholder="Ex: 15000" min="0" step="100" />
           </div>
           <div class="form-group">
             <label class="form-label" for="calc-acompte">Acompte (%)</label>
@@ -349,289 +678,527 @@
               <option value="70">70%</option>
             </select>
           </div>
-          <button type="button" id="calc-btn" class="btn btn--gold" style="width:100%;justify-content:center">
+
+          <div style="display: none;">
+            <input type="checkbox" id="idx-card" />
+            <input type="checkbox" id="idx-intl" />
+          </div>
+
+          <button type="button" id="calc-btn" class="btn btn--gold" style="width: 100%; justify-content: center">
             Calculer →
           </button>
         </div>
+
         <div class="calc-results" id="calc-results">
-          <div class="calc-row"><span>Prix total</span><span class="calc-row-value" id="r-total">—</span></div>
-          <div class="calc-row"><span>Acompte</span><span class="calc-row-value" id="r-acompte">—</span></div>
-          <div class="calc-row"><span>Solde à la livraison</span><span class="calc-row-value" id="r-reste">—</span></div>
-          <div class="calc-row"><span>Frais escrow <span id="r-fee-label-home" style="font-size:11px;opacity:0.7"></span></span><span class="calc-row-value" id="r-commission">—</span></div>
-          <div class="calc-row calc-row--total"><span>Net pour le vendeur</span><span class="calc-row-value" id="r-net">—</span></div>
+          <div class="calc-row">
+            <span>Prix total</span><span class="calc-row-value" id="r-total">—</span>
+          </div>
+          <div class="calc-row">
+            <span>Acompte</span><span class="calc-row-value" id="r-acompte">—</span>
+          </div>
+          <div class="calc-row">
+            <span>Solde à la livraison</span><span class="calc-row-value" id="r-reste">—</span>
+          </div>
+          
+          <div class="calc-row" id="r-card-row" style="display: none;">
+            <span>Frais de carte</span><span class="calc-row-value" id="r-card">—</span>
+          </div>
+          <div class="calc-row" id="r-intl-row" style="display: none;">
+            <span>Frais International</span><span class="calc-row-value" id="r-intl">—</span>
+          </div>
+
+          <div class="calc-row">
+            <span>Frais escrow <span id="r-fee-label-home" style="font-size: 11px; opacity: 0.7"></span></span>
+            <span class="calc-row-value" id="r-commission">—</span>
+          </div>
+          <div class="calc-row calc-row--total">
+            <span>Net pour le vendeur</span><span class="calc-row-value" id="r-net">—</span>
+          </div>
         </div>
       </div>
     </div>
   </div>
 </section>
 
-<!-- ══════════════════════════════════════ MENTIONS LÉGALES ══ -->
-<section style="background:var(--color-dark);padding:40px 0">
-  <div class="container">
-    <div class="legal-notice">
-      <span class="legal-icon">⚖️</span>
-      <div>
-        <strong>Mentions légales importantes :</strong>
-        SecureDeal agit exclusivement comme <strong>intermédiaire de confiance</strong>.
-        SecureDeal ne garantit pas les accords conclus en dehors de la plateforme.
-        Tout échange d'IBAN ou de coordonnées bancaires personnelles est interdit.
-        <a href="/pages/legal/mentions-legales.html" style="color:var(--color-gold);text-decoration:underline;margin-left:4px">Lire les mentions légales →</a>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- ═══════════════════════════════════════════ CTA FINAL ════ -->
-<section style="background:#080800;padding:100px 0;position:relative;overflow:hidden">
-  <div style="position:absolute;inset:0;background:radial-gradient(ellipse 700px 400px at 50% 100%,rgba(201,162,39,0.06),transparent)" aria-hidden="true"></div>
-  <div class="container text-center reveal" style="position:relative">
-    <div class="section-label" style="display:inline-flex;margin-bottom:24px">Rejoignez SecureDeal</div>
-    <h2 style="font-family:'Sora',sans-serif;font-size:clamp(2rem,4vw,3.5rem);font-weight:800;color:white;letter-spacing:-1px;margin-bottom:20px;line-height:1.15">
-      Prêt à trader en toute<br>sécurité à l'international ?
-    </h2>
-    <p style="font-size:18px;color:rgba(255,255,255,0.45);margin-bottom:40px;max-width:520px;margin-left:auto;margin-right:auto;line-height:1.7">
-      Créez votre compte gratuit et effectuez votre première transaction sécurisée en moins de 24 heures.
-    </p>
-    <div style="display:flex;gap:16px;justify-content:center;flex-wrap:wrap">
-      <a href="/pages/auth/register.html?role=buyer"  class="btn btn--gold btn--lg btn--shimmer" style="font-size:16px;padding:16px 40px">🛒 Je suis acheteur</a>
-      <a href="/pages/auth/register.html?role=vendor" class="btn btn--outline-white btn--lg"     style="font-size:16px;padding:16px 40px">📦 Je suis vendeur</a>
-    </div>
-    <div style="margin-top:32px;font-size:13px;color:rgba(255,255,255,0.25)">
-      Inscription gratuite · Aucune carte bancaire requise · Support 24h/7j
-    </div>
-  </div>
-</section>
-
-<!-- ═══════════════════════════════════════════ FOOTER ═══════ -->
-<footer class="site-footer">
-  <div class="container">
-    <div class="footer-grid">
-      <div class="footer-brand">
-        <svg width="140" height="32" viewBox="0 0 160 40" fill="none" xmlns="http://www.w3.org/2000/svg" style="margin-bottom:20px">
-          <path d="M18 3L31 8V17.5C31 25.5 25 31.5 18 34C11 31.5 5 25.5 5 17.5V8Z" fill="none" stroke="#C9A227" stroke-width="1.5"/>
-          <polyline points="13 18 16.5 21.5 23 14" stroke="#C9A227" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
-          <text x="39" y="26" font-family="Sora, sans-serif" font-size="16" font-weight="800" fill="white" letter-spacing="-0.5">SECURE</text>
-          <text x="106" y="26" font-family="Sora, sans-serif" font-size="16" font-weight="300" fill="#C9A227" letter-spacing="2">DEAL</text>
-        </svg>
-        <p class="footer-tagline">La plateforme internationale de commerce sécurisé. Escrow, traçabilité, livraison — tout en un.</p>
-        <div class="footer-badges">
-          <span class="footer-badge">🔒 SSL</span>
-          <span class="footer-badge">✓ KYC</span>
-          <span class="footer-badge">🌍 94 Pays</span>
-          <span class="footer-badge">RGPD</span>
+    <!-- ══════════════════════════════════════ MENTIONS LÉGALES ══ -->
+    <section style="background: var(--color-dark); padding: 40px 0">
+      <div class="container">
+        <div class="legal-notice">
+          <span class="legal-icon">⚖️</span>
+          <div>
+            <strong>Mentions légales importantes :</strong>
+            SecureDeal agit exclusivement comme
+            <strong>intermédiaire de confiance</strong>. SecureDeal ne garantit
+            pas les accords conclus en dehors de la plateforme. Tout échange
+            d'IBAN ou de coordonnées bancaires personnelles est interdit.
+            <a
+              href="/pages/legal/mentions-legales.html"
+              style="
+                color: var(--color-gold);
+                text-decoration: underline;
+                margin-left: 4px;
+              "
+              >Lire les mentions légales →</a
+            >
+          </div>
         </div>
       </div>
+    </section>
 
-      <div>
-        <div class="footer-col-title">Plateforme</div>
-        <div class="footer-links">
-          <a href="/pages/how-it-works.html" class="footer-link">Fonctionnement</a>
-          <a href="/pages/categories.html"   class="footer-link">Toutes les catégories</a>
-          <a href="/pages/tracking.html"     class="footer-link">Suivi de commande</a>
-          <a href="/pages/mobile-app.html"   class="footer-link">Application mobile</a>
+    <!-- ═══════════════════════════════════════════ CTA FINAL ════ -->
+    <section
+      style="
+        background: #080800;
+        padding: 100px 0;
+        position: relative;
+        overflow: hidden;
+      "
+    >
+      <div
+        style="
+          position: absolute;
+          inset: 0;
+          background: radial-gradient(
+            ellipse 700px 400px at 50% 100%,
+            rgba(201, 162, 39, 0.06),
+            transparent
+          );
+        "
+        aria-hidden="true"
+      ></div>
+      <div class="container text-center reveal" style="position: relative">
+        <div
+          class="section-label"
+          style="display: inline-flex; margin-bottom: 24px"
+        >
+          Rejoignez SecureDeal
+        </div>
+        <h2
+          style="
+            font-family: &quot;Sora&quot;, sans-serif;
+            font-size: clamp(2rem, 4vw, 3.5rem);
+            font-weight: 800;
+            color: white;
+            letter-spacing: -1px;
+            margin-bottom: 20px;
+            line-height: 1.15;
+          "
+        >
+          Prêt à trader en toute<br />sécurité à l'international ?
+        </h2>
+        <p
+          style="
+            font-size: 18px;
+            color: rgba(255, 255, 255, 0.45);
+            margin-bottom: 40px;
+            max-width: 520px;
+            margin-left: auto;
+            margin-right: auto;
+            line-height: 1.7;
+          "
+        >
+          Créez votre compte gratuit et effectuez votre première transaction
+          sécurisée en moins de 24 heures.
+        </p>
+        <div
+          style="
+            display: flex;
+            gap: 16px;
+            justify-content: center;
+            flex-wrap: wrap;
+          "
+        >
+          <a
+            href="/pages/auth/register.html?role=buyer"
+            class="btn btn--gold btn--lg btn--shimmer"
+            style="font-size: 16px; padding: 16px 40px"
+            >🛒 Je suis acheteur</a
+          >
+          <a
+            href="/pages/auth/register.html?role=vendor"
+            class="btn btn--outline-white btn--lg"
+            style="font-size: 16px; padding: 16px 40px"
+            >📦 Je suis vendeur</a
+          >
+        </div>
+        <div
+          style="
+            margin-top: 32px;
+            font-size: 13px;
+            color: rgba(255, 255, 255, 0.25);
+          "
+        >
+          Inscription gratuite · Aucune carte bancaire requise · Support 24h/7j
         </div>
       </div>
+    </section>
 
-      <div>
-        <div class="footer-col-title">Mon compte</div>
-        <div class="footer-links">
-          <a href="/pages/auth/register.html?role=vendor" class="footer-link">Espace vendeur</a>
-          <a href="/pages/auth/register.html?role=buyer"  class="footer-link">Espace acheteur</a>
-          <a href="/pages/auth/login.html"                class="footer-link">Connexion</a>
-          <a href="/pages/auth/register.html"             class="footer-link">Créer un compte</a>
+    <!-- ═══════════════════════════════════════════ FOOTER ═══════ -->
+    <footer class="site-footer">
+      <div class="container">
+        <div class="footer-grid">
+          <div class="footer-brand">
+            <svg
+              width="140"
+              height="32"
+              viewBox="0 0 160 40"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+              style="margin-bottom: 20px"
+            >
+              <path
+                d="M18 3L31 8V17.5C31 25.5 25 31.5 18 34C11 31.5 5 25.5 5 17.5V8Z"
+                fill="none"
+                stroke="#C9A227"
+                stroke-width="1.5"
+              />
+              <polyline
+                points="13 18 16.5 21.5 23 14"
+                stroke="#C9A227"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                fill="none"
+              />
+              <text
+                x="39"
+                y="26"
+                font-family="Sora, sans-serif"
+                font-size="16"
+                font-weight="800"
+                fill="white"
+                letter-spacing="-0.5"
+              >
+                SECURE
+              </text>
+              <text
+                x="106"
+                y="26"
+                font-family="Sora, sans-serif"
+                font-size="16"
+                font-weight="300"
+                fill="#C9A227"
+                letter-spacing="2"
+              >
+                DEAL
+              </text>
+            </svg>
+            <p class="footer-tagline">
+              La plateforme internationale de commerce sécurisé. Escrow,
+              traçabilité, livraison — tout en un.
+            </p>
+            <div class="footer-badges">
+              <span class="footer-badge">🔒 SSL</span>
+              <span class="footer-badge">✓ KYC</span>
+              <span class="footer-badge">🌍 94 Pays</span>
+              <span class="footer-badge">RGPD</span>
+            </div>
+          </div>
+
+          <div>
+            <div class="footer-col-title">Plateforme</div>
+            <div class="footer-links">
+              <a href="/pages/how-it-works.html" class="footer-link"
+                >Fonctionnement</a
+              >
+              <a href="/pages/categories.html" class="footer-link"
+                >Toutes les catégories</a
+              >
+              <a href="/pages/tracking.html" class="footer-link"
+                >Suivi de commande</a
+              >
+              <a href="/pages/mobile-app.html" class="footer-link"
+                >Application mobile</a
+              >
+            </div>
+          </div>
+
+          <div>
+            <div class="footer-col-title">Mon compte</div>
+            <div class="footer-links">
+              <a
+                href="/pages/auth/register.html?role=vendor"
+                class="footer-link"
+                >Espace vendeur</a
+              >
+              <a href="/pages/auth/register.html?role=buyer" class="footer-link"
+                >Espace acheteur</a
+              >
+              <a href="/pages/auth/login.html" class="footer-link">Connexion</a>
+              <a href="/pages/auth/register.html" class="footer-link"
+                >Créer un compte</a
+              >
+            </div>
+          </div>
+
+          <div>
+            <div class="footer-col-title">Informations</div>
+            <div class="footer-links">
+              <a href="/pages/about.html" class="footer-link">À propos</a>
+              <a href="/pages/contact.html" class="footer-link">Contact</a>
+              <a href="/pages/legal/mentions-legales.html" class="footer-link"
+                >Mentions légales</a
+              >
+              <a href="/pages/legal/cgu.html" class="footer-link">CGU</a>
+              <a href="/pages/legal/confidentialite.html" class="footer-link"
+                >Confidentialité</a
+              >
+            </div>
+          </div>
+        </div>
+
+        <div class="footer-bottom">
+          <div class="footer-copy">
+            © 2025 SecureDeal. Tous droits réservés. Intermédiaire sécurisé
+            agréé.
+          </div>
+          <div class="footer-legal-links">
+            <a href="/pages/legal/mentions-legales.html">Mentions légales</a>
+            <a href="/pages/legal/cgu.html">CGU</a>
+            <a href="/pages/legal/confidentialite.html">Confidentialité</a>
+            <a href="/pages/legal/cookies.html">Cookies</a>
+          </div>
         </div>
       </div>
+    </footer>
 
-      <div>
-        <div class="footer-col-title">Informations</div>
-        <div class="footer-links">
-          <a href="/pages/about.html"                      class="footer-link">À propos</a>
-          <a href="/pages/contact.html"                    class="footer-link">Contact</a>
-          <a href="/pages/legal/mentions-legales.html"     class="footer-link">Mentions légales</a>
-          <a href="/pages/legal/cgu.html"                  class="footer-link">CGU</a>
-          <a href="/pages/legal/confidentialite.html"      class="footer-link">Confidentialité</a>
-        </div>
-      </div>
-    </div>
+    <!-- ═══════════════════════════════════════════ SCRIPTS ══════ -->
+    <script src="/js/config.js"></script>
+    <script src="/js/api.js"></script>
+    <script src="/js/utils.js"></script>
+    <script src="/js/tracking.js"></script>
+    <script src="/js/icons.js"></script>
+    <script>
+      "use strict";
 
-    <div class="footer-bottom">
-      <div class="footer-copy">© 2025 SecureDeal. Tous droits réservés. Intermédiaire sécurisé agréé.</div>
-      <div class="footer-legal-links">
-        <a href="/pages/legal/mentions-legales.html">Mentions légales</a>
-        <a href="/pages/legal/cgu.html">CGU</a>
-        <a href="/pages/legal/confidentialite.html">Confidentialité</a>
-        <a href="/pages/legal/cookies.html">Cookies</a>
-      </div>
-    </div>
-  </div>
-</footer>
+      // ─── HEADER SCROLL ──────────────────────────────────────────
+      (function () {
+        const header = document.getElementById("site-header");
+        const onScroll = () =>
+          header.classList.toggle("scrolled", window.scrollY > 20);
+        window.addEventListener("scroll", onScroll, { passive: true });
+        onScroll();
+      })();
 
-<!-- ═══════════════════════════════════════════ SCRIPTS ══════ -->
-<script src="/js/config.js"></script>
-<script src="/js/api.js"></script>
-<script src="/js/utils.js"></script>
-<script src="/js/tracking.js"></script>
-<script src="/js/icons.js"></script>
-<script>
-'use strict';
+      // ─── HAMBURGER → CROIX ROUGE ────────────────────────────────
+      (function () {
+        const burger = document.getElementById("hamburger");
+        const menu = document.getElementById("mobile-menu");
+        if (!burger || !menu) return;
 
-// ─── HEADER SCROLL ──────────────────────────────────────────
-(function() {
-  const header = document.getElementById('site-header');
-  const onScroll = () => header.classList.toggle('scrolled', window.scrollY > 20);
-  window.addEventListener('scroll', onScroll, { passive: true });
-  onScroll();
-})();
+        burger.addEventListener("click", () => {
+          const open = menu.classList.toggle("open");
+          burger.classList.toggle("open", open);
+          burger.setAttribute("aria-expanded", open);
+          document.body.classList.toggle("menu-open", open);
+        });
 
-// ─── HAMBURGER → CROIX ROUGE ────────────────────────────────
-(function() {
-  const burger = document.getElementById('hamburger');
-  const menu   = document.getElementById('mobile-menu');
-  if (!burger || !menu) return;
+        menu.querySelectorAll("a").forEach((a) => {
+          a.addEventListener("click", () => {
+            menu.classList.remove("open");
+            burger.classList.remove("open");
+            burger.setAttribute("aria-expanded", "false");
+            document.body.classList.remove("menu-open");
+          });
+        });
+      })();
 
-  burger.addEventListener('click', () => {
-    const open = menu.classList.toggle('open');
-    burger.classList.toggle('open', open);
-    burger.setAttribute('aria-expanded', open);
-    document.body.classList.toggle('menu-open', open);
-  });
+      // ─── SCROLL REVEAL ───────────────────────────────────────────
+      (function () {
+        const obs = new IntersectionObserver(
+          (entries) => {
+            entries.forEach((e) => {
+              if (e.isIntersecting) {
+                e.target.classList.add("visible");
+                obs.unobserve(e.target);
+              }
+            });
+          },
+          { threshold: 0.12 },
+        );
+        document.querySelectorAll(".reveal").forEach((el) => obs.observe(el));
+      })();
 
-  menu.querySelectorAll('a').forEach(a => {
-    a.addEventListener('click', () => {
-      menu.classList.remove('open');
-      burger.classList.remove('open');
-      burger.setAttribute('aria-expanded', 'false');
-      document.body.classList.remove('menu-open');
-    });
-  });
-})();
+      // ─── COMPTEURS HERO ──────────────────────────────────────────
+      (function () {
+        document.querySelectorAll("[data-counter]").forEach((el) => {
+          const target = parseFloat(el.dataset.counter);
+          const dur = parseInt(el.dataset.counterDuration) || 2000;
+          const decimal = !Number.isInteger(target);
+          const obs = new IntersectionObserver(
+            ([entry]) => {
+              if (!entry.isIntersecting) return;
+              obs.disconnect();
+              let start = null;
+              const step = (ts) => {
+                if (!start) start = ts;
+                const p = Math.min((ts - start) / dur, 1);
+                el.textContent = decimal
+                  ? (p * target).toFixed(1)
+                  : Math.floor(p * target).toLocaleString("fr-FR");
+                if (p < 1) requestAnimationFrame(step);
+                else
+                  el.textContent = decimal
+                    ? target.toFixed(1)
+                    : target.toLocaleString("fr-FR");
+              };
+              requestAnimationFrame(step);
+            },
+            { threshold: 0.5 },
+          );
+          obs.observe(el);
+        });
+      })();
 
-// ─── SCROLL REVEAL ───────────────────────────────────────────
-(function() {
-  const obs = new IntersectionObserver((entries) => {
-    entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); obs.unobserve(e.target); } });
-  }, { threshold: 0.12 });
-  document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
-})();
+      // ─── COMPTEURS CATÉGORIES ────────────────────────────────────
+      document
+        .querySelectorAll(".category-count[data-counter]")
+        .forEach((el) => {
+          const target = parseInt(el.dataset.counter);
+          const obs = new IntersectionObserver(
+            ([entry]) => {
+              if (!entry.isIntersecting) return;
+              obs.disconnect();
+              let cur = 0;
+              const step = Math.ceil(target / 60);
+              const timer = setInterval(() => {
+                cur = Math.min(cur + step, target);
+                el.textContent = cur.toLocaleString("fr-FR") + " annonces";
+                if (cur >= target) clearInterval(timer);
+              }, 20);
+            },
+            { threshold: 0.5 },
+          );
+          obs.observe(el);
+        });
 
-// ─── COMPTEURS HERO ──────────────────────────────────────────
-(function() {
-  document.querySelectorAll('[data-counter]').forEach(el => {
-    const target   = parseFloat(el.dataset.counter);
-    const dur      = parseInt(el.dataset.counterDuration) || 2000;
-    const decimal  = !Number.isInteger(target);
-    const obs = new IntersectionObserver(([entry]) => {
-      if (!entry.isIntersecting) return;
-      obs.disconnect();
-      let start = null;
-      const step = (ts) => {
-        if (!start) start = ts;
-        const p = Math.min((ts - start) / dur, 1);
-        el.textContent = decimal ? (p * target).toFixed(1) : Math.floor(p * target).toLocaleString('fr-FR');
-        if (p < 1) requestAnimationFrame(step);
-        else el.textContent = decimal ? target.toFixed(1) : target.toLocaleString('fr-FR');
-      };
-      requestAnimationFrame(step);
-    }, { threshold: 0.5 });
-    obs.observe(el);
-  });
-})();
+      // ─── CALCULATEUR ESCROW (nouveau pricing dynamique) ─────────
+      var idxLevel = "standard";
 
-// ─── COMPTEURS CATÉGORIES ────────────────────────────────────
-document.querySelectorAll('.category-count[data-counter]').forEach(el => {
-  const target = parseInt(el.dataset.counter);
-  const obs = new IntersectionObserver(([entry]) => {
-    if (!entry.isIntersecting) return;
-    obs.disconnect();
-    let cur = 0;
-    const step = Math.ceil(target / 60);
-    const timer = setInterval(() => {
-      cur = Math.min(cur + step, target);
-      el.textContent = cur.toLocaleString('fr-FR') + ' annonces';
-      if (cur >= target) clearInterval(timer);
-    }, 20);
-  }, { threshold: 0.5 });
-  obs.observe(el);
-});
-
-// ─── CALCULATEUR ESCROW (nouveau pricing dynamique) ─────────
-var idxLevel = 'standard';
-
-window.idxSetLevel = function(lv) {
+window.idxSetLevel = function (lv) {
   idxLevel = lv;
-  var s = document.getElementById('idx-std');
-  var n = document.getElementById('idx-cnc');
-  if (lv === 'standard') {
-    s.style.background = 'linear-gradient(135deg,#1a1400,#2a2100)';
-    s.style.color = 'var(--color-gold)';
-    s.style.border = '1px solid rgba(201,162,39,0.25)';
-    n.style.background = 'transparent';
-    n.style.color = 'rgba(255,255,255,0.35)';
-    n.style.border = 'none';
-  } else {
-    n.style.background = 'linear-gradient(135deg,#0d001a,#1a0030)';
-    n.style.color = '#A78BFA';
-    n.style.border = '1px solid rgba(167,139,250,0.25)';
-    s.style.background = 'transparent';
-    s.style.color = 'rgba(255,255,255,0.35)';
-    s.style.border = 'none';
+  var s = document.getElementById("idx-std");
+  var n = document.getElementById("idx-cnc");
+  if (s && n) {
+    if (lv === "standard") {
+      s.style.background = "linear-gradient(135deg,#1a1400,#2a2100)";
+      s.style.color = "var(--color-gold)";
+      s.style.border = "1px solid rgba(201,162,39,0.25)";
+      n.style.background = "transparent";
+      n.style.color = "rgba(255,255,255,0.35)";
+      n.style.border = "none";
+    } else {
+      n.style.background = "linear-gradient(135deg,#0d001a,#1a0030)";
+      n.style.color = "#A78BFA";
+      n.style.border = "1px solid rgba(167,139,250,0.25)";
+      s.style.background = "transparent";
+      s.style.color = "rgba(255,255,255,0.35)";
+      s.style.border = "none";
+    }
   }
   idxCalc();
 };
 
-window.idxCalc = function() {
-  var price = parseFloat(document.getElementById('calc-price').value);
+window.idxCalc = function () {
+  var priceInput = document.getElementById("calc-price");
+  if (!priceInput) return;
+  
+  var price = parseFloat(priceInput.value);
   if (!price || price <= 0) return;
+
   var P = window.SecureDealPricing;
-  if (!P) return;
-  var result = P.compute({
-    amount:          price,
-    level:           idxLevel,
-    paymentMethod:   document.getElementById('idx-card').checked ? 'card_paypal' : 'transfer',
-    isInternational: document.getElementById('idx-intl').checked,
-    depositPct:      parseInt(document.getElementById('calc-acompte').value),
-  });
-  if (!result || result.isQuote) {
-    document.getElementById('r-total').textContent = '> 10 000 000 € — Sur devis';
+  if (!P) {
+    console.error("SecureDealPricing n'est pas chargé depuis pricing.js");
     return;
   }
+
+  // Sécurisation des éléments optionnels
+  var cardChecked = document.getElementById("idx-card") ? document.getElementById("idx-card").checked : false;
+  var intlChecked = document.getElementById("idx-intl") ? document.getElementById("idx-intl").checked : false;
+  var acompteSelect = document.getElementById("calc-acompte");
+  var depositPct = acompteSelect ? parseInt(acompteSelect.value) : 50;
+
+  var result = P.compute({
+    amount: price,
+    level: idxLevel,
+    paymentMethod: cardChecked ? "card_paypal" : "transfer",
+    isInternational: intlChecked,
+    depositPct: depositPct,
+  });
+
+  if (!result || result.isQuote) {
+    document.getElementById("r-total").textContent = "> 10 000 000 € — Sur devis";
+    return;
+  }
+
   var feeLabel = result.fmt.rate;
-  if (result.minimumApplied) feeLabel += ' ⚠ min.';
-  var fl = document.getElementById('r-fee-label-home'); if(fl) fl.textContent = '(' + feeLabel + ')';
-  document.getElementById('r-total').textContent        = result.fmt.amount;
-  document.getElementById('r-commission').textContent   = result.fmt.baseFee;
-  document.getElementById('r-acompte').textContent      = result.fmt.deposit;
-  document.getElementById('r-reste').textContent        = result.fmt.balance;
-  document.getElementById('r-net').textContent          = result.fmt.netToVendor;
-  // Carte
-  var cRow = document.getElementById('r-card-row');
-  if (result.cardFee > 0) {
-    document.getElementById('r-card').textContent = '+ ' + result.fmt.cardFee;
-    cRow.style.display = '';
-  } else { cRow.style.display = 'none'; }
-  // International
-  var iRow = document.getElementById('r-intl-row');
-  if (result.internationalFee > 0) {
-    document.getElementById('r-intl').textContent = '+ ' + result.fmt.internationalFee;
-    iRow.style.display = '';
-  } else { iRow.style.display = 'none'; }
-  document.getElementById('calc-results').classList.add('show');
+  if (result.minimumApplied) feeLabel += " ⚠ min.";
+  
+  var fl = document.getElementById("r-fee-label-home");
+  if (fl) fl.textContent = "(" + feeLabel + ")";
+
+  document.getElementById("r-total").textContent = result.fmt.amount;
+  document.getElementById("r-commission").textContent = result.fmt.baseFee;
+  document.getElementById("r-acompte").textContent = result.fmt.deposit;
+  document.getElementById("r-reste").textContent = result.fmt.balance;
+  document.getElementById("r-net").textContent = Spine = result.fmt.netToVendor;
+
+  // Gestion Carte
+  var cRow = document.getElementById("r-card-row");
+  var cElem = document.getElementById("r-card");
+  if (cRow && cElem) {
+    if (result.cardFee > 0) {
+      cElem.textContent = "+ " + result.fmt.cardFee;
+      cRow.style.display = "";
+    } else {
+      cRow.style.display = "none";
+    }
+  }
+
+  // Gestion International
+  var iRow = document.getElementById("r-intl-row");
+  var iElem = document.getElementById("r-intl");
+  if (iRow && iElem) {
+    if (result.internationalFee > 0) {
+      iElem.textContent = "+ " + result.fmt.internationalFee;
+      iRow.style.display = "";
+    } else {
+      iRow.style.display = "none";
+    }
+  }
+
+  var resultsContainer = document.getElementById("calc-results");
+  if (resultsContainer) resultsContainer.classList.add("show");
 };
 
-// ─── AUTH HEADER ─────────────────────────────────────────────
-try {
-  const user = SD && SD.Auth && SD.Auth.getUser ? SD.Auth.getUser() : null;
-  if (user) {
-    const authEl = document.getElementById('header-auth');
-    const dashUrl = user.role === 'vendor' ? '/pages/dashboard/vendor.html' : '/pages/dashboard/buyer.html';
-    authEl.innerHTML = `<a href="${dashUrl}" class="btn btn--outline-white btn--sm">Mon espace</a>
-    <button onclick="SD.Auth.logout()" class="btn btn--ghost btn--sm">Déconnexion</button>`;
+// ════════════ BRANCHEMENT DE L'ÉVÉNEMENT CLIC ════════════
+document.addEventListener("DOMContentLoaded", function () {
+  var calcBtn = document.getElementById("calc-btn");
+  if (calcBtn) {
+    calcBtn.addEventListener("click", window.idxCalc);
   }
-} catch(e) {}
+});
+      // ─── AUTH HEADER ─────────────────────────────────────────────
+      try {
+        const user =
+          SD && SD.Auth && SD.Auth.getUser ? SD.Auth.getUser() : null;
+        if (user) {
+          const authEl = document.getElementById("header-auth");
+          const dashUrl =
+            user.role === "vendor"
+              ? "/pages/dashboard/vendor.html"
+              : "/pages/dashboard/buyer.html";
+          authEl.innerHTML = `<a href="${dashUrl}" class="btn btn--outline-white btn--sm">Mon espace</a>
+    <button onclick="SD.Auth.logout()" class="btn btn--ghost btn--sm">Déconnexion</button>`;
+        }
+      } catch (e) {}
 
-// ─── LANGUE ──────────────────────────────────────────────────
-const langBtn = document.getElementById('lang-btn');
-if (langBtn) langBtn.addEventListener('click', () => alert('Sélection de langue — bientôt disponible.'));
-</script>
-</body>
+      // ─── LANGUE ──────────────────────────────────────────────────
+      const langBtn = document.getElementById("lang-btn");
+      if (langBtn)
+        langBtn.addEventListener("click", () =>
+          alert("Sélection de langue — bientôt disponible."),
+        );
+    </script>
+  </body>
 </html>
