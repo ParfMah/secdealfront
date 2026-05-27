@@ -1,0 +1,927 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+  <title>Initier une transaction — SecureDeal</title>
+  <script src="/js/loader.js"></script>
+  <script src="/js/pricing.js"></script>
+  <link rel="stylesheet" href="/css/loader.css">
+  <link rel="stylesheet" href="/css/main.css">
+  <link rel="stylesheet" href="/css/brand.css">
+  <link rel="stylesheet" href="/css/backgrounds.css">
+  <link rel="stylesheet" href="/css/responsive-fixes.css">
+  <link rel="icon" href="/images/logo/favicon.svg" type="image/svg+xml">
+  <style>
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    body{background:#050505;overflow-x:hidden}
+
+    /* ── Layout principal ── */
+    .purchase-wrap{
+      max-width:1200px;margin:0 auto;
+      padding:32px 24px 80px;
+      display:grid;
+      grid-template-columns:1fr 340px;
+      gap:32px;align-items:start;
+    }
+
+    /* ── Breadcrumb hero ── */
+    .purchase-hero{
+      background:var(--gradient-hero);
+      padding:80px 0 28px;position:relative;overflow:hidden;
+    }
+    .purchase-hero::before{
+      content:'';position:absolute;inset:0;
+      background-image:
+        linear-gradient(rgba(201,162,39,0.04)1px,transparent 1px),
+        linear-gradient(90deg,rgba(201,162,39,0.04)1px,transparent 1px);
+      background-size:60px 60px;
+    }
+    .purchase-hero .inner{position:relative;max-width:100%;margin:0 auto;padding:0 16px}
+
+    /* ── Stepper ── */
+    .step-nav{
+      display:flex;gap:4px;margin-bottom:24px;
+      background:rgba(255,255,255,0.03);
+      border:1px solid rgba(255,255,255,0.07);
+      border-radius:14px;padding:4px;
+    }
+    .step-nav-item{
+      flex:1;text-align:center;padding:9px 6px;
+      border-radius:10px;font-size:12px;font-weight:700;
+      color:rgba(255,255,255,0.30);font-family:'Sora',sans-serif;
+      transition:all .2s;display:flex;align-items:center;
+      justify-content:center;gap:5px;white-space:nowrap;
+    }
+    .step-nav-item.active{background:rgba(201,162,39,0.12);color:var(--color-gold);border:1px solid rgba(201,162,39,0.2)}
+    .step-nav-item.done{color:#10B981;background:rgba(16,185,129,0.06)}
+    .step-num{
+      width:18px;height:18px;border-radius:50%;
+      background:rgba(255,255,255,0.10);
+      font-size:10px;font-weight:800;
+      display:flex;align-items:center;justify-content:center;flex-shrink:0;
+    }
+    .step-nav-item.active .step-num{background:var(--color-gold);color:#000}
+    .step-nav-item.done .step-num{background:#10B981;color:#000}
+
+    /* ── Section formulaire ── */
+    .form-section{
+      background:rgba(255,255,255,0.03);
+      border:1px solid rgba(255,255,255,0.08);
+      border-radius:18px;padding:24px;margin-bottom:16px;
+    }
+    .form-section-title{
+      font-family:'Sora',sans-serif;font-size:15px;
+      font-weight:700;color:white;margin-bottom:18px;
+      padding-bottom:12px;border-bottom:1px solid rgba(255,255,255,0.07);
+      display:flex;align-items:center;gap:10px;
+    }
+    .form-group{margin-bottom:14px}
+    .form-label{
+      display:block;font-size:13px;font-weight:600;
+      color:rgba(255,255,255,0.55);margin-bottom:6px;
+    }
+    .form-control{
+      width:100%;padding:11px 14px;
+      background:rgba(255,255,255,0.05);
+      border:1.5px solid rgba(255,255,255,0.10);
+      border-radius:12px;color:white;
+      font-family:'DM Sans',sans-serif;font-size:15px;
+      outline:none;transition:border-color .2s;
+      -webkit-appearance:none;appearance:none;
+    }
+    .form-control:focus{border-color:var(--color-gold);box-shadow:0 0 0 3px rgba(201,162,39,0.12)}
+    .form-control::placeholder{color:rgba(255,255,255,0.22)}
+    select.form-control{cursor:pointer}
+    textarea.form-control{resize:vertical;min-height:80px}
+
+    /* Grille 2 colonnes */
+    .form-grid-2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+
+    /* Slider acompte */
+    .dep-row{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px}
+    .dep-label{font-size:13px;color:rgba(255,255,255,0.55)}
+    .dep-value{font-family:'JetBrains Mono',monospace;font-size:16px;font-weight:800;color:var(--color-gold)}
+    .dep-slider{
+      width:100%;max-width:100%;accent-color:var(--color-gold);
+      height:4px;margin-bottom:8px;cursor:pointer;
+      box-sizing:border-box;
+    }
+    .dep-ticks{display:flex;justify-content:space-between;font-size:11px;color:rgba(255,255,255,0.22);margin-bottom:14px}
+
+    /* Info escrow */
+    .escrow-note{
+      background:rgba(201,162,39,0.06);
+      border:1px solid rgba(201,162,39,0.15);
+      border-radius:10px;padding:12px 14px;
+      font-size:12px;color:rgba(255,255,255,0.50);line-height:1.6;
+    }
+
+    /* Upload */
+    .upload-zone{
+      border:2px dashed rgba(201,162,39,0.25);border-radius:14px;
+      padding:20px 12px;text-align:center;cursor:pointer;
+      transition:all .2s;background:rgba(201,162,39,0.03);
+      display:flex;flex-direction:column;align-items:center;gap:8px;
+      width:100%;box-sizing:border-box;
+    }
+    .upload-zone:hover{border-color:rgba(201,162,39,0.5);background:rgba(201,162,39,0.06)}
+    .upload-file-name{font-size:12px;color:var(--color-gold);margin-top:4px;display:none}
+
+    /* CGU */
+    .cgu-item{
+      display:flex;align-items:flex-start;gap:12px;
+      padding:14px;background:rgba(255,255,255,0.02);
+      border:1px solid rgba(255,255,255,0.07);border-radius:12px;
+      cursor:pointer;margin-bottom:10px;
+    }
+    .cgu-item input{accent-color:var(--color-gold);width:16px;height:16px;flex-shrink:0;margin-top:2px}
+    .cgu-text{font-size:13px;color:rgba(255,255,255,0.55);line-height:1.6}
+    .cgu-text a{color:var(--color-gold)}
+
+    /* Boutons nav */
+    .nav-btns{display:flex;gap:12px;margin-top:4px}
+    .btn-prev{
+      flex:1;padding:14px;background:transparent;
+      color:rgba(255,255,255,0.65);border:1.5px solid rgba(255,255,255,0.15);
+      border-radius:14px;font-family:'Sora',sans-serif;font-size:14px;
+      font-weight:700;cursor:pointer;transition:all .2s;
+    }
+    .btn-prev:hover{border-color:rgba(201,162,39,0.35);color:var(--color-gold)}
+    .btn-next{
+      flex:2;padding:14px;background:var(--gradient-gold);color:#000;
+      border:none;border-radius:14px;font-family:'Sora',sans-serif;
+      font-size:14px;font-weight:800;cursor:pointer;transition:all .2s;
+      box-shadow:0 4px 20px rgba(201,162,39,0.30);
+    }
+    .btn-next:hover{transform:translateY(-1px);box-shadow:0 8px 28px rgba(201,162,39,0.4)}
+    .btn-next:disabled{opacity:.4;cursor:not-allowed;transform:none}
+    .btn-next-full{
+      width:100%;padding:16px;background:var(--gradient-gold);color:#000;
+      border:none;border-radius:14px;font-family:'Sora',sans-serif;
+      font-size:15px;font-weight:800;cursor:pointer;transition:all .2s;
+      box-shadow:0 4px 20px rgba(201,162,39,0.30);
+      display:flex;align-items:center;justify-content:center;gap:8px;
+    }
+    .btn-next-full:hover{transform:translateY(-1px);box-shadow:0 8px 28px rgba(201,162,39,0.4)}
+    .btn-next-full:disabled{opacity:.4;cursor:not-allowed;transform:none}
+
+    /* ── Sidebar recap ── */
+    .recap-box{
+      background:rgba(255,255,255,0.03);
+      border:1px solid rgba(201,162,39,0.15);
+      border-radius:18px;padding:22px;
+      position:sticky;top:90px;
+    }
+    .recap-title{
+      font-family:'Sora',sans-serif;font-size:15px;
+      font-weight:700;color:white;margin-bottom:16px;
+      padding-bottom:12px;border-bottom:1px solid rgba(255,255,255,0.07);
+    }
+    .recap-product{
+      display:flex;gap:12px;align-items:center;
+      margin-bottom:16px;padding-bottom:16px;
+      border-bottom:1px solid rgba(255,255,255,0.07);
+    }
+    .recap-product-img{
+      width:68px;height:50px;border-radius:10px;
+      overflow:hidden;background:rgba(255,255,255,0.04);flex-shrink:0;
+    }
+    .recap-product-img img{width:100%;height:100%;object-fit:cover}
+    .recap-product-name{font-size:13px;font-weight:700;color:white;line-height:1.3;margin-bottom:3px}
+    .recap-product-ref{font-size:11px;color:rgba(255,255,255,0.30)}
+    .recap-line{
+      display:flex;justify-content:space-between;align-items:center;
+      padding:7px 0;font-size:13px;color:rgba(255,255,255,0.45);
+      border-bottom:1px solid rgba(255,255,255,0.04);gap:8px;
+    }
+    .recap-line:last-child{border-bottom:none}
+    .recap-line b{color:rgba(255,255,255,0.80);font-family:'JetBrains Mono',monospace;text-align:right;flex-shrink:0}
+    .recap-line.highlight{color:white;font-weight:700;font-size:14px}
+    .recap-line.highlight b{color:var(--color-gold);font-size:16px}
+    .recap-trust{margin-top:16px;padding-top:14px;border-top:1px solid rgba(255,255,255,0.07);display:flex;flex-direction:column;gap:6px}
+    .recap-trust-item{font-size:12px;color:rgba(255,255,255,0.35);display:flex;gap:8px;align-items:center}
+    .recap-trust-item span:first-child{color:var(--color-gold);flex-shrink:0}
+
+    /* ── Récap bande mobile (top) ── */
+    .mobile-recap-band{
+      display:none;
+      background:rgba(201,162,39,0.08);
+      border:1px solid rgba(201,162,39,0.18);
+      border-radius:14px;padding:14px 16px;
+      margin-bottom:20px;
+    }
+    .mrb-row{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px}
+    .mrb-name{font-size:13px;font-weight:700;color:white;margin-bottom:4px}
+    .mrb-price{font-family:'JetBrains Mono',monospace;font-size:18px;font-weight:800;color:var(--color-gold)}
+    .mrb-detail{font-size:12px;color:rgba(255,255,255,0.40)}
+
+    /* ── Step 4 recap ── */
+    .s4-item{
+      display:flex;justify-content:space-between;align-items:center;
+      padding:10px 0;font-size:13px;
+      border-bottom:1px solid rgba(255,255,255,0.06);gap:12px;
+    }
+    .s4-item:last-child{border-bottom:none}
+    .s4-label{color:rgba(255,255,255,0.45);flex-shrink:0}
+    .s4-val{color:white;font-weight:600;text-align:right}
+
+    /* ── Modal succès ── */
+    .modal-bd{
+      position:fixed;inset:0;background:rgba(0,0,0,0.85);
+      backdrop-filter:blur(10px);z-index:1000;
+      display:none;align-items:center;justify-content:center;padding:20px;
+    }
+    .modal-bd.show{display:flex}
+    .modal-box{
+      background:#111;border:1px solid rgba(201,162,39,0.2);
+      border-radius:24px;padding:36px;
+      max-width:440px;width:100%;text-align:center;
+      animation:fadeInUp .3s ease;
+    }
+
+    /* Alerte fraude */
+    .fraud-alert{
+      background:rgba(239,68,68,0.08);
+      border:1px solid rgba(239,68,68,0.20);
+      border-radius:14px;padding:14px 16px;
+      display:flex;gap:12px;margin-bottom:16px;
+    }
+
+    /* ── Responsive mobile ── */
+    /* ── RESET GLOBAL ANTI-OVERFLOW ── */
+    html,body{max-width:100%;overflow-x:hidden}
+    .purchase-wrap,.mobile-recap-band,.step-nav,
+    .form-section,.nav-btns,.mrb-row,
+    .upload-zone,.cgu-item,.fraud-alert{
+      max-width:100%;box-sizing:border-box;
+      overflow-x:hidden;
+    }
+    .form-control{max-width:100%;min-width:0;box-sizing:border-box;width:100%}
+    /* Tous les enfants directs du form-section ne débordent pas */
+    .form-section > *{max-width:100%;box-sizing:border-box}
+
+    @media(max-width:900px){
+      .purchase-wrap{
+        grid-template-columns:1fr !important;
+        gap:0 !important;
+        padding:12px 12px 80px !important;
+        width:100% !important;
+        overflow-x:hidden !important;
+      }
+      .recap-box{position:static;display:none}
+      .mobile-recap-band{display:block}
+      .form-grid-2{grid-template-columns:1fr !important}
+
+      /* Bande récap mobile : prix fluid */
+      .mobile-recap-band{
+        padding:12px 14px !important;
+        overflow:hidden !important;
+      }
+      .mrb-row{
+        display:grid !important;
+        grid-template-columns:1fr auto !important;
+        gap:8px 12px !important;
+        align-items:start !important;
+        overflow:hidden !important;
+      }
+      .mrb-name{
+        font-size:clamp(12px,3.5vw,15px) !important;
+        word-break:break-word !important;
+        min-width:0 !important;
+      }
+      .mrb-price{
+        font-size:clamp(14px,4vw,18px) !important;
+        white-space:nowrap !important;
+        text-align:right !important;
+      }
+      .mrb-detail{font-size:11px !important}
+
+      /* Ligne acompte mobile */
+      .mobile-recap-band>div:last-child{
+        grid-column:1/-1 !important;
+        display:flex !important;
+        justify-content:space-between !important;
+        align-items:center !important;
+        border-top:1px solid rgba(201,162,39,0.15) !important;
+        padding-top:8px !important;
+        margin-top:4px !important;
+      }
+
+      /* Stepper : scrollable + labels courts */
+      .step-nav{
+        overflow-x:auto !important;
+        overflow-y:hidden !important;
+        scrollbar-width:none !important;
+        -ms-overflow-style:none !important;
+        padding:3px !important;
+        gap:2px !important;
+        flex-wrap:nowrap !important;
+      }
+      .step-nav::-webkit-scrollbar{display:none}
+      .step-nav-item{
+        flex:0 0 auto !important;
+        font-size:11px !important;
+        padding:8px 10px !important;
+        white-space:nowrap !important;
+        min-width:max-content !important;
+      }
+      .step-num{width:18px;height:18px;font-size:10px}
+
+      /* Formulaire */
+      .form-section{padding:14px 12px !important}
+      .form-section-title{font-size:14px !important}
+      .form-label{font-size:12px !important}
+      .form-control{
+        font-size:16px !important; /* évite zoom iOS */
+        padding:10px 12px !important;
+        width:100% !important;
+        min-width:0 !important;
+      }
+      .dep-ticks{font-size:10px !important}
+
+      /* Boutons */
+      .btn-next-full{font-size:14px !important;padding:14px !important}
+      .nav-btns{flex-direction:column !important;gap:8px !important}
+      .btn-prev,.btn-next{flex:none !important;width:100% !important}
+    }
+
+    @media(max-width:400px){
+      .purchase-wrap{padding:8px 8px 60px !important}
+      .purchase-hero .inner{padding:0 12px !important}
+      /* Stepper : cacher les labels, garder seulement numéros + icône active */
+      .step-nav-item span{display:none !important}
+      .step-nav-item.active span{display:inline !important;font-size:10px !important}
+      .step-nav-item{padding:8px 8px !important;min-width:auto !important}
+      .mrb-price{font-size:13px !important}
+    }
+  </style>
+</head>
+<body>
+
+<header class="site-header scrolled" id="site-header">
+  <div class="header-inner">
+    <a href="/index.html" class="header-logo">
+      <svg width="150" height="36" viewBox="0 0 160 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M18 3L31 8V17.5C31 25.5 25 31.5 18 34C11 31.5 5 25.5 5 17.5V8Z" fill="none" stroke="#C9A227" stroke-width="1.5"/>
+        <path d="M18 7.5L27 11.5V17.5C27 23 23 27.5 18 30C13 27.5 9 23 9 17.5V11.5Z" fill="rgba(201,162,39,0.08)" stroke="#C9A227" stroke-width="0.8"/>
+        <polyline points="13 18 16.5 21.5 23 14" stroke="#C9A227" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+        <text x="39" y="26" font-family="Sora, sans-serif" font-size="16" font-weight="800" fill="white" letter-spacing="-0.5">SECURE</text>
+        <text x="106" y="26" font-family="Sora, sans-serif" font-size="16" font-weight="300" fill="#C9A227" letter-spacing="2">DEAL</text>
+      </svg>
+    </a>
+    <nav class="header-nav">
+      <a href="/index.html" class="header-nav-link">Accueil</a>
+      <a href="/pages/categories.html" class="header-nav-link active">Catégories</a>
+      <a href="/pages/tracking.html" class="header-nav-link">Suivi</a>
+    </nav>
+    <div class="header-actions">
+      <div id="header-auth" style="display:flex;gap:10px;align-items:center">
+        <a href="/pages/auth/login.html" class="btn btn--outline-white btn--sm">Connexion</a>
+        <a href="/pages/auth/register.html" class="btn btn--gold btn--sm">Créer un compte</a>
+      </div>
+    </div>
+    <button class="hamburger" id="hamburger" aria-label="Menu" aria-expanded="false"><span></span><span></span><span></span></button>
+  </div>
+</header>
+<nav class="mobile-menu" id="mobile-menu">
+  <a href="/index.html">🏠 Accueil</a>
+  <a href="/pages/categories.html" class="active">📦 Catégories</a>
+  <a href="/pages/tracking.html">📡 Suivi</a>
+  <div class="mobile-menu-divider"></div>
+  <div class="mobile-menu-actions">
+    <a href="/pages/auth/login.html" class="btn btn--outline-white">Se connecter</a>
+    <a href="/pages/auth/register.html" class="btn btn--gold">Créer un compte</a>
+  </div>
+</nav>
+
+<!-- Hero -->
+<div class="purchase-hero">
+  <div class="inner">
+    <div style="font-size:13px;color:rgba(255,255,255,0.35);margin-bottom:14px;display:flex;align-items:center;gap:8px;flex-wrap:wrap">
+      <a href="/pages/categories.html" style="color:rgba(255,255,255,0.35)">Catégories</a>
+      <span style="color:rgba(255,255,255,0.15)">›</span>
+      <a id="back-product" href="/pages/product.html" style="color:rgba(255,255,255,0.35)">Produit</a>
+      <span style="color:rgba(255,255,255,0.15)">›</span>
+      <span style="color:var(--color-gold);font-weight:600">Initier la transaction</span>
+    </div>
+    <h1 style="font-family:'Sora',sans-serif;font-size:clamp(1.5rem,4vw,2.2rem);font-weight:800;color:white;margin-bottom:8px;line-height:1.2">Initier la transaction</h1>
+    <p style="color:rgba(255,255,255,0.45);font-size:14px;line-height:1.6">Complétez les informations ci-dessous pour sécuriser votre achat via l'escrow SecureDeal.</p>
+  </div>
+</div>
+
+<!-- Contenu principal -->
+<div class="purchase-wrap">
+
+  <!-- ── COLONNE FORMULAIRE ── -->
+  <div>
+
+    <!-- Bande récap mobile (affichée uniquement sur mobile) -->
+    <div class="mobile-recap-band">
+      <div class="mrb-row">
+        <div style="min-width:0;overflow:hidden">
+          <div class="mrb-name" id="mrb-name">—</div>
+          <div class="mrb-detail">Réf. <span id="mrb-ref">—</span></div>
+        </div>
+        <div style="text-align:right;flex-shrink:0;min-width:0">
+          <div style="font-size:10px;color:rgba(255,255,255,0.35);margin-bottom:2px">Prix total</div>
+          <div class="mrb-price" id="mrb-price">—</div>
+        </div>
+      </div>
+      <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:6px;padding-top:8px;border-top:1px solid rgba(201,162,39,0.15);margin-top:8px">
+        <span style="font-size:12px;color:rgba(255,255,255,0.40)">Acompte&nbsp;(<span id="mrb-pct">50%</span>)</span>
+        <span style="font-size:13px;font-weight:700;color:var(--color-gold)" id="mrb-dep">—</span>
+      </div>
+    </div>
+
+    <!-- Stepper -->
+    <div class="step-nav" id="step-nav">
+      <div class="step-nav-item active" id="sn1"><div class="step-num">1</div><span>Coordonnées</span></div>
+      <div class="step-nav-item" id="sn2"><div class="step-num">2</div><span>Livraison</span></div>
+      <div class="step-nav-item" id="sn3"><div class="step-num">3</div><span>Documents</span></div>
+      <div class="step-nav-item" id="sn4"><div class="step-num">4</div><span>Validation</span></div>
+    </div>
+
+    <!-- ── ÉTAPE 1 : Coordonnées ── -->
+    <div id="step-1">
+      <div class="form-section">
+        <div class="form-section-title">👤 Vos coordonnées</div>
+        <div class="form-grid-2">
+          <div class="form-group">
+            <label class="form-label">Prénom *</label>
+            <input type="text" class="form-control" id="f-prenom" placeholder="Ahmed" autocomplete="given-name">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Nom *</label>
+            <input type="text" class="form-control" id="f-nom" placeholder="Khalil" autocomplete="family-name">
+          </div>
+        </div>
+        <div class="form-grid-2">
+          <div class="form-group">
+            <label class="form-label">Email *</label>
+            <input type="email" class="form-control" id="f-email" placeholder="email@example.com" autocomplete="email">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Téléphone *</label>
+            <input type="tel" class="form-control" id="f-tel" placeholder="+33 6 12 34 56 78" autocomplete="tel">
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Pays de résidence *</label>
+          <select class="form-control" id="f-pays" autocomplete="country">
+            <option value="">— Sélectionner un pays —</option>
+            <option value="FR">🇫🇷 France</option>
+            <option value="BE">🇧🇪 Belgique</option>
+            <option value="CH">🇨🇭 Suisse</option>
+            <option value="SN">🇸🇳 Sénégal</option>
+            <option value="CI">🇨🇮 Côte d'Ivoire</option>
+            <option value="MA">🇲🇦 Maroc</option>
+            <option value="DZ">🇩🇿 Algérie</option>
+            <option value="TN">🇹🇳 Tunisie</option>
+            <option value="CM">🇨🇲 Cameroun</option>
+            <option value="AE">🇦🇪 Émirats Arabes Unis</option>
+            <option value="OTHER">Autre pays</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="form-section">
+        <div class="form-section-title">💰 Modalité de paiement</div>
+
+        <!-- Niveau de service -->
+        <div style="margin-bottom:16px">
+          <div class="form-label">Niveau de service</div>
+          <div style="display:flex;gap:0;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:12px;padding:3px;margin-top:6px">
+            <button type="button" id="lv-std" onclick="setServiceLevel('standard')"
+              style="flex:1;padding:9px;border:none;border-radius:9px;font-family:'Sora',sans-serif;font-size:13px;font-weight:700;cursor:pointer;transition:all .2s;background:linear-gradient(135deg,#1a1400,#2a2100);color:var(--color-gold);border:1px solid rgba(201,162,39,0.25)">
+              ⚡ Standard
+            </button>
+            <button type="button" id="lv-cnc" onclick="setServiceLevel('concierge')"
+              style="flex:1;padding:9px;border:none;border-radius:9px;font-family:'Sora',sans-serif;font-size:13px;font-weight:700;cursor:pointer;transition:all .2s;background:transparent;color:rgba(255,255,255,0.35)">
+              👑 Concierge
+            </button>
+          </div>
+          <div id="lv-desc" style="margin-top:8px;font-size:11px;color:rgba(255,255,255,0.35);line-height:1.5">
+            Traitement automatisé, support email & chat — idéal pour la plupart des transactions.
+          </div>
+        </div>
+
+        <!-- Paiement -->
+        <div style="margin-bottom:12px">
+          <div class="form-label">Moyen de paiement</div>
+          <select class="form-control" id="pay-method" onchange="refreshPricing()" style="margin-top:6px">
+            <option value="transfer">🏦 Virement SEPA (recommandé)</option>
+            <option value="card_paypal">💳 Carte / PayPal (+3,05%)</option>
+          </select>
+        </div>
+
+        <!-- International -->
+        <label style="display:flex;align-items:center;gap:12px;padding:11px 14px;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.07);border-radius:10px;cursor:pointer;margin-bottom:14px">
+          <input type="checkbox" id="is-intl" onchange="refreshPricing()" style="accent-color:var(--color-gold);width:15px;height:15px">
+          <div>
+            <div style="font-size:13px;color:rgba(255,255,255,0.70);font-weight:600">🌍 Transaction internationale</div>
+            <div style="font-size:11px;color:rgba(255,255,255,0.30);margin-top:2px">+23 € frais fixes supplémentaires</div>
+          </div>
+        </label>
+
+        <!-- Acompte -->
+        <div class="dep-row">
+          <span class="dep-label">Pourcentage d'acompte</span>
+          <span class="dep-value" id="dep-display">50%</span>
+        </div>
+        <input type="range" class="dep-slider" id="dep-range" min="30" max="70" step="10" value="50">
+        <div class="dep-ticks"><span>30%</span><span>40%</span><span>50%</span><span>60%</span><span>70%</span></div>
+
+        <!-- Récap pricing dynamique -->
+        <div id="pricing-breakdown" style="background:rgba(201,162,39,0.05);border:1px solid rgba(201,162,39,0.15);border-radius:12px;padding:14px;margin-top:12px;display:none">
+          <div style="font-size:11px;font-weight:700;color:rgba(255,255,255,0.35);text-transform:uppercase;letter-spacing:1px;margin-bottom:10px">Détail des frais</div>
+          <div id="pb-lines"></div>
+        </div>
+
+        <div class="escrow-note" style="margin-top:12px">⚠️ L'acompte est versé à SecureDeal et bloqué jusqu'à réception validée. Le solde est payé à la livraison.</div>
+      </div>
+
+      <button class="btn-next-full" id="next-1">Étape suivante : Adresse de livraison →</button>
+    </div>
+
+    <!-- ── ÉTAPE 2 : Livraison ── -->
+    <div id="step-2" style="display:none">
+      <div class="form-section">
+        <div class="form-section-title">🚚 Adresse de livraison</div>
+        <div class="form-group">
+          <label class="form-label">Adresse ligne 1 *</label>
+          <input type="text" class="form-control" id="f-adr1" placeholder="123 Rue de la Paix" autocomplete="address-line1">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Adresse ligne 2 (optionnel)</label>
+          <input type="text" class="form-control" id="f-adr2" placeholder="Appartement, bâtiment…" autocomplete="address-line2">
+        </div>
+        <div class="form-grid-2">
+          <div class="form-group">
+            <label class="form-label">Ville *</label>
+            <input type="text" class="form-control" id="f-ville" placeholder="Paris" autocomplete="address-level2">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Code postal *</label>
+            <input type="text" class="form-control" id="f-cp" placeholder="75001" autocomplete="postal-code" inputmode="numeric">
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Pays de livraison *</label>
+          <select class="form-control" id="f-pays-livr" autocomplete="country">
+            <option value="">— Sélectionner —</option>
+            <option value="FR">🇫🇷 France</option>
+            <option value="BE">🇧🇪 Belgique</option>
+            <option value="CH">🇨🇭 Suisse</option>
+            <option value="SN">🇸🇳 Sénégal</option>
+            <option value="CI">🇨🇮 Côte d'Ivoire</option>
+            <option value="MA">🇲🇦 Maroc</option>
+            <option value="DZ">🇩🇿 Algérie</option>
+            <option value="AE">🇦🇪 Émirats Arabes Unis</option>
+            <option value="OTHER">Autre pays</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Instructions de livraison (optionnel)</label>
+          <textarea class="form-control" id="f-instructions" rows="3" placeholder="Horaires disponibles, point relais, instructions particulières…"></textarea>
+        </div>
+      </div>
+      <div class="nav-btns">
+        <button class="btn-prev" id="prev-2">← Retour</button>
+        <button class="btn-next" id="next-2">Documents KYC →</button>
+      </div>
+    </div>
+
+    <!-- ── ÉTAPE 3 : Documents KYC ── -->
+    <div id="step-3" style="display:none">
+      <div class="form-section">
+        <div class="form-section-title">📄 Vérification KYC</div>
+        <p style="font-size:13px;color:rgba(255,255,255,0.45);margin-bottom:18px;line-height:1.6">Pour sécuriser la transaction, SecureDeal requiert une vérification d'identité. Stockage sécurisé conforme au RGPD.</p>
+        <div class="form-group">
+          <label class="form-label">Pièce d'identité (recto) *</label>
+          <div class="upload-zone" onclick="document.getElementById('file-id').click()">
+            <div style="font-size:2rem">🪪</div>
+            <div style="font-size:13px;color:rgba(255,255,255,0.55);font-weight:600">Cliquez pour uploader</div>
+            <div style="font-size:11px;color:rgba(255,255,255,0.30)">CNI, Passeport · PDF, JPG, PNG · Max 5 Mo</div>
+          </div>
+          <input type="file" id="file-id" accept=".pdf,.jpg,.jpeg,.png" style="display:none">
+          <div class="upload-file-name" id="file-id-name"></div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Justificatif de domicile (moins de 3 mois) *</label>
+          <div class="upload-zone" onclick="document.getElementById('file-dom').click()">
+            <div style="font-size:2rem">🏠</div>
+            <div style="font-size:13px;color:rgba(255,255,255,0.55);font-weight:600">Cliquez pour uploader</div>
+            <div style="font-size:11px;color:rgba(255,255,255,0.30)">Facture EDF, eau, téléphone · PDF, JPG, PNG</div>
+          </div>
+          <input type="file" id="file-dom" accept=".pdf,.jpg,.jpeg,.png" style="display:none">
+          <div class="upload-file-name" id="file-dom-name"></div>
+        </div>
+      </div>
+      <div class="nav-btns">
+        <button class="btn-prev" id="prev-3">← Retour</button>
+        <button class="btn-next" id="next-3">Révision finale →</button>
+      </div>
+    </div>
+
+    <!-- ── ÉTAPE 4 : Confirmation ── -->
+    <div id="step-4" style="display:none">
+      <div class="form-section">
+        <div class="form-section-title">✅ Récapitulatif &amp; Confirmation</div>
+        <div id="step4-recap" style="margin-bottom:20px"></div>
+        <div id="cgu-list">
+          <label class="cgu-item"><input type="checkbox" id="cgu1"><div class="cgu-text">J'ai lu et j'accepte les <a href="/pages/legal/cgu.html" target="_blank">CGU</a> de SecureDeal.</div></label>
+          <label class="cgu-item"><input type="checkbox" id="cgu2"><div class="cgu-text">Je comprends que mon acompte sera <strong>bloqué chez SecureDeal</strong> jusqu'à confirmation de réception.</div></label>
+          <label class="cgu-item"><input type="checkbox" id="cgu3"><div class="cgu-text">Je m'engage à n'effectuer <strong>aucun paiement en dehors de SecureDeal</strong> ni à transmettre mes coordonnées bancaires.</div></label>
+        </div>
+      </div>
+
+      <div class="fraud-alert">
+        <span style="font-size:18px;flex-shrink:0">🚨</span>
+        <div style="font-size:12px;color:rgba(255,255,255,0.55);line-height:1.6">
+          <strong style="color:white">Vigilance fraude :</strong> SecureDeal ne demande jamais votre IBAN personnel. Tout paiement hors plateforme = arnaque.
+          <a href="/pages/contact.html" style="color:#EF4444"> Signaler →</a>
+        </div>
+      </div>
+
+      <div class="nav-btns">
+        <button class="btn-prev" id="prev-4">← Retour</button>
+        <button class="btn-next" id="btn-confirm" disabled>🛡️ Confirmer la transaction</button>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ── SIDEBAR RECAP (desktop uniquement) ── -->
+  <div>
+    <div class="recap-box">
+      <div class="recap-title">🧾 Récapitulatif</div>
+      <div class="recap-product">
+        <div class="recap-product-img"><img id="rc-img" src="" alt="produit"></div>
+        <div>
+          <div class="recap-product-name" id="rc-title">—</div>
+          <div class="recap-product-ref" id="rc-ref">—</div>
+        </div>
+      </div>
+      <div class="recap-line"><span>Prix total</span><b id="rc-price">—</b></div>
+      <div class="recap-line"><span>Acompte <span id="rc-pct-label">(50%)</span></span><b id="rc-dep">—</b></div>
+      <div class="recap-line"><span>Solde à la livraison</span><b id="rc-bal">—</b></div>
+      <div class="recap-line"><span>Commission (1,2%)</span><b id="rc-com">—</b></div>
+      <div class="recap-line highlight" style="border-top:1px solid rgba(255,255,255,0.08);margin-top:6px;padding-top:12px">
+        <span>À payer maintenant</span><b id="rc-now">—</b>
+      </div>
+      <div class="recap-trust">
+        <div class="recap-trust-item"><span>🔒</span> Paiement escrow sécurisé</div>
+        <div class="recap-trust-item"><span>📡</span> Suivi en temps réel</div>
+        <div class="recap-trust-item"><span>⚖️</span> Arbitrage inclus</div>
+        <div class="recap-trust-item"><span>🔐</span> KYC &amp; RGPD compliant</div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- Modal succès -->
+<div class="modal-bd" id="confirm-modal">
+  <div class="modal-box">
+    <div style="font-size:3.5rem;margin-bottom:14px">🎉</div>
+    <div style="font-family:'Sora',sans-serif;font-size:20px;font-weight:800;color:white;margin-bottom:10px">Transaction initiée !</div>
+    <p style="font-size:13px;color:rgba(255,255,255,0.50);line-height:1.7;margin-bottom:22px">Votre demande a été enregistrée. SecureDeal va contacter le vendeur et vous envoyer les instructions de paiement par email.</p>
+    <div style="background:rgba(201,162,39,0.08);border:1px solid rgba(201,162,39,0.2);border-radius:10px;padding:12px 16px;margin-bottom:24px;font-family:'JetBrains Mono',monospace;font-size:18px;font-weight:800;color:var(--color-gold)" id="modal-txn-id">SD-2025-XXXX</div>
+    <div style="display:flex;flex-direction:column;gap:10px">
+      <a id="btn-go-txn" href="/pages/transaction.html" class="btn btn--gold btn--lg" style="justify-content:center">📊 Suivre ma transaction →</a>
+      <a href="/pages/tracking.html" class="btn btn--outline-white" style="justify-content:center">📡 Suivi commande</a>
+    </div>
+  </div>
+</div>
+
+<script src="/js/config.js"></script>
+<script src="/js/api.js"></script>
+<script src="/js/utils.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+
+  // Hamburger
+  var burger = document.getElementById('hamburger');
+  var mmenu  = document.getElementById('mobile-menu');
+  if (burger && mmenu) {
+    burger.addEventListener('click', function() {
+      var o = mmenu.classList.toggle('open');
+      burger.classList.toggle('open', o);
+      document.body.style.overflow = o ? 'hidden' : '';
+    });
+    mmenu.querySelectorAll('a').forEach(function(a) {
+      a.addEventListener('click', function() {
+        mmenu.classList.remove('open'); burger.classList.remove('open');
+        document.body.style.overflow = '';
+      });
+    });
+  }
+
+  // ── Catalogue ──────────────────────────────────────────────
+  var PRODUCTS = [
+    {id:'V001',title:'Toyota Land Cruiser 200 V8',price:28500,img:'/images/categories/cars-toyota-lc200.svg'},
+    {id:'V002',title:'Mercedes G 63 AMG 2020',    price:89000,img:'/images/categories/cars-mercedes-g63.svg'},
+    {id:'V003',title:'BMW X5 xDrive 40d Pack M',  price:42000,img:'/images/categories/cars-bmw-x5.svg'},
+    {id:'T001',title:'John Deere 8R 410',          price:185000,img:'/images/categories/tractors-john-deere.svg'},
+    {id:'C001',title:'Conteneur 20 pieds',         price:3200,  img:'/images/categories/containers-container-20ft.svg'},
+    {id:'P001',title:'iPhone 15 Pro Max x20',      price:19800, img:'/images/categories/phones-iphone-15pm.svg'},
+    {id:'E001',title:'Groupe electrogene 100kVA',  price:22000, img:'/images/categories/equipment-generator-100kva.svg'}
+  ];
+
+  function fmt(n) { return new Intl.NumberFormat('fr-FR',{style:'currency',currency:'EUR'}).format(n); }
+  function fmtN(n){ return new Intl.NumberFormat('fr-FR').format(n); }
+
+  var params = new URLSearchParams(window.location.search);
+  var pid    = params.get('id') || 'V001';
+  var depPct = parseInt(params.get('dep')) || 50;
+  var p      = PRODUCTS.find(function(x){ return x.id === pid; }) || PRODUCTS[0];
+
+  document.getElementById('back-product').href = '/pages/product.html?id=' + p.id;
+
+  // ─── Pricing ─────────────────────────────────────────────
+  var pricingState = { level:'standard', paymentMethod:'transfer', isInternational:false };
+
+  window.setServiceLevel = function(lv) {
+    pricingState.level = lv;
+    var btnStd = document.getElementById('lv-std');
+    var btnCnc = document.getElementById('lv-cnc');
+    var desc   = document.getElementById('lv-desc');
+    if (lv === 'standard') {
+      btnStd.style.cssText = 'flex:1;padding:9px;border-radius:9px;font-family:\'Sora\',sans-serif;font-size:13px;font-weight:700;cursor:pointer;transition:all .2s;background:linear-gradient(135deg,#1a1400,#2a2100);color:var(--color-gold);border:1px solid rgba(201,162,39,0.25)';
+      btnCnc.style.cssText = 'flex:1;padding:9px;border:none;border-radius:9px;font-family:\'Sora\',sans-serif;font-size:13px;font-weight:700;cursor:pointer;transition:all .2s;background:transparent;color:rgba(255,255,255,0.35)';
+      desc.textContent = 'Traitement automatisé, support email & chat — idéal pour la plupart des transactions.';
+    } else {
+      btnStd.style.cssText = 'flex:1;padding:9px;border:none;border-radius:9px;font-family:\'Sora\',sans-serif;font-size:13px;font-weight:700;cursor:pointer;transition:all .2s;background:transparent;color:rgba(255,255,255,0.35)';
+      btnCnc.style.cssText = 'flex:1;padding:9px;border-radius:9px;font-family:\'Sora\',sans-serif;font-size:13px;font-weight:700;cursor:pointer;transition:all .2s;background:linear-gradient(135deg,#0d001a,#1a0030);color:#A78BFA;border:1px solid rgba(167,139,250,0.25)';
+      desc.textContent = 'Gestionnaire dédié, inspection certifiée, assistance 24/7 — pour transactions complexes.';
+    }
+    refreshPricing();
+  };
+
+  window.refreshPricing = function() {
+    pricingState.paymentMethod  = document.getElementById('pay-method').value;
+    pricingState.isInternational= document.getElementById('is-intl').checked;
+    var depPct = parseInt(document.getElementById('dep-range').value);
+    var P      = window.SecureDealPricing;
+    if (!P) return;
+    var result = P.compute({
+      amount: p.price, level: pricingState.level,
+      paymentMethod: pricingState.paymentMethod,
+      isInternational: pricingState.isInternational,
+      depositPct: depPct,
+    });
+    if (!result) return;
+    // Mettre à jour le récap sidebar + mobile band
+    updateRecapWithPricing(result);
+    // Afficher le breakdown
+    var bd = document.getElementById('pricing-breakdown');
+    var lines = document.getElementById('pb-lines');
+    bd.style.display = 'block';
+    var html = '';
+    html += pbLine('Frais escrow (' + result.fmt.rate + ')', result.fmt.baseFee, result.minimumApplied ? '⚠ minimum' : '');
+    if (result.cardFee > 0) html += pbLine('Supplément carte/PayPal (+3,05%)', '+ ' + result.fmt.cardFee, '', '#EF4444');
+    if (result.internationalFee > 0) html += pbLine('Frais international', '+ ' + result.fmt.internationalFee, '', '#EF4444');
+    html += pbLine('Total frais', result.fmt.totalFee, '', '#EF4444');
+    html += '<div style="height:1px;background:rgba(255,255,255,0.07);margin:6px 0"></div>';
+    html += pbLine('Net au vendeur', result.fmt.netToVendor, '', '#10B981');
+    lines.innerHTML = html;
+  };
+
+  function pbLine(label, value, badge, color) {
+    return '<div style="display:flex;justify-content:space-between;align-items:center;padding:4px 0;font-size:12px;border-bottom:1px solid rgba(255,255,255,0.04)">' +
+      '<span style="color:rgba(255,255,255,0.45)">' + label + (badge ? ' <span style=\'font-size:9px;background:rgba(245,158,11,0.15);color:#F59E0B;border-radius:3px;padding:1px 5px\'>' + badge + '</span>' : '') + '</span>' +
+      '<span style="font-family:JetBrains Mono,monospace;font-weight:700;color:' + (color||'white') + '">' + value + '</span></div>';
+  }
+
+  function updateRecapWithPricing(r) {
+    var pct = r.depositPct;
+    setEl('dep-display',    pct + '%');
+    setEl('rc-price',       r.fmt.amount);
+    setEl('rc-dep',         r.fmt.deposit);
+    setEl('rc-bal',         r.fmt.balance);
+    setEl('rc-com',         r.fmt.totalFee);
+    setEl('rc-now',         r.fmt.deposit);
+    setEl('rc-pct-label',   '(' + pct + '%)');
+    setEl('mrb-pct',        pct + '%');
+    setEl('mrb-dep',        r.fmt.deposit);
+    setEl('mrb-price',      r.fmt.amount);
+  }
+
+  // ── Remplissage sidebar ──────────────────────────────────
+  function setEl(id, val) {
+    var el = document.getElementById(id);
+    if (el) el.textContent = val;
+  }
+
+  document.getElementById('rc-img').src = p.img;
+  document.getElementById('rc-title').textContent = p.title.length > 35 ? p.title.slice(0,35)+'…' : p.title;
+  document.getElementById('rc-ref').textContent   = 'Réf. #' + p.id;
+
+  // Mobile recap band
+  document.getElementById('mrb-name').textContent = p.title.length > 30 ? p.title.slice(0,30)+'…' : p.title;
+  document.getElementById('mrb-ref').textContent  = p.id;
+  document.getElementById('mrb-price').textContent= fmt(p.price);
+
+  function updateRecap() {
+    var pct = parseInt(document.getElementById('dep-range').value) / 100;
+    var dep = p.price * pct;
+    var bal = p.price * (1 - pct);
+    var com = p.price * 0.012;
+
+    setEl('dep-display', Math.round(pct*100) + '%');
+    setEl('rc-price',    fmt(p.price));
+    setEl('rc-dep',      fmt(dep));
+    setEl('rc-bal',      fmt(bal));
+    setEl('rc-com',      '-' + fmt(com));
+    setEl('rc-now',      fmt(dep));
+    setEl('rc-pct-label','(' + Math.round(pct*100) + '%)');
+
+    // Mobile band
+    setEl('mrb-pct', Math.round(pct*100) + '%');
+    setEl('mrb-dep', fmt(dep));
+  }
+
+  document.getElementById('dep-range').value = depPct;
+  document.getElementById('dep-range').addEventListener('input', function() { document.getElementById('dep-pct-label') && (document.getElementById('dep-pct-label').textContent = this.value + '%'); refreshPricing(); });
+  updateRecap();
+
+  // ── Navigation étapes ─────────────────────────────────────
+  var cur = 1;
+  function getStep(n) { return document.getElementById('step-'+n); }
+  function getSN(n)   { return document.getElementById('sn'+n); }
+
+  function goTo(n) {
+    getStep(cur).style.display = 'none';
+    getSN(cur).classList.remove('active');
+    getSN(cur).classList.add(n > cur ? 'done' : '');
+    if (n < cur) getSN(cur).classList.remove('done');
+    cur = n;
+    getStep(cur).style.display = 'block';
+    getSN(cur).classList.remove('done');
+    getSN(cur).classList.add('active');
+    window.scrollTo({top: 140, behavior:'smooth'});
+  }
+
+  document.getElementById('next-1').addEventListener('click', function() { goTo(2); });
+  document.getElementById('prev-2').addEventListener('click', function() { goTo(1); });
+  document.getElementById('next-2').addEventListener('click', function() { goTo(3); });
+  document.getElementById('prev-3').addEventListener('click', function() { goTo(2); });
+  document.getElementById('prev-4').addEventListener('click', function() { goTo(3); });
+
+  document.getElementById('next-3').addEventListener('click', function() {
+    var pct = parseInt(document.getElementById('dep-range').value);
+    var dep = fmt(p.price * pct / 100);
+    var r = document.getElementById('step4-recap');
+    r.innerHTML =
+      '<div class="s4-item"><span class="s4-label">Produit</span><span class="s4-val">' + p.title + '</span></div>' +
+      '<div class="s4-item"><span class="s4-label">Acheteur</span><span class="s4-val">' +
+        (document.getElementById('f-prenom').value||'—') + ' ' +
+        (document.getElementById('f-nom').value||'—') + '</span></div>' +
+      '<div class="s4-item"><span class="s4-label">Email</span><span class="s4-val">' + (document.getElementById('f-email').value||'—') + '</span></div>' +
+      '<div class="s4-item"><span class="s4-label">Livraison</span><span class="s4-val">' +
+        (document.getElementById('f-ville').value||'—') + ', ' +
+        (document.getElementById('f-pays-livr').value||'—') + '</span></div>' +
+      '<div class="s4-item"><span class="s4-label">Acompte (' + pct + '%)</span>' +
+        '<span class="s4-val" style="color:var(--color-gold);font-family:JetBrains Mono,monospace">' + dep + '</span></div>';
+    goTo(4);
+  });
+
+  // CGU
+  function checkCGU() {
+    var ok = document.getElementById('cgu1').checked &&
+             document.getElementById('cgu2').checked &&
+             document.getElementById('cgu3').checked;
+    document.getElementById('btn-confirm').disabled = !ok;
+  }
+  ['cgu1','cgu2','cgu3'].forEach(function(id) {
+    document.getElementById(id).addEventListener('change', checkCGU);
+  });
+
+  // Confirmer
+  document.getElementById('btn-confirm').addEventListener('click', function() {
+    var txnId = 'SD-2025-' + Math.floor(Math.random()*9000+1000);
+    document.getElementById('modal-txn-id').textContent = txnId;
+    document.getElementById('btn-go-txn').href = '/pages/transaction.html?id=' + txnId + '&product=' + p.id;
+    document.getElementById('confirm-modal').classList.add('show');
+  });
+  document.getElementById('confirm-modal').addEventListener('click', function(e) {
+    if (e.target === this) this.classList.remove('show');
+  });
+
+  // Uploads
+  function setupUpload(fileId, nameId) {
+    document.getElementById(fileId).addEventListener('change', function() {
+      var el = document.getElementById(nameId);
+      if (this.files && this.files[0]) {
+        el.textContent = '✓ ' + this.files[0].name;
+        el.style.display = 'block';
+      }
+    });
+  }
+  setupUpload('file-id',  'file-id-name');
+  setupUpload('file-dom', 'file-dom-name');
+});
+</script>
+</body>
+</html>

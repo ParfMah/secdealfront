@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Application Mobile — SecureDeal</title>
+  <script src="/js/loader.js"></script>
+  <link rel="stylesheet" href="/css/loader.css">
+  <link rel="stylesheet" href="/css/main.css">
+  <link rel="stylesheet" href="/css/brand.css">
+  <link rel="stylesheet" href="/css/backgrounds.css">
+  <link rel="stylesheet" href="/css/responsive-fixes.css">
+  <link rel="icon" href="/images/logo/favicon.svg" type="image/svg+xml">
+  <!-- PWA Manifest -->
+  <link rel="manifest" href="/manifest.json">
+  <meta name="theme-color" content="#0a0a0a">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="SecureDeal">
+</head>
+<body>
+
+<header class="site-header" id="site-header">
+  <div class="header-inner">
+    <a href="/index.html" class="header-logo">
+      <img src="/images/logo/securedeal-logo-white.svg" alt="SecureDeal" style="height:34px"
+           onerror="this.outerHTML='<span style=\'font-family:Sora,sans-serif;font-size:17px;font-weight:800;color:white\'>SECURE<span style=\'color:#C9A227;font-weight:300;letter-spacing:2px\'>DEAL</span></span>'">
+    </a>
+    <div class="header-actions">
+      <a href="/pages/auth/login.html" class="btn btn--outline-white btn--sm">Connexion</a>
+      <a href="/pages/auth/register.html" class="btn btn--cyan btn--sm">Créer un compte</a>
+    </div>
+  </div>
+</header>
+
+<!-- HERO -->
+<section style="background:var(--gradient-hero);padding:100px 0 80px;position:relative;overflow:hidden">
+  <div style="position:absolute;inset:0;background-image:linear-gradient(rgba(0,212,255,0.04) 1px,transparent 1px),linear-gradient(90deg,rgba(0,212,255,0.04) 1px,transparent 1px);background-size:60px 60px"></div>
+  <div class="hero-orb hero-orb--1" style="opacity:0.5" aria-hidden="true"></div>
+
+  <div class="container">
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:80px;align-items:center">
+      <div>
+        <div class="hero-eyebrow" style="display:inline-flex;margin-bottom:24px">📱 Application Progressive (PWA)</div>
+        <h1 style="font-family:'Sora',sans-serif;font-size:clamp(2rem,4vw,3.2rem);font-weight:800;color:white;line-height:1.15;margin-bottom:20px;letter-spacing:-1px">
+          SecureDeal dans<br>votre poche
+        </h1>
+        <p style="font-size:17px;color:rgba(255,255,255,0.65);line-height:1.7;margin-bottom:36px;max-width:460px">
+          Suivez vos transactions, scannez les QR codes de livraison, recevez des notifications push — partout dans le monde, même hors ligne.
+        </p>
+
+        <div style="display:flex;flex-direction:column;gap:14px;margin-bottom:36px">
+          <div style="display:flex;align-items:center;gap:14px">
+            <span style="width:36px;height:36px;background:rgba(0,212,255,0.15);border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0">📡</span>
+            <span style="color:rgba(255,255,255,0.75);font-size:15px">Suivi GPS et traçabilité temps réel</span>
+          </div>
+          <div style="display:flex;align-items:center;gap:14px">
+            <span style="width:36px;height:36px;background:rgba(0,212,255,0.15);border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0">🔲</span>
+            <span style="color:rgba(255,255,255,0.75);font-size:15px">Scanner QR codes de livraison</span>
+          </div>
+          <div style="display:flex;align-items:center;gap:14px">
+            <span style="width:36px;height:36px;background:rgba(0,212,255,0.15);border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0">🔔</span>
+            <span style="color:rgba(255,255,255,0.75);font-size:15px">Notifications push instantanées</span>
+          </div>
+          <div style="display:flex;align-items:center;gap:14px">
+            <span style="width:36px;height:36px;background:rgba(0,212,255,0.15);border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0">📵</span>
+            <span style="color:rgba(255,255,255,0.75);font-size:15px">Fonctionnement partiel hors ligne</span>
+          </div>
+          <div style="display:flex;align-items:center;gap:14px">
+            <span style="width:36px;height:36px;background:rgba(0,212,255,0.15);border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0">💬</span>
+            <span style="color:rgba(255,255,255,0.75);font-size:15px">Messagerie sécurisée intégrée</span>
+          </div>
+        </div>
+
+        <!-- Boutons d'installation -->
+        <div style="display:flex;flex-direction:column;gap:12px;max-width:360px">
+          <button id="install-pwa" class="btn btn--cyan btn--lg btn--shimmer" style="font-size:16px;padding:16px 32px;justify-content:flex-start;gap:16px">
+            <span style="font-size:24px">📲</span>
+            <div style="text-align:left">
+              <div style="font-size:11px;font-weight:600;opacity:0.8;text-transform:uppercase;letter-spacing:1px">Installer sur votre appareil</div>
+              <div style="font-size:15px;font-weight:800">Télécharger SecureDeal</div>
+            </div>
+          </button>
+
+          <div style="display:flex;gap:10px">
+            <button class="btn btn--outline-white" style="flex:1;gap:10px;padding:12px 16px" onclick="showInstallGuide('android')">
+              <span style="font-size:20px">🤖</span> Android
+            </button>
+            <button class="btn btn--outline-white" style="flex:1;gap:10px;padding:12px 16px" onclick="showInstallGuide('ios')">
+              <span style="font-size:20px">🍎</span> iPhone
+            </button>
+          </div>
+        </div>
+
+        <div style="margin-top:20px;font-size:12px;color:rgba(255,255,255,0.3)">
+          Application Progressive Web App · Aucun store requis · Compatible Android 8+ et iOS 14+
+        </div>
+      </div>
+
+      <!-- Mockup mobile -->
+      <div style="display:flex;justify-content:center;position:relative">
+        <div style="width:260px;background:var(--gradient-primary);border-radius:40px;padding:18px;box-shadow:0 40px 100px rgba(0,0,0,0.4),0 0 60px rgba(30,107,184,0.3);border:6px solid rgba(255,255,255,0.1);animation:float 5s ease-in-out infinite;position:relative;z-index:1">
+          <!-- Notch -->
+          <div style="width:80px;height:6px;background:rgba(255,255,255,0.15);border-radius:6px;margin:0 auto 14px"></div>
+          <!-- Status bar -->
+          <div style="display:flex;justify-content:space-between;padding:0 4px;margin-bottom:12px;font-size:10px;color:rgba(255,255,255,0.4)">
+            <span>9:41</span><span>📶 100%</span>
+          </div>
+          <!-- App header -->
+          <div style="background:rgba(255,255,255,0.06);border-radius:16px;padding:14px;margin-bottom:10px">
+            <div style="font-size:10px;color:rgba(255,255,255,0.4);text-transform:uppercase;letter-spacing:1.5px;margin-bottom:8px">Mes transactions</div>
+            <!-- Transaction card -->
+            <div style="background:rgba(0,212,255,0.1);border:1px solid rgba(0,212,255,0.2);border-radius:10px;padding:10px;margin-bottom:6px">
+              <div style="font-size:11px;font-weight:700;color:white">BMW 320d · Lyon → Dubai</div>
+              <div style="font-size:9px;color:rgba(0,212,255,0.8);margin-top:3px">🚛 En transit · ETA 21 mai</div>
+              <div style="margin-top:8px;height:3px;background:rgba(255,255,255,0.1);border-radius:3px;overflow:hidden">
+                <div style="width:65%;height:100%;background:linear-gradient(90deg,#1E6BB8,#C9A227);border-radius:3px"></div>
+              </div>
+            </div>
+            <div style="background:rgba(16,185,129,0.1);border:1px solid rgba(16,185,129,0.2);border-radius:10px;padding:10px">
+              <div style="font-size:11px;font-weight:700;color:white">iPhone 14 Pro ×50</div>
+              <div style="font-size:9px;color:rgba(16,185,129,0.8);margin-top:3px">✅ Livré et confirmé</div>
+            </div>
+          </div>
+          <!-- QR Scanner button -->
+          <div style="background:rgba(255,255,255,0.06);border-radius:12px;padding:12px;text-align:center;cursor:pointer;border:1px dashed rgba(0,212,255,0.3)">
+            <div style="font-size:22px;margin-bottom:4px">🔲</div>
+            <div style="font-size:10px;color:rgba(255,255,255,0.6);font-weight:600">Scanner QR Code livraison</div>
+          </div>
+          <!-- Notification -->
+          <div style="background:rgba(16,185,129,0.12);border:1px solid rgba(16,185,129,0.25);border-radius:10px;padding:10px;margin-top:8px;display:flex;align-items:center;gap:8px">
+            <span style="font-size:14px">🔔</span>
+            <div>
+              <div style="font-size:10px;font-weight:700;color:white">Acompte reçu</div>
+              <div style="font-size:9px;color:rgba(255,255,255,0.5)">€14 250 sécurisés — SD-2025-8847</div>
+            </div>
+          </div>
+          <!-- Bottom nav -->
+          <div style="display:flex;justify-content:space-around;padding:12px 0 0;border-top:1px solid rgba(255,255,255,0.08);margin-top:12px">
+            <div style="text-align:center;font-size:9px;color:#C9A227">🏠<br>Accueil</div>
+            <div style="text-align:center;font-size:9px;color:rgba(255,255,255,0.4)">📦<br>Commandes</div>
+            <div style="text-align:center;font-size:9px;color:rgba(255,255,255,0.4)">💬<br>Messages</div>
+            <div style="text-align:center;font-size:9px;color:rgba(255,255,255,0.4)">👤<br>Profil</div>
+          </div>
+        </div>
+        <!-- Ombre décorative -->
+        <div style="position:absolute;bottom:-30px;left:50%;transform:translateX(-50%);width:200px;height:40px;background:rgba(0,212,255,0.15);border-radius:50%;filter:blur(20px)"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- GUIDE INSTALLATION -->
+<section style="background:var(--color-off-white);padding:80px 0">
+  <div class="container" style="max-width:900px">
+    <div class="text-center mb-8 reveal">
+      <div class="section-label">Installation rapide</div>
+      <h2 class="text-h1 mb-4">Comment installer l'application ?</h2>
+      <p class="text-lead">Aucun App Store ni Google Play requis — l'application s'installe directement depuis votre navigateur.</p>
+    </div>
+
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:32px">
+      <!-- Android -->
+      <div style="background:white;border-radius:24px;padding:32px;border:1px solid var(--color-grey-100);box-shadow:var(--shadow-md)" id="guide-android">
+        <div style="display:flex;align-items:center;gap:14px;margin-bottom:24px">
+          <div style="font-size:2.5rem">🤖</div>
+          <div>
+            <div style="font-family:'Sora',sans-serif;font-size:18px;font-weight:800;color:var(--color-navy)">Android</div>
+            <div style="font-size:13px;color:var(--color-grey-400)">Chrome, Samsung Internet, Edge</div>
+          </div>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:14px">
+          <div style="display:flex;gap:12px;align-items:flex-start">
+            <div style="width:28px;height:28px;background:var(--gradient-primary);border-radius:50%;display:flex;align-items:center;justify-content:center;color:white;font-size:12px;font-weight:700;flex-shrink:0">1</div>
+            <div style="font-size:14px;color:var(--color-grey-600);line-height:1.5">Ouvrez <strong>securedeal.io</strong> dans Chrome sur votre Android</div>
+          </div>
+          <div style="display:flex;gap:12px;align-items:flex-start">
+            <div style="width:28px;height:28px;background:var(--gradient-primary);border-radius:50%;display:flex;align-items:center;justify-content:center;color:white;font-size:12px;font-weight:700;flex-shrink:0">2</div>
+            <div style="font-size:14px;color:var(--color-grey-600);line-height:1.5">Appuyez sur les <strong>3 points ⋮</strong> en haut à droite du navigateur</div>
+          </div>
+          <div style="display:flex;gap:12px;align-items:flex-start">
+            <div style="width:28px;height:28px;background:var(--gradient-primary);border-radius:50%;display:flex;align-items:center;justify-content:center;color:white;font-size:12px;font-weight:700;flex-shrink:0">3</div>
+            <div style="font-size:14px;color:var(--color-grey-600);line-height:1.5">Sélectionnez <strong>"Ajouter à l'écran d'accueil"</strong> ou <strong>"Installer l'application"</strong></div>
+          </div>
+          <div style="display:flex;gap:12px;align-items:flex-start">
+            <div style="width:28px;height:28px;background:var(--color-success);border-radius:50%;display:flex;align-items:center;justify-content:center;color:white;font-size:12px;font-weight:700;flex-shrink:0">✓</div>
+            <div style="font-size:14px;color:var(--color-success);font-weight:600;line-height:1.5">SecureDeal est installé sur votre écran d'accueil !</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- iOS -->
+      <div style="background:white;border-radius:24px;padding:32px;border:1px solid var(--color-grey-100);box-shadow:var(--shadow-md)" id="guide-ios">
+        <div style="display:flex;align-items:center;gap:14px;margin-bottom:24px">
+          <div style="font-size:2.5rem">🍎</div>
+          <div>
+            <div style="font-family:'Sora',sans-serif;font-size:18px;font-weight:800;color:var(--color-navy)">iPhone / iPad</div>
+            <div style="font-size:13px;color:var(--color-grey-400)">Safari (iOS 14+)</div>
+          </div>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:14px">
+          <div style="display:flex;gap:12px;align-items:flex-start">
+            <div style="width:28px;height:28px;background:var(--gradient-primary);border-radius:50%;display:flex;align-items:center;justify-content:center;color:white;font-size:12px;font-weight:700;flex-shrink:0">1</div>
+            <div style="font-size:14px;color:var(--color-grey-600);line-height:1.5">Ouvrez <strong>securedeal.io</strong> dans <strong>Safari</strong> sur votre iPhone</div>
+          </div>
+          <div style="display:flex;gap:12px;align-items:flex-start">
+            <div style="width:28px;height:28px;background:var(--gradient-primary);border-radius:50%;display:flex;align-items:center;justify-content:center;color:white;font-size:12px;font-weight:700;flex-shrink:0">2</div>
+            <div style="font-size:14px;color:var(--color-grey-600);line-height:1.5">Appuyez sur l'icône <strong>Partager □↑</strong> en bas de Safari</div>
+          </div>
+          <div style="display:flex;gap:12px;align-items:flex-start">
+            <div style="width:28px;height:28px;background:var(--gradient-primary);border-radius:50%;display:flex;align-items:center;justify-content:center;color:white;font-size:12px;font-weight:700;flex-shrink:0">3</div>
+            <div style="font-size:14px;color:var(--color-grey-600);line-height:1.5">Faites défiler et choisissez <strong>"Sur l'écran d'accueil"</strong></div>
+          </div>
+          <div style="display:flex;gap:12px;align-items:flex-start">
+            <div style="width:28px;height:28px;background:var(--color-success);border-radius:50%;display:flex;align-items:center;justify-content:center;color:white;font-size:12px;font-weight:700;flex-shrink:0">✓</div>
+            <div style="font-size:14px;color:var(--color-success);font-weight:600;line-height:1.5">SecureDeal est installé sur votre iPhone !</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FEATURES APP -->
+<section style="background:white;padding:80px 0">
+  <div class="container" style="max-width:900px">
+    <div class="text-center mb-8 reveal">
+      <h2 class="text-h1 mb-4">Tout SecureDeal, partout</h2>
+    </div>
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:20px">
+      <div class="feature-card reveal">
+        <div class="feature-icon-wrap">🔔</div>
+        <div class="feature-title">Notifications push</div>
+        <div class="feature-desc">Alertes immédiates pour chaque étape : acompte reçu, produit expédié, livraison confirmée, paiement effectué.</div>
+      </div>
+      <div class="feature-card reveal delay-100">
+        <div class="feature-icon-wrap">🔲</div>
+        <div class="feature-title">Scanner QR Code</div>
+        <div class="feature-desc">Scannez les QR codes de traçabilité pour valider les livraisons et accéder instantanément au suivi complet.</div>
+      </div>
+      <div class="feature-card reveal delay-200">
+        <div class="feature-icon-wrap">📡</div>
+        <div class="feature-title">Suivi GPS live</div>
+        <div class="feature-desc">Localisez votre produit en temps réel sur une carte interactive, depuis la récupération jusqu'à la livraison.</div>
+      </div>
+      <div class="feature-card reveal">
+        <div class="feature-icon-wrap">📵</div>
+        <div class="feature-title">Mode hors ligne</div>
+        <div class="feature-desc">Consultez vos transactions et l'historique même sans connexion internet. Synchronisation automatique.</div>
+      </div>
+      <div class="feature-card reveal delay-100">
+        <div class="feature-icon-wrap">💬</div>
+        <div class="feature-title">Messagerie mobile</div>
+        <div class="feature-desc">Communiquez avec vendeurs et acheteurs via la messagerie sécurisée, directement depuis l'application.</div>
+      </div>
+      <div class="feature-card reveal delay-200">
+        <div class="feature-icon-wrap">📄</div>
+        <div class="feature-title">PDF & Quittances</div>
+        <div class="feature-desc">Téléchargez et partagez vos quittances PDF directement depuis l'application mobile.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section style="background:var(--gradient-primary);padding:80px 0;text-align:center">
+  <div class="container reveal">
+    <h2 style="color:white;font-size:2.2rem;font-weight:800;margin-bottom:16px">Installez SecureDeal maintenant</h2>
+    <p style="color:rgba(255,255,255,0.6);margin-bottom:32px">Gratuit · Aucune inscription requise pour commencer le suivi</p>
+    <button id="install-pwa-cta" class="btn btn--cyan btn--lg btn--shimmer" style="font-size:16px;padding:18px 48px">
+      📲 Installer l'application gratuite
+    </button>
+  </div>
+</section>
+
+<footer class="site-footer" style="padding:32px 0">
+  <div class="container">
+    <div class="footer-bottom" style="border-top:none;padding-top:0">
+      <div class="footer-copy">© 2025 SecureDeal. Tous droits réservés.</div>
+      <div class="footer-legal-links">
+        <a href="/pages/legal/mentions-legales.html">Mentions légales</a>
+        <a href="/pages/legal/cgu.html">CGU</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script src="/js/config.js"></script>
+<script src="/js/api.js"></script>
+<script src="/js/utils.js"></script>
+<script>
+'use strict';
+
+// ─── PWA Install ───────────────────────────────────────────────
+let deferredPrompt = null;
+
+window.addEventListener('beforeinstallprompt', (e) => {
+  e.preventDefault();
+  deferredPrompt = e;
+  document.querySelectorAll('#install-pwa,#install-pwa-cta').forEach(btn => {
+    btn.style.display = 'flex';
+  });
+});
+
+async function installPWA() {
+  if (deferredPrompt) {
+    deferredPrompt.prompt();
+    const { outcome } = await deferredPrompt.userChoice;
+    if (outcome === 'accepted') {
+      SD.Toast.success('SecureDeal installé avec succès ! 🎉');
+    }
+    deferredPrompt = null;
+  } else {
+    // Si pas de prompt dispo (déjà installé ou iOS), afficher guide
+    const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
+    showInstallGuide(isIOS ? 'ios' : 'android');
+    document.getElementById(isIOS ? 'guide-ios' : 'guide-android')
+      ?.scrollIntoView({ behavior:'smooth', block:'center' });
+    SD.Toast.info('Suivez le guide ci-dessous pour installer l\'application.');
+  }
+}
+
+document.getElementById('install-pwa').addEventListener('click', installPWA);
+document.getElementById('install-pwa-cta').addEventListener('click', installPWA);
+
+window.showInstallGuide = (platform) => {
+  document.getElementById(`guide-${platform}`)?.scrollIntoView({ behavior:'smooth', block:'center' });
+  SD.Toast.info(`Guide d'installation ${platform === 'ios' ? 'iPhone' : 'Android'} affiché ci-dessous.`);
+};
+
+// ─── Service Worker ────────────────────────────────────────────
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('/sw.js').catch(() => {});
+}
+
+window.addEventListener('appinstalled', () => {
+  SD.Toast.success('Application SecureDeal installée avec succès !');
+  deferredPrompt = null;
+});
+</script>
+</body>
+</html>

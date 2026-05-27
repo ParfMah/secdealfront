@@ -1,0 +1,713 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Espace Acheteur — SecureDeal</title>
+  <script src="/js/loader.js"></script>
+  <link rel="stylesheet" href="/css/loader.css">
+  <link rel="stylesheet" href="/css/design-system.css">
+  <link rel="stylesheet" href="/css/dashboard.css">
+  <link rel="stylesheet" href="/css/brand.css">
+  <link rel="stylesheet" href="/css/backgrounds.css">
+  <link rel="stylesheet" href="/css/responsive-fixes.css">
+  <link rel="icon" href="/images/logo/favicon.svg" type="image/svg+xml">
+</head>
+<body>
+
+<!-- ═══ SIDEBAR ACHETEUR ══════════════════════════════════════ -->
+<aside class="sidebar" id="sidebar" style="background:linear-gradient(180deg,#061A2E 0%,#0a0a0a 100%)">
+  <div class="sidebar-logo">
+    <a href="/index.html">
+      <img src="/images/logo/securedeal-logo-white.svg" alt="SecureDeal" style="height:30px"
+           onerror="this.outerHTML='<span style=\'font-family:Sora,sans-serif;font-size:16px;font-weight:800;color:white\'>SECURE<span style=\'color:#C9A227;font-weight:300\'>DEAL</span></span>'">
+    </a>
+  </div>
+
+  <!-- Profil mini -->
+  <div style="padding:0 20px 20px">
+    <div style="display:flex;align-items:center;gap:12px;padding:14px;background:rgba(255,255,255,0.05);border-radius:14px;border:1px solid rgba(255,255,255,0.08)">
+      <div class="avatar avatar--md" style="background:linear-gradient(135deg,#F59E0B,#D97706);font-weight:800;font-size:15px" id="sb-avatar">A</div>
+      <div style="min-width:0">
+        <div style="font-weight:700;font-size:14px;color:white;overflow:hidden;text-overflow:ellipsis;white-space:nowrap" id="sb-name">Ahmed Khalil</div>
+        <div style="display:flex;align-items:center;gap:4px;margin-top:2px">
+          <span style="width:6px;height:6px;background:#10B981;border-radius:50%"></span>
+          <span style="font-size:11px;color:rgba(255,255,255,0.4)">Acheteur vérifié</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="sidebar-section">
+    <div class="sidebar-section-title">Principal</div>
+    <nav class="sidebar-nav">
+      <a href="#" class="sidebar-link active" data-page="dashboard">
+        <svg class="sidebar-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+        Tableau de bord
+      </a>
+      <a href="#" class="sidebar-link" data-page="browse">
+        <svg class="sidebar-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        Parcourir les annonces
+      </a>
+      <a href="#" class="sidebar-link" data-page="orders">
+        <svg class="sidebar-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+        Mes commandes
+        <span class="sidebar-badge">4</span>
+      </a>
+      <a href="#" class="sidebar-link" data-page="tracking">
+        <svg class="sidebar-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+        Suivi livraisons
+      </a>
+      <a href="#" class="sidebar-link" data-page="messages">
+        <svg class="sidebar-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+        Messagerie
+        <span class="sidebar-badge" id="sb-msg-badge">1</span>
+      </a>
+    </nav>
+  </div>
+
+  <div class="sidebar-section">
+    <div class="sidebar-section-title">Documents</div>
+    <nav class="sidebar-nav">
+      <a href="#" class="sidebar-link" data-page="receipts">
+        <svg class="sidebar-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+        Quittances & PDF
+      </a>
+      <a href="#" class="sidebar-link" data-page="history">
+        <svg class="sidebar-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 .49-4.95"/></svg>
+        Historique complet
+      </a>
+    </nav>
+  </div>
+
+  <div class="sidebar-section">
+    <div class="sidebar-section-title">Compte</div>
+    <nav class="sidebar-nav">
+      <a href="#" class="sidebar-link" data-page="profile">
+        <svg class="sidebar-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+        Mon profil & KYC
+      </a>
+      <a href="#" class="sidebar-link" data-page="notifications">
+        <svg class="sidebar-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+        Notifications
+      </a>
+      <a href="/pages/mobile-app.html" class="sidebar-link">
+        <svg class="sidebar-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="5" y="2" width="14" height="20" rx="2"/><line x1="12" y1="18" x2="12.01" y2="18"/></svg>
+        Application mobile
+      </a>
+    </nav>
+  </div>
+
+  <div style="margin-top:auto;padding:16px 20px">
+    <button onclick="SD.Auth.logout()" style="width:100%;cursor:pointer;border:none;background:rgba(239,68,68,0.1);color:#FC8181;border-radius:10px;padding:10px 14px;display:flex;align-items:center;gap:10px;font-size:14px;font-weight:500">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+      Déconnexion
+    </button>
+  </div>
+</aside>
+
+<!-- ═══ MAIN CONTENT ══════════════════════════════════════════ -->
+<div class="dashboard-layout">
+<div class="dashboard-main" id="dashboard-main">
+
+  <div class="dashboard-header">
+    <div style="display:flex;align-items:center;gap:16px">
+      <button data-sidebar-toggle class="btn btn--ghost btn--sm" style="padding:8px" id="mobile-menu-btn">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+      </button>
+      <div>
+        <h1 class="page-title" id="dh-title">Tableau de bord</h1>
+        <p class="page-subtitle">Bienvenue, <span id="dh-name">Ahmed</span> 👋</p>
+      </div>
+    </div>
+    <div style="display:flex;align-items:center;gap:12px">
+      <div class="badge badge--verified">✓ Vérifié</div>
+      <button class="btn btn--ghost btn--sm" style="position:relative;padding:8px" onclick="showPage('notifications')">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+        <span style="position:absolute;top:4px;right:4px;width:8px;height:8px;background:var(--color-danger);border-radius:50%;border:2px solid white"></span>
+      </button>
+      <button class="btn btn--primary btn--sm" onclick="showPage('browse')">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        Parcourir les annonces
+      </button>
+    </div>
+  </div>
+
+  <!-- ══ DASHBOARD ═════════════════════════════════════════════ -->
+  <div class="dashboard-content" id="page-dashboard">
+    <div class="stats-grid" style="margin-bottom:28px">
+      <div class="stat-block">
+        <div class="stat-block-icon blue">🛒</div>
+        <div class="stat-block-info">
+          <div class="stat-block-value" data-counter="12">0</div>
+          <div class="stat-block-label">Commandes totales</div>
+          <div class="stat-block-change" style="color:var(--color-success)">▲ +2 ce mois</div>
+        </div>
+      </div>
+      <div class="stat-block">
+        <div class="stat-block-icon amber">⏳</div>
+        <div class="stat-block-info">
+          <div class="stat-block-value" data-counter="4">0</div>
+          <div class="stat-block-label">En cours de livraison</div>
+          <div class="stat-block-change" style="color:var(--color-warning)">● 2 en transit</div>
+        </div>
+      </div>
+      <div class="stat-block">
+        <div class="stat-block-icon green">✅</div>
+        <div class="stat-block-info">
+          <div class="stat-block-value" data-counter="8">0</div>
+          <div class="stat-block-label">Livraisons confirmées</div>
+          <div class="stat-block-change" style="color:var(--color-success)">100% conformes</div>
+        </div>
+      </div>
+      <div class="stat-block">
+        <div class="stat-block-icon cyan">💰</div>
+        <div class="stat-block-info">
+          <div class="stat-block-value" data-counter="143800">0</div>
+          <div class="stat-block-label">Total dépensé (€)</div>
+          <div class="stat-block-change" style="color:var(--color-grey-400)">Escrow sécurisé</div>
+        </div>
+      </div>
+    </div>
+
+    <div style="display:grid;grid-template-columns:1.5fr 1fr;gap:24px">
+      <!-- Commandes actives -->
+      <div>
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px">
+          <h2 style="font-family:'Sora',sans-serif;font-size:16px;font-weight:700;color:var(--color-navy)">Commandes actives</h2>
+          <button class="btn btn--ghost btn--sm" onclick="showPage('orders')">Tout voir →</button>
+        </div>
+        <div id="active-orders"></div>
+      </div>
+      <!-- Résumé escrow -->
+      <div>
+        <div style="margin-bottom:16px">
+          <h2 style="font-family:'Sora',sans-serif;font-size:16px;font-weight:700;color:var(--color-navy)">Mes fonds escrow</h2>
+        </div>
+        <div style="background:var(--gradient-primary);border-radius:20px;padding:24px;color:white">
+          <div style="font-size:12px;color:rgba(255,255,255,0.5);font-weight:600;text-transform:uppercase;letter-spacing:1px;margin-bottom:8px">Total sécurisé en escrow</div>
+          <div style="font-family:'Sora',sans-serif;font-size:2.2rem;font-weight:800;margin-bottom:16px" data-counter="47500">€ 0</div>
+          <div style="display:flex;flex-direction:column;gap:10px;padding-top:16px;border-top:1px solid rgba(255,255,255,0.1)">
+            <div style="display:flex;justify-content:space-between;font-size:13px">
+              <span style="color:rgba(255,255,255,0.6)">BMW 320d — SD-2025-8847</span>
+              <span style="font-family:'JetBrains Mono',monospace;font-weight:700;color:#C9A227">€ 14 250</span>
+            </div>
+            <div style="display:flex;justify-content:space-between;font-size:13px">
+              <span style="color:rgba(255,255,255,0.6)">iPhone 14 Pro ×20 — SD-2025-7733</span>
+              <span style="font-family:'JetBrains Mono',monospace;font-weight:700;color:#C9A227">€ 7 900</span>
+            </div>
+            <div style="display:flex;justify-content:space-between;font-size:13px">
+              <span style="color:rgba(255,255,255,0.6)">Conteneur 40' — SD-2025-9102</span>
+              <span style="font-family:'JetBrains Mono',monospace;font-weight:700;color:#C9A227">€ 25 350</span>
+            </div>
+          </div>
+          <div style="margin-top:16px;font-size:11px;color:rgba(255,255,255,0.3)">
+            🔒 Fonds sécurisés et libérés uniquement à la livraison confirmée
+          </div>
+        </div>
+
+        <!-- Suivi rapide -->
+        <div style="background:white;border-radius:16px;padding:20px;border:1px solid var(--color-grey-100);margin-top:16px">
+          <div style="font-size:13px;font-weight:600;color:var(--color-navy);margin-bottom:12px">🔍 Suivi rapide</div>
+          <div style="display:flex;gap:8px">
+            <input type="text" class="form-control" id="quick-track" placeholder="N° transaction…" style="font-family:'JetBrains Mono',monospace;font-size:13px">
+            <button class="btn btn--primary" onclick="quickTrack()">→</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Notifications récentes -->
+    <div style="margin-top:24px">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px">
+        <h2 style="font-family:'Sora',sans-serif;font-size:16px;font-weight:700;color:var(--color-navy)">Activité récente</h2>
+        <button class="btn btn--ghost btn--sm" onclick="showPage('notifications')">Tout voir →</button>
+      </div>
+      <div class="notif-list" id="dash-notifs"></div>
+    </div>
+  </div>
+
+  <!-- ══ PARCOURIR ══════════════════════════════════════════════ -->
+  <div class="dashboard-content" id="page-browse" style="display:none">
+    <div style="margin-bottom:24px">
+      <div class="page-title">Parcourir les annonces</div>
+      <div class="page-subtitle">Trouvez votre prochain achat sécurisé</div>
+    </div>
+
+    <!-- Catégories rapides -->
+    <div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:20px">
+      <button class="cat-filter-btn btn btn--primary btn--sm" data-cat="all">Tout</button>
+      <button class="cat-filter-btn btn btn--outline btn--sm" data-cat="cars">🚗 Voitures</button>
+      <button class="cat-filter-btn btn btn--outline btn--sm" data-cat="vehicles">🚐 Véhicules</button>
+      <button class="cat-filter-btn btn btn--outline btn--sm" data-cat="tractors">🚜 Tracteurs</button>
+      <button class="cat-filter-btn btn btn--outline btn--sm" data-cat="containers">📦 Conteneurs</button>
+      <button class="cat-filter-btn btn btn--outline btn--sm" data-cat="phones">📱 Téléphones</button>
+      <button class="cat-filter-btn btn btn--outline btn--sm" data-cat="equipment">⚙️ Équipements</button>
+    </div>
+
+    <!-- Search bar -->
+    <div class="search-bar" style="margin-bottom:24px;max-width:100%">
+      <span class="search-icon">🔍</span>
+      <input type="text" class="search-input" id="browse-search" placeholder="Rechercher par marque, modèle, catégorie…">
+    </div>
+
+    <div class="products-grid" id="browse-grid"></div>
+  </div>
+
+  <!-- ══ COMMANDES ══════════════════════════════════════════════ -->
+  <div class="dashboard-content" id="page-orders" style="display:none">
+    <div style="margin-bottom:24px">
+      <div class="page-title">Mes commandes</div>
+      <div class="page-subtitle">Suivi complet de tous vos achats</div>
+    </div>
+    <div style="display:flex;gap:8px;margin-bottom:20px;flex-wrap:wrap">
+      <button class="filter-chip active">Toutes (12)</button>
+      <button class="filter-chip">En cours (4)</button>
+      <button class="filter-chip">En transit (2)</button>
+      <button class="filter-chip">Livrées (8)</button>
+    </div>
+    <div id="orders-list"></div>
+  </div>
+
+  <!-- ══ SUIVI LIVRAISONS ═══════════════════════════════════════ -->
+  <div class="dashboard-content" id="page-tracking" style="display:none">
+    <div style="margin-bottom:24px">
+      <div class="page-title">Suivi livraisons</div>
+      <div class="page-subtitle">Traçabilité temps réel de vos commandes en cours</div>
+    </div>
+    <div id="tracking-cards"></div>
+  </div>
+
+  <!-- ══ MESSAGERIE ════════════════════════════════════════════ -->
+  <div class="dashboard-content" id="page-messages" style="display:none;padding:24px">
+    <div class="chat-layout" id="buyer-chat"></div>
+  </div>
+
+  <!-- ══ QUITTANCES PDF ════════════════════════════════════════ -->
+  <div class="dashboard-content" id="page-receipts" style="display:none">
+    <div style="margin-bottom:24px">
+      <div class="page-title">Quittances & PDF</div>
+      <div class="page-subtitle">Téléchargez vos quittances d'achat et preuves de livraison</div>
+    </div>
+
+    <div class="alert alert--info" style="margin-bottom:24px">
+      <span>📄</span>
+      <div>Chaque transaction génère automatiquement une quittance PDF avec QR code de vérification, numéro de transaction unique et signature numérique SecureDeal.</div>
+    </div>
+
+    <div id="receipts-list"></div>
+  </div>
+
+  <!-- ══ HISTORIQUE ════════════════════════════════════════════ -->
+  <div class="dashboard-content" id="page-history" style="display:none">
+    <div style="margin-bottom:24px">
+      <div class="page-title">Historique complet</div>
+      <div class="page-subtitle">Toutes vos actions sur SecureDeal</div>
+    </div>
+    <div class="table-wrap">
+      <table class="table">
+        <thead><tr><th>Date</th><th>Action</th><th>Transaction</th><th>Produit</th><th>Montant</th><th>Statut</th></tr></thead>
+        <tbody id="history-tbody"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- ══ PROFIL ════════════════════════════════════════════════ -->
+  <div class="dashboard-content" id="page-profile" style="display:none">
+    <div style="margin-bottom:24px">
+      <div class="page-title">Mon profil & KYC</div>
+      <div class="page-subtitle">Gérez vos informations personnelles</div>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:24px">
+      <div style="background:white;border-radius:20px;padding:28px;border:1px solid var(--color-grey-100)">
+        <div style="display:flex;align-items:center;gap:16px;margin-bottom:24px;padding-bottom:20px;border-bottom:1px solid var(--color-grey-100)">
+          <div class="avatar avatar--xl" style="background:linear-gradient(135deg,#F59E0B,#D97706);font-size:2rem;font-weight:800">A</div>
+          <div>
+            <div style="font-family:'Sora',sans-serif;font-size:20px;font-weight:800;color:var(--color-navy)">Ahmed Khalil</div>
+            <div class="badge badge--verified" style="margin-top:4px">✓ Compte vérifié</div>
+          </div>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:14px">
+          <div class="form-group"><label class="form-label">Prénom</label><input type="text" class="form-control" value="Ahmed" id="bp-fn"></div>
+          <div class="form-group"><label class="form-label">Nom</label><input type="text" class="form-control" value="Khalil" id="bp-ln"></div>
+          <div class="form-group"><label class="form-label">Email</label><input type="email" class="form-control" value="ahmed.khalil@email.com"></div>
+          <div class="form-group"><label class="form-label">Téléphone</label><input type="tel" class="form-control" value="+971 50 123 4567"></div>
+          <div class="form-group"><label class="form-label">Adresse</label><input type="text" class="form-control" value="Dubai Marina, Dubai, EAU"></div>
+          <button class="btn btn--primary" id="save-buyer-profile">Sauvegarder</button>
+        </div>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:20px">
+        <div style="background:white;border-radius:20px;padding:24px;border:1px solid var(--color-grey-100)">
+          <h3 style="font-family:'Sora',sans-serif;font-size:15px;font-weight:700;color:var(--color-navy);margin-bottom:16px">Statut KYC</h3>
+          <div class="kyc-steps" style="flex-direction:column;gap:12px;padding-left:0">
+            <div style="display:flex;align-items:center;gap:12px">
+              <div style="width:28px;height:28px;background:var(--color-success);border-radius:50%;display:flex;align-items:center;justify-content:center;color:white;font-size:12px;flex-shrink:0">✓</div>
+              <div style="font-size:13px;color:var(--color-grey-600)">Email vérifié</div>
+            </div>
+            <div style="display:flex;align-items:center;gap:12px">
+              <div style="width:28px;height:28px;background:var(--color-success);border-radius:50%;display:flex;align-items:center;justify-content:center;color:white;font-size:12px;flex-shrink:0">✓</div>
+              <div style="font-size:13px;color:var(--color-grey-600)">Identité vérifiée (Passeport)</div>
+            </div>
+            <div style="display:flex;align-items:center;gap:12px">
+              <div style="width:28px;height:28px;background:var(--color-success);border-radius:50%;display:flex;align-items:center;justify-content:center;color:white;font-size:12px;flex-shrink:0">✓</div>
+              <div style="font-size:13px;color:var(--color-grey-600)">Justificatif de domicile validé</div>
+            </div>
+            <div style="display:flex;align-items:center;gap:12px">
+              <div style="width:28px;height:28px;background:var(--color-success);border-radius:50%;display:flex;align-items:center;justify-content:center;color:white;font-size:12px;flex-shrink:0">✓</div>
+              <div style="font-size:13px;color:var(--color-grey-600)">Numéro de téléphone confirmé</div>
+            </div>
+          </div>
+        </div>
+        <div style="background:var(--color-info-bg);border:1px solid rgba(30,107,184,0.15);border-radius:16px;padding:20px">
+          <div style="font-size:13px;font-weight:600;color:var(--color-navy);margin-bottom:12px">📱 Application mobile</div>
+          <p style="font-size:13px;color:var(--color-grey-500);line-height:1.6;margin-bottom:14px">Suivez vos commandes partout avec l'application SecureDeal.</p>
+          <a href="/pages/mobile-app.html" class="btn btn--primary btn--sm btn--full">Télécharger l'application</a>
+        </div>
+        <div class="legal-notice">
+          <span class="legal-icon">⚖️</span>
+          <div style="font-size:12px">SecureDeal agit comme intermédiaire. Tout paiement doit transiter par la plateforme uniquement. Nous ne sommes pas responsables des accords conclus hors plateforme.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ NOTIFICATIONS ═════════════════════════════════════════ -->
+  <div class="dashboard-content" id="page-notifications" style="display:none">
+    <div style="margin-bottom:24px">
+      <div class="page-title">Notifications</div>
+      <div class="page-subtitle">Centre de notifications SecureDeal</div>
+    </div>
+    <div class="notif-list" id="buyer-notifs"></div>
+  </div>
+
+</div>
+</div>
+
+<script src="/js/config.js"></script>
+<script src="/js/api.js"></script>
+<script src="/js/utils.js"></script>
+<script src="/js/icons.js"></script>
+<script>
+'use strict';
+
+// ─── Protection route ─────────────────────────────────────────
+if (!SD.Auth.requireAuth('buyer')) {}
+
+const user = SD.Auth.getUser() || { name:'Ahmed Khalil', role:'buyer' };
+const firstName = (user.name || '').split(' ')[0] || 'Ahmed';
+document.getElementById('sb-name').textContent  = user.name || 'Ahmed Khalil';
+document.getElementById('sb-avatar').textContent= firstName[0] || 'A';
+document.getElementById('dh-name').textContent  = firstName;
+
+// ─── Navigation ───────────────────────────────────────────────
+const PAGES = ['dashboard','browse','orders','tracking','messages','receipts','history','profile','notifications'];
+function showPage(name) {
+  PAGES.forEach(p => {
+    const el = document.getElementById(`page-${p}`);
+    if (el) el.style.display = p === name ? 'block' : 'none';
+  });
+  document.querySelectorAll('.sidebar-link[data-page]').forEach(l =>
+    l.classList.toggle('active', l.dataset.page === name)
+  );
+  const titles = {
+    dashboard:'Tableau de bord', browse:'Parcourir les annonces', orders:'Mes commandes',
+    tracking:'Suivi livraisons', messages:'Messagerie', receipts:'Quittances & PDF',
+    history:'Historique complet', profile:'Mon profil', notifications:'Notifications',
+  };
+  document.getElementById('dh-title').textContent = titles[name] || '';
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+document.querySelectorAll('.sidebar-link[data-page]').forEach(l =>
+  l.addEventListener('click', e => { e.preventDefault(); showPage(l.dataset.page); })
+);
+window.showPage = showPage;
+
+// ─── Données démo ─────────────────────────────────────────────
+const DEMO_ORDERS = [
+  { id:'SD-2025-8847', product:'BMW 320d Touring 2021',     amount:28500, status:'transit',   date:'10 mai 2025', seller:'Marc D.',  eta:'21 mai 2025' },
+  { id:'SD-2025-7733', product:'iPhone 14 Pro ×20 unités',  amount:15800, status:'escrow',    date:'8 mai 2025',  seller:'TechStore', eta:'18 mai 2025' },
+  { id:'SD-2025-9102', product:'Conteneur 40 pieds HC neuf',amount:50700, status:'pending',   date:'12 mai 2025', seller:'ContiBox',  eta:'28 mai 2025' },
+  { id:'SD-2025-5521', product:'iPhone 14 Pro ×50 unités',  amount:39500, status:'delivered', date:'1 mai 2025',  seller:'Marc D.',  eta:'Livré le 6 mai' },
+];
+
+const ST = {
+  transit:   { label:'En transit',    cls:'badge--transit'  },
+  escrow:    { label:'Escrow actif',  cls:'badge--escrow'   },
+  pending:   { label:'En attente',    cls:'badge--pending'  },
+  delivered: { label:'Livré ✓',       cls:'badge--delivered'},
+};
+
+// Active orders (dashboard)
+const aoEl = document.getElementById('active-orders');
+DEMO_ORDERS.filter(o => o.status !== 'delivered').forEach(o => {
+  const s = ST[o.status] || {};
+  aoEl.innerHTML += `
+    <div class="product-list-item" style="margin-bottom:10px">
+      <div style="width:44px;height:44px;background:var(--color-grey-50);border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0">📦</div>
+      <div class="product-list-info">
+        <div class="product-list-title" style="font-size:14px">${SD.Sanitize.html(o.product)}</div>
+        <div style="font-size:12px;color:var(--color-grey-400);margin-top:2px">ETA : ${o.eta}</div>
+      </div>
+      <span class="badge ${s.cls}">${s.label}</span>
+      <button class="btn btn--outline btn--sm" onclick="window.location.href='/pages/tracking.html?id=${o.id}'">📡</button>
+    </div>`;
+});
+
+// Orders list
+const olEl = document.getElementById('orders-list');
+DEMO_ORDERS.forEach(o => {
+  const s = ST[o.status] || {};
+  const acompte = o.amount * 0.5;
+  olEl.innerHTML += `
+    <div class="transaction-card">
+      <div class="transaction-header">
+        <div>
+          <div class="transaction-id">#${o.id}</div>
+          <div style="font-size:12px;color:var(--color-grey-400);margin-top:2px">${o.date} · Vendeur : ${o.seller}</div>
+        </div>
+        <span class="badge ${s.cls}">${s.label}</span>
+      </div>
+      <div class="transaction-body">
+        <div style="font-weight:600;color:var(--color-navy);font-size:15px;margin-bottom:14px">${SD.Sanitize.html(o.product)}</div>
+        <div class="transaction-amounts">
+          <div class="amount-block"><div class="amount-label">Prix total</div><div class="amount-value">${SD.Fmt.currency(o.amount)}</div></div>
+          <div class="amount-block escrow"><div class="amount-label">Acompte versé</div><div class="amount-value">${SD.Fmt.currency(acompte)}</div></div>
+          <div class="amount-block"><div class="amount-label">Reste dû</div><div class="amount-value">${o.status === 'delivered' ? '€ 0' : SD.Fmt.currency(acompte)}</div><div class="amount-sub">${o.status === 'delivered' ? 'Payé' : 'À la livraison'}</div></div>
+        </div>
+      </div>
+      <div class="transaction-footer">
+        <div style="font-size:12px;color:var(--color-grey-400)">ETA : <strong>${o.eta}</strong></div>
+        <div style="display:flex;gap:8px">
+          <button class="btn btn--outline btn--sm" onclick="window.location.href='/pages/tracking.html?id=${o.id}'">📡 Suivi</button>
+          <button class="btn btn--outline btn--sm" onclick="SD.Toast.info('Téléchargement quittance PDF…')">📄 Quittance</button>
+        </div>
+      </div>
+    </div>`;
+});
+
+// Tracking cards détaillées
+const tcEl = document.getElementById('tracking-cards');
+DEMO_ORDERS.filter(o => o.status !== 'delivered').forEach(o => {
+  const s = ST[o.status] || {};
+  const progress = o.status === 'transit' ? 65 : o.status === 'escrow' ? 35 : 15;
+  tcEl.innerHTML += `
+    <div style="background:white;border-radius:20px;padding:28px;border:1px solid var(--color-grey-100);margin-bottom:20px;box-shadow:var(--shadow-sm)">
+      <div style="display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:20px;flex-wrap:wrap;gap:12px">
+        <div>
+          <div style="font-family:'Sora',sans-serif;font-size:16px;font-weight:700;color:var(--color-navy)">${SD.Sanitize.html(o.product)}</div>
+          <div style="font-family:'JetBrains Mono',monospace;font-size:13px;color:var(--color-blue);margin-top:4px">#${o.id}</div>
+        </div>
+        <div style="display:flex;gap:10px;align-items:center">
+          <span class="badge ${s.cls}">${s.label}</span>
+          <button class="btn btn--primary btn--sm" onclick="window.location.href='/pages/tracking.html?id=${o.id}'">Suivi complet →</button>
+        </div>
+      </div>
+      <div style="margin-bottom:16px">
+        <div style="display:flex;justify-content:space-between;font-size:12px;color:var(--color-grey-400);margin-bottom:8px">
+          <span>Progression</span><span>${progress}%</span>
+        </div>
+        <div class="progress"><div class="progress-bar" style="width:${progress}%"></div></div>
+      </div>
+      <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:12px">
+        <div style="text-align:center;padding:12px;background:var(--color-grey-50);border-radius:10px">
+          <div style="font-size:10px;color:var(--color-grey-400);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:4px">Commandé</div>
+          <div style="font-size:13px;font-weight:600;color:var(--color-navy)">${o.date}</div>
+        </div>
+        <div style="text-align:center;padding:12px;background:var(--color-success-bg);border-radius:10px">
+          <div style="font-size:10px;color:var(--color-grey-400);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:4px">Acompte</div>
+          <div style="font-size:13px;font-weight:600;color:var(--color-success)">${SD.Fmt.currency(o.amount*0.5)}</div>
+        </div>
+        <div style="text-align:center;padding:12px;background:rgba(0,212,255,0.06);border-radius:10px">
+          <div style="font-size:10px;color:var(--color-grey-400);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:4px">ETA livraison</div>
+          <div style="font-size:13px;font-weight:600;color:var(--color-cyan-dim)">${o.eta}</div>
+        </div>
+        <div style="text-align:center;padding:12px;background:var(--color-grey-50);border-radius:10px">
+          <div style="font-size:10px;color:var(--color-grey-400);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:4px">Vendeur</div>
+          <div style="font-size:13px;font-weight:600;color:var(--color-navy)">${o.seller}</div>
+        </div>
+      </div>
+    </div>`;
+});
+
+// Quittances
+const qrEl = document.getElementById('receipts-list');
+DEMO_ORDERS.forEach(o => {
+  const s = ST[o.status] || {};
+  qrEl.innerHTML += `
+    <div style="display:flex;align-items:center;gap:16px;padding:20px;background:white;border-radius:16px;border:1px solid var(--color-grey-100);margin-bottom:12px;box-shadow:var(--shadow-sm)">
+      <div style="width:52px;height:52px;background:rgba(239,68,68,0.08);border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:24px;flex-shrink:0">📄</div>
+      <div style="flex:1;min-width:0">
+        <div style="font-weight:600;font-size:14px;color:var(--color-navy)">${SD.Sanitize.html(o.product)}</div>
+        <div style="display:flex;align-items:center;gap:10px;margin-top:4px">
+          <span style="font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--color-blue)">#${o.id}</span>
+          <span class="badge ${s.cls}" style="font-size:10px">${s.label}</span>
+        </div>
+      </div>
+      <div style="text-align:right">
+        <div style="font-family:'Sora',sans-serif;font-size:16px;font-weight:800;color:var(--color-navy)">${SD.Fmt.currency(o.amount)}</div>
+        <div style="font-size:11px;color:var(--color-grey-400);margin-top:2px">${o.date}</div>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:6px;margin-left:8px">
+        <button class="btn btn--primary btn--sm" onclick="SD.Toast.success('Téléchargement de la quittance PDF…')">⬇️ PDF</button>
+        <button class="btn btn--outline btn--sm" onclick="window.location.href='/pages/tracking.html?id=${o.id}'">📡 Suivi</button>
+      </div>
+    </div>`;
+});
+
+// Historique
+const htEl = document.getElementById('history-tbody');
+const HIST = [
+  { date:'12 mai 2025', action:'Acompte versé', id:'SD-2025-9102', product:'Conteneur 40\'', amount:25350, status:'pending' },
+  { date:'10 mai 2025', action:'Commande créée', id:'SD-2025-8847', product:'BMW 320d 2021', amount:28500, status:'transit' },
+  { date:'8 mai 2025',  action:'Acompte versé', id:'SD-2025-7733', product:'iPhone 14 Pro ×20', amount:7900, status:'escrow' },
+  { date:'6 mai 2025',  action:'Livraison confirmée', id:'SD-2025-5521', product:'iPhone 14 Pro ×50', amount:39500, status:'delivered' },
+  { date:'1 mai 2025',  action:'Commande créée', id:'SD-2025-5521', product:'iPhone 14 Pro ×50', amount:39500, status:'delivered' },
+];
+HIST.forEach(h => {
+  const s = ST[h.status] || {};
+  htEl.innerHTML += `<tr>
+    <td style="font-family:'JetBrains Mono',monospace;font-size:12px">${h.date}</td>
+    <td>${h.action}</td>
+    <td><span style="font-family:'JetBrains Mono',monospace;color:var(--color-blue);font-size:12px">#${h.id}</span></td>
+    <td>${SD.Sanitize.html(h.product)}</td>
+    <td style="font-weight:600">${SD.Fmt.currency(h.amount)}</td>
+    <td><span class="badge ${s.cls}">${s.label}</span></td>
+  </tr>`;
+});
+
+// Notifications
+const notifs = [
+  { icon:'🚛', title:'En transit', text:'Votre BMW 320d est en route : Frankfurt → Dubai', time:'Il y a 2h', unread:true, type:'info' },
+  { icon:'💰', title:'Acompte confirmé', text:'€25 350 sécurisés pour Conteneur 40 pieds', time:'Il y a 4h', unread:true, type:'success' },
+  { icon:'📄', title:'Quittance disponible', text:'Quittance SD-2025-5521 disponible en téléchargement', time:'Il y a 6 jours', unread:false, type:'info' },
+  { icon:'✅', title:'Livraison confirmée', text:'iPhone 14 Pro ×50 livré et reçu à Dubai', time:'Il y a 7 jours', unread:false, type:'success' },
+];
+['dash-notifs','buyer-notifs'].forEach(id => {
+  const el = document.getElementById(id);
+  if (!el) return;
+  notifs.forEach(n => {
+    el.innerHTML += `
+      <div class="notif-item ${n.unread ? 'unread' : ''}">
+        <div class="notif-icon" style="background:var(--color-${n.type==='success'?'success':'info'}-bg)">${n.icon}</div>
+        <div class="notif-content"><div class="notif-title">${n.title}</div><div class="notif-text">${n.text}</div></div>
+        <div class="notif-time">${n.time}</div>
+      </div>`;
+  });
+});
+
+// Browse products
+const BROWSE = [
+  { id:'SD001', cat:'cars', title:'BMW 320d Touring 2021', price:28500, emoji:'🚗', location:'Munich 🇩🇪', status:'stock' },
+  { id:'SD003', cat:'cars', title:'Volkswagen Golf 8 GTI 2022', price:38900, emoji:'🚗', location:'Berlin 🇩🇪', status:'stock' },
+  { id:'SD004', cat:'tractors', title:'John Deere 6130M 2019', price:85000, emoji:'🚜', location:'Toulouse 🇫🇷', status:'seller' },
+  { id:'SD006', cat:'containers', title:'Conteneur 20 pieds HC', price:3200, emoji:'📦', location:'Anvers 🇧🇪', status:'stock' },
+  { id:'SD008', cat:'phones', title:'iPhone 14 Pro ×20 — Lot', price:15800, emoji:'📱', location:'Paris 🇫🇷', status:'stock' },
+  { id:'SD010', cat:'equipment', title:'Grue mobile Liebherr LTM 1050', price:185000, emoji:'⚙️', location:'Stuttgart 🇩🇪', status:'seller' },
+];
+
+let browseFilter = 'all';
+function renderBrowse() {
+  const q = document.getElementById('browse-search').value.toLowerCase();
+  const grid = document.getElementById('browse-grid');
+  const filtered = BROWSE.filter(p =>
+    (browseFilter === 'all' || p.cat === browseFilter) &&
+    (!q || p.title.toLowerCase().includes(q))
+  );
+  grid.innerHTML = filtered.map(p => `
+    <div class="product-card" onclick="SD.Toast.info('Produit ${SD.Sanitize.html(p.id)} — Vue détaillée bientôt disponible')">
+      <div class="product-img-placeholder"><span style="font-size:3rem">${p.emoji}</span></div>
+      <div class="product-body">
+        <div class="product-category">${p.cat}</div>
+        <div class="product-title">${SD.Sanitize.html(p.title)}</div>
+        <div class="product-meta"><span>📍 ${p.location}</span></div>
+        <div class="product-price"><span class="product-price-currency">€</span>${SD.Fmt.number(p.price)}</div>
+      </div>
+      <div class="product-footer">
+        <span style="font-size:11px;color:var(--color-grey-400)">Acompte : <b style="color:var(--color-blue)">${SD.Fmt.currency(p.price*0.5)}</b></span>
+        <span class="product-stock-badge ${p.status==='stock'?'in-stock':'with-seller'}">${p.status==='stock'?'En stock':'Vendeur'}</span>
+      </div>
+    </div>`).join('');
+}
+
+document.querySelectorAll('.cat-filter-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.cat-filter-btn').forEach(b => {
+      b.classList.remove('btn--primary'); b.classList.add('btn--outline');
+    });
+    btn.classList.add('btn--primary'); btn.classList.remove('btn--outline');
+    browseFilter = btn.dataset.cat; renderBrowse();
+  });
+});
+document.getElementById('browse-search').addEventListener('input', renderBrowse);
+renderBrowse();
+
+// Chat acheteur
+document.getElementById('buyer-chat').innerHTML = `
+  <div class="chat-sidebar">
+    <div class="chat-sidebar-header">
+      <div class="chat-sidebar-title">Messages</div>
+      <div class="chat-search"><span>🔍</span><input type="text" placeholder="Rechercher…"></div>
+    </div>
+    <div class="chat-list">
+      <div class="chat-item active">
+        <div class="avatar avatar--md" style="background:var(--gradient-primary)">M</div>
+        <div class="chat-item-info">
+          <div class="chat-item-name">Marc Dupont</div>
+          <div class="chat-item-preview">BMW 320d — Voici les photos intérieures…</div>
+        </div>
+        <div class="chat-item-meta"><div class="chat-item-time">14:28</div><div class="chat-unread">1</div></div>
+      </div>
+    </div>
+  </div>
+  <div class="chat-main">
+    <div class="chat-main-header">
+      <div class="avatar avatar--md" style="background:var(--gradient-primary)">M</div>
+      <div class="chat-main-info">
+        <div class="chat-main-name">Marc Dupont</div>
+        <div class="chat-main-product">Transaction #SD-2025-8847 · BMW 320d 2021</div>
+      </div>
+    </div>
+    <div class="chat-security-notice">🔒 Conversation protégée — accessible uniquement au vendeur, à l'acheteur et à SecureDeal</div>
+    <div class="chat-messages">
+      <div class="message message--out">
+        <div class="avatar avatar--sm" style="background:linear-gradient(135deg,#F59E0B,#D97706)">A</div>
+        <div><div class="message-bubble">Bonjour, je suis intéressé par la BMW. Pouvez-vous m'envoyer des photos de l'intérieur ?</div><div class="message-time">14:25</div></div>
+      </div>
+      <div class="message message--in">
+        <div class="avatar avatar--sm" style="background:var(--gradient-primary)">M</div>
+        <div><div class="message-bubble">Bonjour Ahmed ! Bien sûr, voici les photos demandées. Le véhicule est en excellent état, entretien complet chez concessionnaire.</div><div class="message-time">14:28 ✓✓</div></div>
+      </div>
+    </div>
+    <div class="chat-fraud-warning">⚠️ Ne partagez jamais votre IBAN ou coordonnées bancaires. Tout paiement se fait uniquement via SecureDeal.</div>
+    <div class="chat-input-area">
+      <div class="chat-input-wrap">
+        <textarea class="chat-textarea" id="buyer-msg" rows="1" placeholder="Écrivez un message…"></textarea>
+        <button class="chat-send" id="buyer-send">➤</button>
+      </div>
+    </div>
+  </div>`;
+
+document.getElementById('buyer-send')?.addEventListener('click', () => {
+  const inp = document.getElementById('buyer-msg');
+  const msg = inp.value.trim(); if (!msg) return;
+  const msgs = document.querySelector('#buyer-chat .chat-messages');
+  msgs.innerHTML += `<div class="message message--out"><div class="avatar avatar--sm" style="background:linear-gradient(135deg,#F59E0B,#D97706)">A</div><div><div class="message-bubble">${SD.Sanitize.html(msg)}</div><div class="message-time">${new Date().toLocaleTimeString('fr-FR',{hour:'2-digit',minute:'2-digit'})} ✓</div></div></div>`;
+  msgs.scrollTop = msgs.scrollHeight; inp.value = '';
+});
+
+// Profil save
+document.getElementById('save-buyer-profile').addEventListener('click', () => {
+  SD.Toast.success('Profil mis à jour avec succès.');
+});
+
+// Quick track
+window.quickTrack = () => {
+  const v = document.getElementById('quick-track').value.trim();
+  if (v) window.location.href = `/pages/tracking.html?id=${encodeURIComponent(v)}`;
+  else SD.Toast.warning('Saisissez un numéro de transaction.');
+};
+
+SD.Counter.initAll();
+</script>
+</body>
+</html>

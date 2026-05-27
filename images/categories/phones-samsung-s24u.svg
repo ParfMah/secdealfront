@@ -1,0 +1,23 @@
+<svg width="400" height="260" viewBox="0 0 400 260" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background -->
+  <rect width="400" height="260" fill="#0d0014"/>
+  <!-- Grid pattern -->
+  <defs>
+    <pattern id="grid-samsung-s24u" x="0" y="0" width="40" height="40" patternUnits="userSpaceOnUse">
+      <path d="M 40 0 L 0 0 0 40" fill="none" stroke="#8B5CF6" stroke-width="0.3" opacity="0.15"/>
+    </pattern>
+  </defs>
+  <rect width="400" height="260" fill="url(#grid-samsung-s24u)"/>
+  <!-- Glow -->
+  <ellipse cx="200" cy="130" rx="160" ry="100" fill="#8B5CF6" opacity="0.06"/>
+  <!-- Emoji large -->
+  <text x="200" y="120" font-size="72" text-anchor="middle" dominant-baseline="middle">📱</text>
+  <!-- Product title -->
+  <text x="200" y="175" font-family="Sora, sans-serif" font-size="14" font-weight="700" fill="white" text-anchor="middle">Samsung S24 Ultra × 20</text>
+  <!-- Price -->
+  <text x="200" y="198" font-family="JetBrains Mono, monospace" font-size="13" font-weight="600" fill="#8B5CF6" text-anchor="middle">À partir de 1,000€</text>
+  <!-- Badge -->
+  <rect x="152" y="218" width="96" height="22" rx="11" fill="#8B5CF6" opacity="0.15"/>
+  <rect x="152" y="218" width="96" height="22" rx="11" fill="none" stroke="#8B5CF6" stroke-width="1" opacity="0.4"/>
+  <text x="200" y="233" font-family="Sora, sans-serif" font-size="9" font-weight="700" fill="#8B5CF6" text-anchor="middle" letter-spacing="1">SÉCURISÉ SECUREDEAL</text>
+</svg>

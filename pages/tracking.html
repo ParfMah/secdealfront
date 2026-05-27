@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Suivez votre commande SecureDeal en temps réel. Saisissez votre numéro de transaction pour accéder au suivi complet.">
+  <title>Suivi de commande — SecureDeal</title>
+  <script src="/js/loader.js"></script>
+  <link rel="stylesheet" href="/css/loader.css">
+  <link rel="stylesheet" href="/css/main.css">
+  <link rel="stylesheet" href="/css/brand.css">
+  <link rel="stylesheet" href="/css/backgrounds.css">
+  <link rel="stylesheet" href="/css/responsive-fixes.css">
+  <link rel="icon" href="/images/logo/favicon.svg" type="image/svg+xml">
+  <style>
+    /* ─── Styles spécifiques page Suivi ─── */
+    body { background: #0a0a0a; color: white; }
+
+    .tracking-hero {
+      background: var(--gradient-hero);
+      padding: 110px 0 60px;
+      position: relative;
+      overflow: hidden;
+    }
+    .tracking-hero::before {
+      content: '';
+      position: absolute; inset: 0;
+      background-image:
+        linear-gradient(rgba(201,162,39,0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(201,162,39,0.03) 1px, transparent 1px);
+      background-size: 60px 60px;
+    }
+
+    .tracking-search-form {
+      display: flex;
+      gap: 12px;
+      align-items: center;
+      background: rgba(255,255,255,0.04);
+      border: 1.5px solid rgba(201,162,39,0.20);
+      border-radius: 16px;
+      padding: 8px 8px 8px 20px;
+      max-width: 580px;
+      margin: 0 auto;
+    }
+    .tracking-input {
+      flex: 1;
+      background: none;
+      border: none;
+      outline: none;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 15px;
+      color: white;
+      min-width: 0;
+    }
+    .tracking-input::placeholder { color: rgba(255,255,255,0.25); font-family: 'DM Sans', sans-serif; }
+
+    .tracking-result-area {
+      background: var(--color-dark);
+      min-height: 60vh;
+      padding: 48px 0 80px;
+    }
+
+    /* Carte résumé transaction */
+    .tracking-summary {
+      background: rgba(255,255,255,0.03);
+      border: 1px solid rgba(201,162,39,0.12);
+      border-radius: var(--radius-2xl);
+      padding: var(--space-8);
+      margin-bottom: var(--space-6);
+    }
+
+    /* Timeline */
+    .tracking-timeline {
+      background: rgba(255,255,255,0.02);
+      border: 1px solid rgba(255,255,255,0.06);
+      border-radius: var(--radius-2xl);
+      padding: var(--space-8);
+      margin-bottom: var(--space-6);
+    }
+    .timeline-title {
+      font-family: var(--font-display);
+      font-size: var(--text-md);
+      font-weight: var(--weight-semibold);
+      color: white;
+      margin-bottom: var(--space-8);
+      padding-bottom: var(--space-4);
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+    }
+    .timeline-step {
+      display: flex;
+      gap: var(--space-4);
+      position: relative;
+      padding-bottom: var(--space-6);
+    }
+    .timeline-step:last-child { padding-bottom: 0; }
+    .timeline-step:not(:last-child)::before {
+      content: '';
+      position: absolute;
+      left: 19px; top: 40px;
+      bottom: 0; width: 1px;
+      background: rgba(255,255,255,0.07);
+    }
+    .timeline-dot {
+      width: 40px; height: 40px;
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 16px;
+      flex-shrink: 0;
+      position: relative;
+      z-index: 1;
+    }
+    .timeline-dot.done    { background: rgba(16,185,129,0.15); border: 1.5px solid rgba(16,185,129,0.3); }
+    .timeline-dot.active  { background: rgba(201,162,39,0.15); border: 1.5px solid rgba(201,162,39,0.4); animation: pulse-gold 2s ease infinite; }
+    .timeline-dot.pending { background: rgba(255,255,255,0.04); border: 1.5px solid rgba(255,255,255,0.08); }
+    .timeline-content { flex: 1; min-width: 0; }
+    .timeline-label {
+      font-family: var(--font-display);
+      font-size: var(--text-base);
+      font-weight: var(--weight-semibold);
+      color: white; margin-bottom: 4px;
+    }
+    .timeline-label.pending { color: rgba(255,255,255,0.35); }
+    .timeline-date { font-size: 12px; color: rgba(255,255,255,0.35); margin-bottom: 4px; }
+    .timeline-note { font-size: var(--text-sm); color: rgba(255,255,255,0.45); }
+  </style>
+</head>
+<body>
+
+<!-- ═══════════════════════════════════════════════ HEADER ════ -->
+<header class="site-header" id="site-header">
+  <div class="header-inner">
+    <a href="/index.html" class="header-logo">
+      <svg width="150" height="36" viewBox="0 0 160 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M18 3L31 8V17.5C31 25.5 25 31.5 18 34C11 31.5 5 25.5 5 17.5V8Z" fill="none" stroke="#C9A227" stroke-width="1.5"/>
+        <path d="M18 7.5L27 11.5V17.5C27 23 23 27.5 18 30C13 27.5 9 23 9 17.5V11.5Z" fill="rgba(201,162,39,0.08)" stroke="#C9A227" stroke-width="0.8"/>
+        <polyline points="13 18 16.5 21.5 23 14" stroke="#C9A227" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+        <text x="39" y="26" font-family="Sora, sans-serif" font-size="16" font-weight="800" fill="white" letter-spacing="-0.5">SECURE</text>
+        <text x="106" y="26" font-family="Sora, sans-serif" font-size="16" font-weight="300" fill="#C9A227" letter-spacing="2">DEAL</text>
+      </svg>
+    </a>
+    <nav class="header-nav" id="main-nav">
+      <a href="/index.html"              class="header-nav-link">Accueil</a>
+      <a href="/pages/how-it-works.html" class="header-nav-link">Fonctionnement</a>
+      <a href="/pages/categories.html"   class="header-nav-link">Catégories</a>
+      <a href="/pages/tracking.html"     class="header-nav-link active">Suivi</a>
+      <a href="/pages/about.html"        class="header-nav-link">À propos</a>
+      <a href="/pages/contact.html"      class="header-nav-link">Contact</a>
+    </nav>
+    <div class="header-actions">
+      <div class="header-auth-actions" id="header-auth" style="display:flex;gap:10px;align-items:center">
+        <a href="/pages/auth/login.html"    class="btn btn--outline-white btn--sm">Connexion</a>
+        <a href="/pages/auth/register.html" class="btn btn--gold btn--sm">Créer un compte</a>
+      </div>
+    </div>
+    <button class="hamburger" id="hamburger" aria-label="Menu" aria-expanded="false">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</header>
+
+<nav class="mobile-menu" id="mobile-menu">
+  <a href="/index.html">🏠 Accueil</a>
+  <a href="/pages/how-it-works.html">⚙️ Fonctionnement</a>
+  <a href="/pages/categories.html">📦 Catégories</a>
+  <a href="/pages/tracking.html" class="active">📡 Suivi</a>
+  <a href="/pages/about.html">ℹ️ À propos</a>
+  <a href="/pages/pricing.html">💰 Tarifs</a>
+  <a href="/pages/contact.html">✉️ Contact</a>
+  <div class="mobile-menu-divider"></div>
+  <div class="mobile-menu-actions">
+    <a href="/pages/auth/login.html"    class="btn btn--outline-white" style="width:100%;justify-content:center">Se connecter</a>
+    <a href="/pages/auth/register.html" class="btn btn--gold" style="width:100%;justify-content:center">Créer un compte</a>
+  </div>
+</nav>
+
+<!-- ═══════════════════════════════════════ HERO TRACKING ════ -->
+<section class="tracking-hero">
+  <div class="container text-center" style="position:relative">
+    <div class="hero-eyebrow" style="display:inline-flex;margin-bottom:20px">📡 Traçabilité temps réel</div>
+    <h1 style="font-family:'Sora',sans-serif;font-size:clamp(2rem,4vw,3rem);font-weight:800;color:white;margin-bottom:16px">
+      Suivez votre commande
+    </h1>
+    <p style="font-size:16px;color:rgba(255,255,255,0.50);margin-bottom:40px;max-width:500px;margin-left:auto;margin-right:auto">
+      Entrez votre numéro de transaction ou de suivi pour accéder à l'historique complet.
+    </p>
+
+    <form class="tracking-search-form" id="tracking-form">
+      <input type="text" class="tracking-input" id="tracking-input"
+             placeholder="Ex: SD-2025-8847 ou T-AB12CD34EF"
+             autocomplete="off" spellcheck="false">
+      <button type="submit" class="btn btn--gold" style="flex-shrink:0">
+        Rechercher →
+      </button>
+    </form>
+    <div style="margin-top:12px;font-size:12px;color:rgba(255,255,255,0.25)">
+      Numéro de transaction fourni par email · Accessible 24h/7j
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════════════════════════ ZONE RÉSULTAT ═══════ -->
+<div class="tracking-result-area">
+  <div class="container" style="max-width:900px">
+
+    <!-- État initial -->
+    <div id="state-initial" style="text-align:center;padding:80px 20px">
+      <div style="font-size:5rem;margin-bottom:20px;opacity:0.2">📦</div>
+      <h3 style="color:rgba(255,255,255,0.35);font-weight:500;font-size:18px">Entrez un numéro de suivi pour commencer</h3>
+      <p style="color:rgba(255,255,255,0.20);font-size:14px;margin-top:8px">Le numéro vous a été envoyé par email lors de votre transaction.</p>
+    </div>
+
+    <!-- Chargement -->
+    <div id="state-loading" style="display:none;text-align:center;padding:80px 20px">
+      <div style="width:48px;height:48px;border:3px solid rgba(201,162,39,0.15);border-top-color:#C9A227;border-radius:50%;animation:spin 0.8s linear infinite;margin:0 auto 20px"></div>
+      <div style="color:rgba(255,255,255,0.40);font-size:15px">Recherche en cours…</div>
+    </div>
+
+    <!-- Erreur -->
+    <div id="state-error" style="display:none">
+      <div class="alert alert--danger" style="margin-bottom:20px">
+        <span>⚠️</span>
+        <div><strong>Transaction introuvable.</strong> Vérifiez le numéro saisi ou contactez le support SecureDeal.</div>
+      </div>
+    </div>
+
+    <!-- Résultat démo -->
+    <div id="state-result" style="display:none">
+
+      <div class="tracking-summary">
+        <div style="display:flex;align-items:flex-start;justify-content:space-between;flex-wrap:wrap;gap:16px;margin-bottom:24px">
+          <div>
+            <div style="font-size:11px;color:rgba(255,255,255,0.35);font-weight:600;text-transform:uppercase;letter-spacing:1px;margin-bottom:6px">Numéro de transaction</div>
+            <div id="r-txn-id" style="font-family:'JetBrains Mono',monospace;font-size:22px;font-weight:700;color:white">—</div>
+          </div>
+          <div id="r-status-badge"></div>
+        </div>
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:16px">
+          <div>
+            <div style="font-size:11px;color:rgba(255,255,255,0.30);text-transform:uppercase;letter-spacing:1px;margin-bottom:4px">Produit</div>
+            <div id="r-product" style="font-weight:600;color:white">—</div>
+          </div>
+          <div>
+            <div style="font-size:11px;color:rgba(255,255,255,0.30);text-transform:uppercase;letter-spacing:1px;margin-bottom:4px">Montant</div>
+            <div id="r-amount" style="font-family:'JetBrains Mono',monospace;font-weight:700;color:#C9A227">—</div>
+          </div>
+          <div>
+            <div style="font-size:11px;color:rgba(255,255,255,0.30);text-transform:uppercase;letter-spacing:1px;margin-bottom:4px">Origine</div>
+            <div id="r-origin" style="font-weight:600;color:white">—</div>
+          </div>
+          <div>
+            <div style="font-size:11px;color:rgba(255,255,255,0.30);text-transform:uppercase;letter-spacing:1px;margin-bottom:4px">Destination</div>
+            <div id="r-dest" style="font-weight:600;color:white">—</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="tracking-timeline">
+        <div class="timeline-title">📋 Historique de la transaction</div>
+        <div id="timeline-steps"></div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════ FOOTER ═══════ -->
+<footer class="site-footer">
+  <div class="container">
+    <div class="footer-bottom">
+      <div class="footer-copy">© 2025 SecureDeal. Tous droits réservés.</div>
+      <div class="footer-legal-links">
+        <a href="/pages/legal/mentions-legales.html">Mentions légales</a>
+        <a href="/pages/legal/cgu.html">CGU</a>
+        <a href="/pages/legal/confidentialite.html">Confidentialité</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<!-- ═══════════════════════════════════════════ SCRIPTS ══════ -->
+<script src="/js/config.js"></script>
+<script src="/js/api.js"></script>
+<script src="/js/utils.js"></script>
+<script>
+'use strict';
+
+// Header scroll
+const header = document.getElementById('site-header');
+window.addEventListener('scroll', () => header.classList.toggle('scrolled', window.scrollY > 20), { passive:true });
+
+// Hamburger
+const burger = document.getElementById('hamburger');
+const menu   = document.getElementById('mobile-menu');
+burger.addEventListener('click', () => {
+  const open = menu.classList.toggle('open');
+  burger.classList.toggle('open', open);
+  burger.setAttribute('aria-expanded', open);
+  document.body.style.overflow = open ? 'hidden' : '';
+});
+menu.querySelectorAll('a').forEach(a => a.addEventListener('click', () => {
+  menu.classList.remove('open'); burger.classList.remove('open');
+  burger.setAttribute('aria-expanded','false'); document.body.style.overflow = '';
+}));
+
+// ─── Données démo ───────────────────────────────────────────
+const DEMO_TRANSACTIONS = {
+  'SD-2025-8847': {
+    id: 'SD-2025-8847', product: 'Toyota Land Cruiser 200 V8', amount: '€ 28 500',
+    origin: 'Lyon, France', dest: 'Dubai, EAU',
+    status: 'transit',
+    steps: [
+      { icon:'✅', label:'Acompte 50% reçu',         date:'12 mai 2025 · 09:42', note:'Paiement escrow confirmé — € 14 250 bloqués.',   state:'done' },
+      { icon:'🔍', label:'Vérification du véhicule',  date:'13 mai 2025 · 11:00', note:'Inspection indépendante validée.',               state:'done' },
+      { icon:'📦', label:'Produit récupéré',          date:'14 mai 2025 · 14:18', note:'Véhicule pris en charge par SecureDeal Logistics.', state:'done' },
+      { icon:'🚛', label:'En transit — Lyon → Dubai', date:'16 mai 2025 · 08:30', note:'ETA Dubai : 21 mai 2025. BL n° SD-BL-98247.',    state:'active' },
+      { icon:'🏠', label:'Livraison finale',          date:'—',                    note:'En attente.',                                     state:'pending' },
+      { icon:'💸', label:'Solde libéré au vendeur',   date:'—',                    note:'Après confirmation réception acheteur.',          state:'pending' },
+    ]
+  },
+  'SD-2025-4412': {
+    id: 'SD-2025-4412', product: 'iPhone 15 Pro Max × 50', amount: '€ 55 000',
+    origin: 'Paris, France', dest: 'Abidjan, CI',
+    status: 'delivered',
+    steps: [
+      { icon:'✅', label:'Acompte 40% reçu',    date:'2 mai 2025 · 10:15',  note:'Paiement escrow confirmé.',   state:'done' },
+      { icon:'📦', label:'Produit expédié',       date:'5 mai 2025 · 13:00',  note:'Envoi DHL Express confirmé.', state:'done' },
+      { icon:'🚛', label:'En transit',           date:'7 mai 2025 · 07:45',  note:'Transit Frankfurt.',           state:'done' },
+      { icon:'✈️', label:'Arrivé à destination', date:'9 mai 2025 · 16:20',  note:'Dédouanement en cours.',      state:'done' },
+      { icon:'🏠', label:'Livraison confirmée',  date:'11 mai 2025 · 11:00', note:'Réception validée par l\'acheteur.', state:'done' },
+      { icon:'💸', label:'Solde libéré',         date:'11 mai 2025 · 12:30', note:'€ 33 000 virés au vendeur.',  state:'done' },
+    ]
+  }
+};
+
+function renderResult(txn) {
+  const statusMap = {
+    transit:   { label:'En transit',  cls:'badge--escrow' },
+    delivered: { label:'Livré',       cls:'badge--active' },
+    pending:   { label:'En attente',  cls:'badge--pending' },
+  };
+  const s = statusMap[txn.status] || { label: txn.status, cls: 'badge--pending' };
+
+  document.getElementById('r-txn-id').textContent = txn.id;
+  document.getElementById('r-product').textContent = txn.product;
+  document.getElementById('r-amount').textContent  = txn.amount;
+  document.getElementById('r-origin').textContent  = txn.origin;
+  document.getElementById('r-dest').textContent    = txn.dest;
+  document.getElementById('r-status-badge').innerHTML = `<span class="badge ${s.cls}" style="font-size:12px;padding:6px 14px">${s.label}</span>`;
+
+  const tl = document.getElementById('timeline-steps');
+  tl.innerHTML = txn.steps.map(step => `
+    <div class="timeline-step">
+      <div class="timeline-dot ${step.state}">${step.icon}</div>
+      <div class="timeline-content">
+        <div class="timeline-label ${step.state === 'pending' ? 'pending' : ''}">${step.label}</div>
+        <div class="timeline-date">${step.date}</div>
+        <div class="timeline-note">${step.note}</div>
+      </div>
+    </div>
+  `).join('');
+}
+
+// ─── Formulaire de recherche ─────────────────────────────────
+document.getElementById('tracking-form').addEventListener('submit', (e) => {
+  e.preventDefault();
+  const val = document.getElementById('tracking-input').value.trim().toUpperCase();
+
+  document.getElementById('state-initial').style.display = 'none';
+  document.getElementById('state-error').style.display   = 'none';
+  document.getElementById('state-result').style.display  = 'none';
+  document.getElementById('state-loading').style.display = 'block';
+
+  setTimeout(() => {
+    document.getElementById('state-loading').style.display = 'none';
+    const txn = DEMO_TRANSACTIONS[val];
+    if (txn) {
+      renderResult(txn);
+      document.getElementById('state-result').style.display = 'block';
+    } else {
+      document.getElementById('state-error').style.display = 'block';
+    }
+  }, 1200);
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Vérification KYC — SecureDeal</title>
+  <meta name="description" content="Complétez votre vérification d'identité pour accéder aux transactions SecureDeal.">
+  <link rel="stylesheet" href="/css/design-system.css">
+  <link rel="stylesheet" href="/css/main.css">
+  <link rel="stylesheet" href="/css/responsive-fixes.css">
+  <link rel="icon" href="/images/logo/favicon.svg" type="image/svg+xml">
+  <script src="/js/loader.js"></script>
+  <style>
+    .kyc-step { background:rgba(255,255,255,0.03); border:1px solid rgba(255,255,255,0.08); border-radius:16px; padding:24px; margin-bottom:16px; }
+    .kyc-step.done { border-color:rgba(16,185,129,0.3); background:rgba(16,185,129,0.04); }
+    .kyc-step.active { border-color:rgba(201,162,39,0.3); background:rgba(201,162,39,0.04); }
+    .step-num { width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:14px;flex-shrink:0; }
+    .step-num.done  { background:#10B981;color:#000; }
+    .step-num.active{ background:#C9A227;color:#000; }
+    .step-num.pending{background:rgba(255,255,255,0.08);color:rgba(255,255,255,0.4); }
+    .upload-zone { border:2px dashed rgba(255,255,255,0.15);border-radius:12px;padding:32px;text-align:center;cursor:pointer;transition:all 0.2s; }
+    .upload-zone:hover { border-color:rgba(201,162,39,0.4);background:rgba(201,162,39,0.04); }
+    .upload-zone.has-file { border-color:rgba(16,185,129,0.4);background:rgba(16,185,129,0.04); }
+    .doc-type-btn { padding:12px 20px;border:1px solid rgba(255,255,255,0.12);border-radius:10px;cursor:pointer;font-size:13px;color:rgba(255,255,255,0.7);background:transparent;transition:all 0.2s; }
+    .doc-type-btn.selected { border-color:#C9A227;color:#C9A227;background:rgba(201,162,39,0.08); }
+    .progress-bar { height:4px;background:rgba(255,255,255,0.06);border-radius:2px;overflow:hidden;margin-bottom:32px; }
+    .progress-fill { height:100%;background:linear-gradient(90deg,#C9A227,#E6C84E);transition:width 0.5s ease; }
+  </style>
+</head>
+<body>
+
+<!-- NAV -->
+<header class="site-header" id="site-header">
+  <nav class="nav-container">
+    <a href="/index.html" class="nav-logo">SECURE<span>DEAL</span></a>
+    <div class="nav-links">
+      <a href="/pages/categories.html">Annonces</a>
+      <a href="/pages/pricing.html">Tarifs</a>
+    </div>
+    <div id="header-auth" class="nav-auth"></div>
+  </nav>
+</header>
+
+<main style="padding-top:100px;padding-bottom:80px;min-height:100vh">
+  <div style="max-width:700px;margin:0 auto;padding:0 20px">
+
+    <div style="margin-bottom:32px">
+      <div style="font-size:11px;color:rgba(255,255,255,0.35);text-transform:uppercase;letter-spacing:1px;margin-bottom:8px">Vérification d'identité</div>
+      <h1 style="font-size:28px;font-weight:800;color:white;margin-bottom:8px">Vérification KYC</h1>
+      <p style="font-size:14px;color:rgba(255,255,255,0.45)">Obligatoire pour effectuer des transactions. Sécurisé et confidentiel.</p>
+    </div>
+
+    <!-- Statut actuel -->
+    <div id="kyc-status-banner" style="display:none;margin-bottom:24px"></div>
+
+    <!-- Barre de progression -->
+    <div class="progress-bar">
+      <div class="progress-fill" id="progress-fill" style="width:0%"></div>
+    </div>
+
+    <!-- Étape 1 : Type de document -->
+    <div class="kyc-step active" id="step-1">
+      <div style="display:flex;gap:14px;align-items:flex-start;margin-bottom:20px">
+        <div class="step-num active" id="snum-1">1</div>
+        <div>
+          <div style="font-size:15px;font-weight:700;color:white">Type de pièce d'identité</div>
+          <div style="font-size:12px;color:rgba(255,255,255,0.4);margin-top:2px">Choisissez votre document officiel</div>
+        </div>
+      </div>
+      <div style="display:flex;flex-wrap:wrap;gap:10px" id="doc-types">
+        <button class="doc-type-btn" data-type="NATIONAL_ID">🪪 Carte nationale d'identité</button>
+        <button class="doc-type-btn" data-type="PASSPORT">📘 Passeport</button>
+        <button class="doc-type-btn" data-type="DRIVING_LICENSE">🚗 Permis de conduire</button>
+        <button class="doc-type-btn" data-type="RESIDENCE_PERMIT">📄 Titre de séjour</button>
+      </div>
+    </div>
+
+    <!-- Étape 2 : Upload recto -->
+    <div class="kyc-step" id="step-2" style="opacity:0.4;pointer-events:none">
+      <div style="display:flex;gap:14px;align-items:flex-start;margin-bottom:20px">
+        <div class="step-num pending" id="snum-2">2</div>
+        <div>
+          <div style="font-size:15px;font-weight:700;color:white">Recto du document</div>
+          <div style="font-size:12px;color:rgba(255,255,255,0.4);margin-top:2px">Photo nette, document entier visible</div>
+        </div>
+      </div>
+      <div class="upload-zone" id="drop-front" onclick="document.getElementById('file-front').click()">
+        <div id="preview-front">
+          <div style="font-size:40px;margin-bottom:8px">📤</div>
+          <div style="font-size:14px;font-weight:600;color:white;margin-bottom:4px">Cliquez ou glissez votre fichier ici</div>
+          <div style="font-size:12px;color:rgba(255,255,255,0.35)">JPG, PNG, PDF — 10 Mo max</div>
+        </div>
+      </div>
+      <input type="file" id="file-front" accept="image/jpeg,image/png,application/pdf" style="display:none">
+    </div>
+
+    <!-- Étape 3 : Upload verso (pour CNI/permis) -->
+    <div class="kyc-step" id="step-3" style="opacity:0.4;pointer-events:none">
+      <div style="display:flex;gap:14px;align-items:flex-start;margin-bottom:20px">
+        <div class="step-num pending" id="snum-3">3</div>
+        <div>
+          <div style="font-size:15px;font-weight:700;color:white">Verso du document <span style="font-size:11px;color:rgba(255,255,255,0.35)">(si applicable)</span></div>
+          <div style="font-size:12px;color:rgba(255,255,255,0.4);margin-top:2px">Non requis pour passeport</div>
+        </div>
+      </div>
+      <div class="upload-zone" id="drop-back" onclick="document.getElementById('file-back').click()">
+        <div id="preview-back">
+          <div style="font-size:40px;margin-bottom:8px">📤</div>
+          <div style="font-size:14px;font-weight:600;color:white;margin-bottom:4px">Verso du document</div>
+          <div style="font-size:12px;color:rgba(255,255,255,0.35)">Optionnel selon le document</div>
+        </div>
+      </div>
+      <input type="file" id="file-back" accept="image/jpeg,image/png,application/pdf" style="display:none">
+    </div>
+
+    <!-- Étape 4 : Selfie -->
+    <div class="kyc-step" id="step-4" style="opacity:0.4;pointer-events:none">
+      <div style="display:flex;gap:14px;align-items:flex-start;margin-bottom:20px">
+        <div class="step-num pending" id="snum-4">4</div>
+        <div>
+          <div style="font-size:15px;font-weight:700;color:white">Selfie de vérification</div>
+          <div style="font-size:12px;color:rgba(255,255,255,0.4);margin-top:2px">Photo de vous tenant votre document</div>
+        </div>
+      </div>
+      <div class="upload-zone" id="drop-selfie" onclick="document.getElementById('file-selfie').click()">
+        <div id="preview-selfie">
+          <div style="font-size:40px;margin-bottom:8px">🤳</div>
+          <div style="font-size:14px;font-weight:600;color:white;margin-bottom:4px">Selfie + document visible</div>
+          <div style="font-size:12px;color:rgba(255,255,255,0.35)">Visage et document clairement visibles</div>
+        </div>
+      </div>
+      <input type="file" id="file-selfie" accept="image/jpeg,image/png" style="display:none">
+    </div>
+
+    <!-- Récapitulatif et soumettre -->
+    <div id="step-submit" style="display:none;margin-top:24px">
+      <div style="background:rgba(201,162,39,0.06);border:1px solid rgba(201,162,39,0.2);border-radius:14px;padding:20px;margin-bottom:20px">
+        <div style="font-size:13px;font-weight:600;color:#C9A227;margin-bottom:12px">📋 Récapitulatif</div>
+        <div id="submit-summary" style="font-size:13px;color:rgba(255,255,255,0.6);line-height:1.8"></div>
+      </div>
+      <div style="font-size:12px;color:rgba(255,255,255,0.35);margin-bottom:16px;line-height:1.6">
+        🔒 Vos documents sont chiffrés et stockés de façon sécurisée. Ils ne seront utilisés que pour la vérification de votre identité conformément à notre <a href="/pages/legal/confidentialite.html" style="color:#C9A227">politique de confidentialité</a>.
+      </div>
+      <button id="btn-submit-kyc" style="width:100%;padding:16px;background:linear-gradient(90deg,#C9A227,#E6C84E);border:none;border-radius:12px;font-size:15px;font-weight:700;color:#000;cursor:pointer">
+        🛡️ Soumettre ma vérification
+      </button>
+    </div>
+
+    <!-- Succès -->
+    <div id="state-submitted" style="display:none;text-align:center;padding:40px">
+      <div style="font-size:64px;margin-bottom:16px">✅</div>
+      <h2 style="font-size:22px;font-weight:700;color:white;margin-bottom:8px">Dossier soumis !</h2>
+      <p style="font-size:14px;color:rgba(255,255,255,0.5);margin-bottom:24px">Notre équipe vérifie vos documents sous 24–48h ouvrées. Vous recevrez un email de confirmation.</p>
+      <a href="/pages/dashboard/buyer.html" style="display:inline-block;padding:14px 32px;background:rgba(201,162,39,0.1);border:1px solid rgba(201,162,39,0.3);border-radius:12px;color:#C9A227;font-weight:600;text-decoration:none">← Retour au tableau de bord</a>
+    </div>
+
+  </div>
+</main>
+
+<script src="/js/config.js"></script>
+<script src="/js/api.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  if (!window.SecureDeal || !SecureDeal.Auth.isLoggedIn()) {
+    window.location.href = '/pages/auth/login.html?redirect=' + encodeURIComponent(window.location.href);
+    return;
+  }
+
+  var user = SecureDeal.Auth.getUser();
+  var selectedDocType = null;
+  var fileFront   = null;
+  var fileBack    = null;
+  var fileSelfie  = null;
+
+  // Vérifier statut KYC actuel
+  var kycStatus = user.kycStatus;
+  if (kycStatus === 'VERIFIED') {
+    document.getElementById('kyc-status-banner').style.display = 'block';
+    document.getElementById('kyc-status-banner').innerHTML =
+      '<div style="background:rgba(16,185,129,0.08);border:1px solid rgba(16,185,129,0.2);border-radius:12px;padding:16px;display:flex;gap:12px;align-items:center">' +
+      '<span style="font-size:24px">✅</span>' +
+      '<div><div style="font-weight:700;color:#10B981">Identité vérifiée</div><div style="font-size:12px;color:rgba(255,255,255,0.4)">Votre KYC est validé. Vous pouvez effectuer des transactions.</div></div></div>';
+  } else if (kycStatus === 'PENDING') {
+    document.getElementById('kyc-status-banner').style.display = 'block';
+    document.getElementById('kyc-status-banner').innerHTML =
+      '<div style="background:rgba(245,158,11,0.08);border:1px solid rgba(245,158,11,0.2);border-radius:12px;padding:16px;display:flex;gap:12px;align-items:center">' +
+      '<span style="font-size:24px">⏳</span>' +
+      '<div><div style="font-weight:700;color:#F59E0B">Vérification en cours</div><div style="font-size:12px;color:rgba(255,255,255,0.4)">Votre dossier est en cours d\'examen. Réponse sous 24–48h.</div></div></div>';
+  }
+
+  // Sélection du type de document
+  document.querySelectorAll('.doc-type-btn').forEach(function(btn) {
+    btn.addEventListener('click', function() {
+      document.querySelectorAll('.doc-type-btn').forEach(function(b) { b.classList.remove('selected'); });
+      this.classList.add('selected');
+      selectedDocType = this.dataset.type;
+      // Activer étape 2
+      document.getElementById('step-2').style.opacity = '1';
+      document.getElementById('step-2').style.pointerEvents = 'auto';
+      document.getElementById('step-2').classList.add('active');
+      document.getElementById('snum-2').className = 'step-num active';
+      // Masquer verso pour passeport
+      if (selectedDocType === 'PASSPORT') {
+        document.getElementById('step-3').style.display = 'none';
+      } else {
+        document.getElementById('step-3').style.display = 'block';
+      }
+      updateProgress(25);
+    });
+  });
+
+  // Upload handlers
+  function setupUpload(fileInput, zone, preview, callback) {
+    fileInput.addEventListener('change', function() {
+      var file = this.files[0];
+      if (!file) return;
+      callback(file);
+      zone.classList.add('has-file');
+      preview.innerHTML = '<div style="font-size:28px;margin-bottom:8px">✅</div>' +
+        '<div style="font-size:13px;font-weight:600;color:#10B981">' + file.name + '</div>' +
+        '<div style="font-size:11px;color:rgba(255,255,255,0.35);margin-top:4px">' + (file.size/1024).toFixed(1) + ' Ko</div>';
+    });
+    // Drag & drop
+    zone.addEventListener('dragover', function(e) { e.preventDefault(); this.style.borderColor='#C9A227'; });
+    zone.addEventListener('dragleave', function() { this.style.borderColor=''; });
+    zone.addEventListener('drop', function(e) {
+      e.preventDefault(); this.style.borderColor='';
+      var file = e.dataTransfer.files[0];
+      if (file) { var dt = new DataTransfer(); dt.items.add(file); fileInput.files = dt.files; fileInput.dispatchEvent(new Event('change')); }
+    });
+  }
+
+  setupUpload(document.getElementById('file-front'), document.getElementById('drop-front'), document.getElementById('preview-front'), function(file) {
+    fileFront = file;
+    // Activer étape 3 ou 4
+    if (selectedDocType !== 'PASSPORT') {
+      document.getElementById('step-3').style.opacity = '1';
+      document.getElementById('step-3').style.pointerEvents = 'auto';
+      document.getElementById('step-3').classList.add('active');
+      document.getElementById('snum-3').className = 'step-num active';
+    }
+    document.getElementById('step-4').style.opacity = '1';
+    document.getElementById('step-4').style.pointerEvents = 'auto';
+    document.getElementById('step-4').classList.add('active');
+    document.getElementById('snum-4').className = 'step-num active';
+    updateProgress(50);
+    checkReadyToSubmit();
+  });
+
+  setupUpload(document.getElementById('file-back'), document.getElementById('drop-back'), document.getElementById('preview-back'), function(file) {
+    fileBack = file;
+    updateProgress(65);
+    checkReadyToSubmit();
+  });
+
+  setupUpload(document.getElementById('file-selfie'), document.getElementById('drop-selfie'), document.getElementById('preview-selfie'), function(file) {
+    fileSelfie = file;
+    updateProgress(90);
+    checkReadyToSubmit();
+  });
+
+  function checkReadyToSubmit() {
+    var ready = fileFront && fileSelfie && selectedDocType;
+    if (ready) {
+      document.getElementById('step-submit').style.display = 'block';
+      document.getElementById('submit-summary').innerHTML =
+        '✅ Type : ' + selectedDocType.replace(/_/g,' ') + '<br>' +
+        '✅ Recto : ' + (fileFront ? fileFront.name : '—') + '<br>' +
+        (fileBack ? '✅ Verso : ' + fileBack.name + '<br>' : '') +
+        '✅ Selfie : ' + (fileSelfie ? fileSelfie.name : '—');
+      updateProgress(100);
+    }
+  }
+
+  function updateProgress(pct) {
+    document.getElementById('progress-fill').style.width = pct + '%';
+  }
+
+  // Soumettre KYC
+  document.getElementById('btn-submit-kyc').addEventListener('click', async function() {
+    this.disabled = true;
+    this.textContent = '⏳ Envoi en cours…';
+    try {
+      // Upload recto
+      await SecureDeal.Documents.upload('KYC_FRONT', fileFront, null);
+      // Upload verso si présent
+      if (fileBack) await SecureDeal.Documents.upload('KYC_BACK', fileBack, null);
+      // Upload selfie
+      await SecureDeal.Documents.upload('KYC_SELFIE', fileSelfie, null);
+      // Soumettre le KYC
+      await fetch(
+        (window.SD_API_BASE || 'https://securedeal-api.onrender.com/api/v1') + '/auth/submit-kyc',
+        {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + localStorage.getItem('sd_access_token') },
+          body: JSON.stringify({ documentType: selectedDocType }),
+        }
+      );
+      document.getElementById('state-submitted').style.display = 'block';
+      document.querySelector('main > div > *:not(#state-submitted)') && document.querySelectorAll('main > div > *:not(#state-submitted)').forEach(function(el) { el.style.display='none'; });
+    } catch(err) {
+      window.SD && SD.toast && SD.toast('Erreur lors de l\'envoi : ' + (err.message || 'Réessayez'), 'error');
+      this.disabled = false;
+      this.textContent = '🛡️ Soumettre ma vérification';
+    }
+  });
+});
+</script>
+</body>
+</html>

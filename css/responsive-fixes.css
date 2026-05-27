@@ -1,0 +1,464 @@
+/* =============================================================
+   SECUREDEAL — RESPONSIVE FIXES v2
+   Corrections ciblées — mobile-first
+   N'écrase pas le design desktop
+   ============================================================= */
+
+/* ─── 0. ANTI-OVERFLOW GLOBAL ───────────────────────────────── */
+html, body {
+  overflow-x: hidden;
+  max-width: 100%;
+}
+
+*  { box-sizing: border-box; }
+
+img, svg, video, iframe {
+  max-width: 100%;
+  height: auto;
+}
+
+/* ─── 1. TYPOGRAPHIE FLUIDE ─────────────────────────────────── */
+/* Tous les h1 inline-styled à font-size fixe reçoivent une limite */
+h1 { font-size: clamp(1.6rem, 5vw, 3.5rem); }
+h2 { font-size: clamp(1.3rem, 3.5vw, 2.5rem); }
+h3 { font-size: clamp(1.1rem, 2.5vw, 1.5rem); }
+
+/* ─── 2. HERO SECTIONS ──────────────────────────────────────── */
+.hero-eyebrow { white-space: normal; text-align: center; }
+
+@media (max-width: 900px) {
+  .hero { min-height: auto; padding-top: var(--header-height); }
+
+  .hero-inner {
+    grid-template-columns: 1fr !important;
+    text-align: center;
+    padding: 48px 16px 40px !important;
+    gap: 40px !important;
+  }
+
+  .hero-title  { font-size: clamp(1.8rem, 7vw, 2.8rem); letter-spacing: -0.5px; }
+  .hero-subtitle { font-size: 15px; }
+
+  .hero-actions {
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+
+  .hero-stats {
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 24px;
+  }
+
+  .hero-visual {
+    display: flex !important;
+    justify-content: center;
+  }
+
+  .hero-card {
+    max-width: 100% !important;
+    width: 100% !important;
+    animation: none !important;
+  }
+}
+
+/* ─── 3. HEADER ─────────────────────────────────────────────── */
+@media (max-width: 768px) {
+  .header-inner {
+    padding: 0 16px !important;
+    gap: 8px !important;
+  }
+
+  .header-nav,
+  .header-actions,
+  .header-lang { display: none !important; }
+
+  .hamburger { display: flex !important; }
+
+  /* Forcer le header opaque sur mobile dès le départ (pas de transparence) */
+  .site-header {
+    background: rgba(10,10,10,0.97) !important;
+    backdrop-filter: blur(16px);
+  }
+}
+
+/* ─── 4. MOBILE MENU ────────────────────────────────────────── */
+.mobile-menu {
+  display: none;
+  position: fixed;
+  top: var(--header-height);
+  left: 0; right: 0;
+  background: rgba(10,10,10,0.98);
+  backdrop-filter: blur(24px);
+  border-top: 1px solid rgba(201,162,39,0.10);
+  padding: 16px;
+  z-index: 199;
+  flex-direction: column;
+  gap: 4px;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.5);
+  max-height: calc(100dvh - var(--header-height));
+  overflow-y: auto;
+}
+
+.mobile-menu.open { display: flex; animation: menuSlideDown 0.3s ease; }
+
+@keyframes menuSlideDown {
+  from { opacity:0; transform:translateY(-8px); }
+  to   { opacity:1; transform:translateY(0); }
+}
+
+.mobile-menu a {
+  display: flex;
+  align-items: center;
+  padding: 13px 16px;
+  border-radius: 10px;
+  font-family: var(--font-display);
+  font-size: 15px;
+  font-weight: 500;
+  color: rgba(255,255,255,0.75);
+  transition: all 0.2s;
+  border: 1px solid transparent;
+  text-decoration: none;
+}
+
+.mobile-menu a:hover,
+.mobile-menu a.active {
+  color: var(--color-gold);
+  background: rgba(201,162,39,0.06);
+  border-color: rgba(201,162,39,0.12);
+}
+
+.mobile-menu-divider {
+  height: 1px;
+  background: rgba(255,255,255,0.06);
+  margin: 8px 0;
+}
+
+.mobile-menu-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding-top: 4px;
+}
+
+.mobile-menu-actions .btn {
+  width: 100%;
+  justify-content: center;
+}
+
+/* Hamburger → croix rouge */
+.hamburger {
+  display: none;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 40px; height: 40px;
+  cursor: pointer;
+  padding: 8px;
+  border: none;
+  background: none;
+  position: relative;
+  flex-shrink: 0;
+}
+
+.hamburger span {
+  display: block;
+  width: 22px; height: 2px;
+  background: rgba(255,255,255,0.85);
+  border-radius: 2px;
+  transition: all 0.35s cubic-bezier(0.4,0,0.2,1);
+  transform-origin: center;
+  position: absolute;
+}
+
+.hamburger span:nth-child(1) { transform: translateY(-7px); }
+.hamburger span:nth-child(2) { transform: translateY(0); }
+.hamburger span:nth-child(3) { transform: translateY(7px); }
+
+.hamburger.open span { background: #ef4444; }
+.hamburger.open span:nth-child(1) { transform: translateY(0) rotate(45deg); }
+.hamburger.open span:nth-child(2) { transform: scaleX(0); opacity: 0; }
+.hamburger.open span:nth-child(3) { transform: translateY(0) rotate(-45deg); }
+
+/* ─── 5. TRUST BAR ──────────────────────────────────────────── */
+@media (max-width: 768px) {
+  .trust-bar-inner {
+    gap: 12px 24px;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .trust-item { font-size: 11px; }
+}
+
+/* ─── 6. STEPS GRID ─────────────────────────────────────────── */
+@media (max-width: 900px) {
+  .steps-grid { grid-template-columns: 1fr 1fr !important; }
+  .steps-grid::before { display: none !important; }
+}
+
+@media (max-width: 540px) {
+  .steps-grid { grid-template-columns: 1fr !important; }
+}
+
+/* ─── 7. FEATURES GRID ──────────────────────────────────────── */
+@media (max-width: 900px) {
+  .features-grid { grid-template-columns: 1fr 1fr !important; }
+}
+
+@media (max-width: 540px) {
+  .features-grid { grid-template-columns: 1fr !important; }
+}
+
+/* ─── 8. CATEGORIES GRID ────────────────────────────────────── */
+@media (max-width: 900px) {
+  .categories-grid { grid-template-columns: repeat(3, 1fr) !important; }
+}
+
+@media (max-width: 540px) {
+  .categories-grid { grid-template-columns: repeat(2, 1fr) !important; }
+}
+
+/* ─── 9. PRODUCTS GRID ──────────────────────────────────────── */
+@media (max-width: 1100px) {
+  .products-grid { grid-template-columns: repeat(3, 1fr) !important; }
+}
+
+@media (max-width: 768px) {
+  .products-grid { grid-template-columns: repeat(2, 1fr) !important; }
+}
+
+@media (max-width: 480px) {
+  .products-grid { grid-template-columns: 1fr !important; }
+}
+
+/* ─── 10. ESCROW SECTION ────────────────────────────────────── */
+@media (max-width: 900px) {
+  .escrow-inner {
+    grid-template-columns: 1fr !important;
+    gap: 40px !important;
+  }
+}
+
+/* ─── 11. FOOTER ────────────────────────────────────────────── */
+@media (max-width: 900px) {
+  .footer-grid {
+    grid-template-columns: 1fr 1fr !important;
+    gap: 32px !important;
+  }
+}
+
+@media (max-width: 540px) {
+  .footer-grid {
+    grid-template-columns: 1fr !important;
+    gap: 24px !important;
+  }
+
+  .footer-bottom {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+  }
+
+  .footer-legal-links { flex-wrap: wrap; gap: 12px; }
+}
+
+/* ─── 12. ABOUT PAGE — VALEURS ──────────────────────────────── */
+@media (max-width: 900px) {
+  .values-grid {
+    grid-template-columns: 1fr 1fr !important;
+  }
+}
+
+@media (max-width: 540px) {
+  .values-grid {
+    grid-template-columns: 1fr !important;
+  }
+
+  .value-card {
+    /* Assure qu'aucune carte ne déborde */
+    width: 100% !important;
+    min-width: 0 !important;
+    overflow: hidden;
+  }
+}
+
+/* About team grid */
+@media (max-width: 540px) {
+  .team-grid {
+    grid-template-columns: 1fr !important;
+  }
+}
+
+/* About history grid */
+@media (max-width: 900px) {
+  .about-2col {
+    grid-template-columns: 1fr !important;
+    gap: 40px !important;
+  }
+}
+
+/* ─── 13. SEARCH BAR ────────────────────────────────────────── */
+@media (max-width: 768px) {
+  .search-bar {
+    min-width: 0 !important;
+    width: 100% !important;
+  }
+
+  .products-toolbar {
+    flex-direction: column !important;
+    align-items: stretch !important;
+  }
+
+  .products-toolbar select {
+    width: 100% !important;
+  }
+}
+
+/* ─── 14. LEGAL NOTICE ──────────────────────────────────────── */
+@media (max-width: 540px) {
+  .legal-notice { flex-direction: column; gap: 8px; }
+}
+
+/* ─── 15. CONTAINER PADDING MOBILE ─────────────────────────── */
+@media (max-width: 480px) {
+  .container { padding: 0 12px !important; }
+
+  .section     { padding: 48px 0 !important; }
+  .section--lg { padding: 60px 0 !important; }
+}
+
+/* ─── 16. HERO CARD STEPS ───────────────────────────────────── */
+@media (max-width: 400px) {
+  .hero-step { gap: 8px !important; padding: 8px !important; }
+  .hero-step-icon { width: 28px !important; height: 28px !important; font-size: 13px !important; }
+  .hero-step-text { font-size: 11px !important; }
+  .hero-step-status { font-size: 9px !important; }
+}
+
+/* ─── 17. BUTTONS RESPONSIVE ────────────────────────────────── */
+@media (max-width: 480px) {
+  .btn--lg { padding: 12px 24px !important; font-size: 14px !important; }
+}
+
+/* ─── 18. CATEGORIES PAGE TABS ──────────────────────────────── */
+@media (max-width: 768px) {
+  #cat-tabs {
+    overflow-x: auto;
+    flex-wrap: nowrap !important;
+    padding-bottom: 8px !important;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+  }
+  #cat-tabs::-webkit-scrollbar { display: none; }
+  #cat-tabs .btn { white-space: nowrap; flex-shrink: 0; }
+}
+
+/* ─── 19. FILTER SIDEBAR MOBILE — géré dans categories.html ─── */
+/* (Voir le <style> inline de categories.html pour le toggle mobile) */
+
+/* ─── 20. CONTACT GRID ──────────────────────────────────────── */
+.contact-grid {
+  display: grid;
+  grid-template-columns: 1fr 1.6fr;
+  gap: 48px;
+  align-items: start;
+}
+
+@media (max-width: 900px) {
+  .contact-grid {
+    grid-template-columns: 1fr !important;
+    gap: 32px !important;
+  }
+}
+
+/* ─── 21. AUTH PAGES RESPONSIVE ─────────────────────────────── */
+@media (max-width: 900px) {
+  .auth-layout {
+    grid-template-columns: 1fr !important;
+  }
+  .auth-visual { display: none !important; }
+  .auth-panel {
+    padding: clamp(24px, 5vw, 48px) clamp(16px, 4vw, 40px) !important;
+    min-height: 100vh;
+  }
+}
+
+/* ─── 22. REGISTER WRAP ─────────────────────────────────────── */
+@media (max-width: 768px) {
+  .register-wrap {
+    padding: 80px 12px 60px !important;
+  }
+
+  .stepper {
+    gap: 4px !important;
+    overflow-x: auto;
+    padding-bottom: 4px;
+  }
+
+  .stepper-label {
+    font-size: 9px !important;
+  }
+
+  .stepper-dot {
+    width: 28px !important;
+    height: 28px !important;
+    font-size: 11px !important;
+  }
+}
+
+@media (max-width: 540px) {
+  /* Grilles 2 colonnes dans les forms */
+  [style*="grid-template-columns:1fr 1fr"] {
+    grid-template-columns: 1fr !important;
+  }
+
+  .form-card {
+    padding: 20px 16px !important;
+    border-radius: 16px !important;
+  }
+}
+
+/* ─── 23. HOW-IT-WORKS GRIDS ────────────────────────────────── */
+@media (max-width: 768px) {
+  .modes-grid {
+    grid-template-columns: 1fr !important;
+  }
+
+  .flow-steps-grid {
+    grid-template-columns: 1fr !important;
+  }
+}
+
+/* ─── 24. TRACKING SEARCH FORM ──────────────────────────────── */
+@media (max-width: 600px) {
+  .tracking-search-form {
+    flex-direction: column !important;
+    align-items: stretch !important;
+    padding: 12px !important;
+    gap: 10px !important;
+  }
+
+  .tracking-input { text-align: center; }
+
+  .tracking-search-form .btn {
+    width: 100%;
+    justify-content: center;
+  }
+}
+
+/* ─── 25. SCROLL REVEAL IMMEDIATE ON MOBILE ─────────────────── */
+@media (max-width: 768px) {
+  /* Sur mobile, réduit le délai de transition des animations */
+  .reveal { transition-delay: 0s !important; }
+}
+
+/* ─── 26. SECTION PADDING AJUSTÉ MOBILE ─────────────────────── */
+@media (max-width: 768px) {
+  section[style*="padding:100px"],
+  section[style*="padding:80px"] {
+    padding-top: 60px !important;
+    padding-bottom: 60px !important;
+  }
+}

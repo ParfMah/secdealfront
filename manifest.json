@@ -1,0 +1,33 @@
+{
+  "name": "SecureDeal — Commerce International Sécurisé",
+  "short_name": "SecureDeal",
+  "description": "Plateforme internationale sécurisée — Escrow, traçabilité, livraison",
+  "start_url": "/index.html",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "portrait-primary",
+  "background_color": "#0A2540",
+  "theme_color": "#0A2540",
+  "lang": "fr",
+  "categories": ["finance", "shopping", "business"],
+  "icons": [
+    { "src": "/images/logo/favicon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any maskable" },
+    { "src": "/images/logo/favicon.svg", "sizes": "192x192", "type": "image/svg+xml" },
+    { "src": "/images/logo/favicon.svg", "sizes": "512x512", "type": "image/svg+xml" }
+  ],
+  "screenshots": [],
+  "shortcuts": [
+    {
+      "name": "Suivi commande",
+      "url": "/pages/tracking.html",
+      "description": "Suivre une commande en cours",
+      "icons": [{ "src": "/images/logo/favicon.svg", "sizes": "any" }]
+    },
+    {
+      "name": "Mes transactions",
+      "url": "/pages/dashboard/buyer.html",
+      "description": "Accéder à mes transactions",
+      "icons": [{ "src": "/images/logo/favicon.svg", "sizes": "any" }]
+    }
+  ]
+}

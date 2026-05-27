@@ -1,0 +1,509 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="SecureDeal — À propos de la plateforme internationale de commerce sécurisé. Notre mission, nos valeurs et notre équipe.">
+  <title>À propos — SecureDeal</title>
+  <script src="/js/loader.js"></script>
+  <link rel="stylesheet" href="/css/loader.css">
+  <link rel="stylesheet" href="/css/main.css">
+  <link rel="stylesheet" href="/css/brand.css">
+  <link rel="stylesheet" href="/css/backgrounds.css">
+  <link rel="stylesheet" href="/css/responsive-fixes.css">
+  <link rel="icon" href="/images/logo/favicon.svg" type="image/svg+xml">
+  <style>
+    .about-hero {
+      background: var(--gradient-hero);
+      padding: 120px 0 80px;
+      position: relative;
+      overflow: hidden;
+    }
+    .about-hero::before {
+      content: '';
+      position: absolute; inset: 0;
+      background-image:
+        linear-gradient(rgba(201,162,39,0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(201,162,39,0.03) 1px, transparent 1px);
+      background-size: 60px 60px;
+    }
+    .about-hero::after {
+      content: '';
+      position: absolute;
+      width: 500px; height: 500px;
+      background: radial-gradient(circle, rgba(201,162,39,0.07) 0%, transparent 70%);
+      top: -100px; right: -100px;
+      border-radius: 50%;
+    }
+
+    /* Valeurs */
+    .values-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: var(--space-6);
+    }
+    @media (max-width: 768px) { .values-grid { grid-template-columns: 1fr; } }
+    @media (max-width: 1024px) { .values-grid { grid-template-columns: repeat(2, 1fr); } }
+
+    .value-card {
+      background: rgba(255,255,255,0.03);
+      border: 1px solid rgba(201,162,39,0.10);
+      border-radius: var(--radius-2xl);
+      padding: var(--space-8);
+      transition: all var(--transition-base);
+    }
+    .value-card:hover {
+      border-color: rgba(201,162,39,0.25);
+      transform: translateY(-4px);
+    }
+    .value-icon {
+      font-size: 2.5rem;
+      margin-bottom: var(--space-4);
+    }
+    .value-title {
+      font-family: var(--font-display);
+      font-size: var(--text-lg);
+      font-weight: var(--weight-bold);
+      color: white;
+      margin-bottom: var(--space-3);
+    }
+    .value-desc {
+      font-size: var(--text-sm);
+      color: rgba(255,255,255,0.45);
+      line-height: 1.7;
+    }
+
+    /* Timeline fondation */
+    .history-item {
+      display: flex;
+      gap: var(--space-6);
+      position: relative;
+      padding-bottom: var(--space-8);
+      align-items: flex-start;
+    }
+    .history-item:not(:last-child)::before {
+      content: '';
+      position: absolute;
+      left: 23px; top: 46px;
+      bottom: 0; width: 1px;
+      background: rgba(201,162,39,0.12);
+    }
+    .history-year {
+      width: 48px; height: 48px; flex-shrink: 0;
+      border-radius: 50%;
+      background: rgba(201,162,39,0.10);
+      border: 1.5px solid rgba(201,162,39,0.25);
+      display: flex; align-items: center; justify-content: center;
+      font-family: var(--font-mono);
+      font-size: 10px; font-weight: 700;
+      color: var(--color-gold);
+      position: relative; z-index: 1;
+    }
+    .history-content { flex: 1; }
+    .history-content h3 {
+      font-family: var(--font-display);
+      font-size: var(--text-base);
+      font-weight: var(--weight-semibold);
+      color: white; margin-bottom: 6px;
+    }
+    .history-content p {
+      font-size: var(--text-sm);
+      color: rgba(255,255,255,0.45);
+      line-height: 1.6;
+    }
+
+    /* Stats */
+    .stats-row {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: var(--space-4);
+    }
+    @media (max-width: 768px) { .stats-row { grid-template-columns: repeat(2, 1fr); } }
+
+    .stat-box {
+      background: rgba(201,162,39,0.05);
+      border: 1px solid rgba(201,162,39,0.12);
+      border-radius: var(--radius-xl);
+      padding: var(--space-6);
+      text-align: center;
+    }
+    .stat-box-value {
+      font-family: var(--font-display);
+      font-size: var(--text-3xl);
+      font-weight: var(--weight-extrabold);
+      background: var(--gradient-gold);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      line-height: 1.1; margin-bottom: 6px;
+    }
+    .stat-box-label {
+      font-size: var(--text-sm);
+      color: rgba(255,255,255,0.40);
+    }
+
+    /* Équipe */
+    .team-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: var(--space-6);
+    }
+    @media (max-width: 768px) { .team-grid { grid-template-columns: 1fr; } }
+    @media (max-width: 1024px) { .team-grid { grid-template-columns: repeat(2, 1fr); } }
+
+    .team-card {
+      background: rgba(255,255,255,0.02);
+      border: 1px solid rgba(255,255,255,0.06);
+      border-radius: var(--radius-2xl);
+      padding: var(--space-6);
+      text-align: center;
+      transition: all var(--transition-base);
+    }
+    .team-card:hover { border-color: rgba(201,162,39,0.15); }
+    .team-avatar {
+      width: 80px; height: 80px;
+      border-radius: 50%;
+      background: rgba(201,162,39,0.08);
+      border: 2px solid rgba(201,162,39,0.20);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 2rem;
+      margin: 0 auto var(--space-4);
+    }
+    .team-name {
+      font-family: var(--font-display);
+      font-size: var(--text-base);
+      font-weight: var(--weight-bold);
+      color: white; margin-bottom: 4px;
+    }
+    .team-role {
+      font-size: var(--text-sm);
+      color: var(--color-gold);
+      margin-bottom: var(--space-3);
+    }
+    .team-bio {
+      font-size: var(--text-xs);
+      color: rgba(255,255,255,0.35);
+      line-height: 1.6;
+    }
+  </style>
+</head>
+<body>
+
+<!-- ═══════════════════════════════════════════════ HEADER ════ -->
+<header class="site-header" id="site-header">
+  <div class="header-inner">
+    <a href="/index.html" class="header-logo">
+      <svg width="150" height="36" viewBox="0 0 160 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M18 3L31 8V17.5C31 25.5 25 31.5 18 34C11 31.5 5 25.5 5 17.5V8Z" fill="none" stroke="#C9A227" stroke-width="1.5"/>
+        <path d="M18 7.5L27 11.5V17.5C27 23 23 27.5 18 30C13 27.5 9 23 9 17.5V11.5Z" fill="rgba(201,162,39,0.08)" stroke="#C9A227" stroke-width="0.8"/>
+        <polyline points="13 18 16.5 21.5 23 14" stroke="#C9A227" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+        <text x="39" y="26" font-family="Sora, sans-serif" font-size="16" font-weight="800" fill="white" letter-spacing="-0.5">SECURE</text>
+        <text x="106" y="26" font-family="Sora, sans-serif" font-size="16" font-weight="300" fill="#C9A227" letter-spacing="2">DEAL</text>
+      </svg>
+    </a>
+    <nav class="header-nav" id="main-nav">
+      <a href="/index.html"              class="header-nav-link">Accueil</a>
+      <a href="/pages/how-it-works.html" class="header-nav-link">Fonctionnement</a>
+      <a href="/pages/categories.html"   class="header-nav-link">Catégories</a>
+      <a href="/pages/tracking.html"     class="header-nav-link">Suivi</a>
+      <a href="/pages/about.html"        class="header-nav-link active">À propos</a>
+      <a href="/pages/contact.html"      class="header-nav-link">Contact</a>
+    </nav>
+    <div class="header-actions">
+      <div class="header-auth-actions" id="header-auth" style="display:flex;gap:10px;align-items:center">
+        <a href="/pages/auth/login.html"    class="btn btn--outline-white btn--sm">Connexion</a>
+        <a href="/pages/auth/register.html" class="btn btn--gold btn--sm btn--shimmer">Créer un compte</a>
+      </div>
+    </div>
+    <button class="hamburger" id="hamburger" aria-label="Menu" aria-expanded="false">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</header>
+
+<nav class="mobile-menu" id="mobile-menu">
+  <a href="/index.html">🏠 Accueil</a>
+  <a href="/pages/how-it-works.html">⚙️ Fonctionnement</a>
+  <a href="/pages/categories.html">📦 Catégories</a>
+  <a href="/pages/tracking.html">📡 Suivi</a>
+  <a href="/pages/about.html" class="active">ℹ️ À propos</a>
+  <a href="/pages/pricing.html">💰 Tarifs</a>
+  <a href="/pages/contact.html">✉️ Contact</a>
+  <div class="mobile-menu-divider"></div>
+  <div class="mobile-menu-actions">
+    <a href="/pages/auth/login.html"    class="btn btn--outline-white" style="width:100%;justify-content:center">Se connecter</a>
+    <a href="/pages/auth/register.html" class="btn btn--gold" style="width:100%;justify-content:center">Créer un compte</a>
+  </div>
+</nav>
+
+<!-- ═══════════════════════════════════════════ HERO ABOUT ════ -->
+<section class="about-hero">
+  <div class="container text-center reveal" style="position:relative;z-index:1">
+    <div class="section-label" style="display:inline-flex;margin-bottom:24px">Notre histoire</div>
+    <h1 style="font-family:'Sora',sans-serif;font-size:clamp(2.5rem,5vw,4rem);font-weight:800;color:white;letter-spacing:-1.5px;margin-bottom:24px;line-height:1.1">
+      Né d'une conviction :<br>
+      <span style="background:linear-gradient(90deg,#C9A227,#E6C84E);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text">
+        le commerce doit être juste
+      </span>
+    </h1>
+    <p style="font-size:var(--text-md);color:rgba(255,255,255,0.50);max-width:600px;margin:0 auto;line-height:1.8">
+      SecureDeal est né du constat qu'une transaction internationale sur trois souffre de problèmes de confiance, de paiement ou de livraison. Nous avons décidé de changer cela.
+    </p>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════ NOTRE MISSION ═ -->
+<section class="section" style="background:var(--color-dark)">
+  <div class="container">
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:var(--space-16);align-items:center" class="about-grid">
+      <div class="reveal">
+        <div class="section-label">Notre mission</div>
+        <h2 class="text-h2 mb-6">Sécuriser chaque transaction, partout dans le monde</h2>
+        <p style="color:rgba(255,255,255,0.50);line-height:1.8;margin-bottom:var(--space-5)">
+          SecureDeal est une plateforme d'escrow et de traçabilité dédiée au commerce international de haute valeur. Nous intervenons comme tiers de confiance indépendant pour garantir que chaque acheteur reçoit ce qu'il a payé, et chaque vendeur reçoit ce qui lui est dû.
+        </p>
+        <p style="color:rgba(255,255,255,0.50);line-height:1.8;margin-bottom:var(--space-8)">
+          Contrairement aux plateformes génériques, SecureDeal se spécialise dans les transactions complexes impliquant des véhicules, des équipements industriels, des conteneurs et des produits technologiques de grande valeur entre des parties situées dans des pays différents.
+        </p>
+        <div style="display:flex;gap:var(--space-4);flex-wrap:wrap">
+          <a href="/pages/how-it-works.html" class="btn btn--gold">Voir comment ça marche</a>
+          <a href="/pages/contact.html"      class="btn btn--outline-white">Nous contacter</a>
+        </div>
+      </div>
+      <div class="reveal" style="transition-delay:0.1s">
+        <div style="background:rgba(201,162,39,0.04);border:1px solid rgba(201,162,39,0.12);border-radius:var(--radius-2xl);padding:var(--space-8)">
+          <div style="margin-bottom:var(--space-6);padding-bottom:var(--space-4);border-bottom:1px solid rgba(255,255,255,0.06)">
+            <div style="font-size:11px;color:rgba(255,255,255,0.30);text-transform:uppercase;letter-spacing:1.5px;margin-bottom:8px">Notre engagement</div>
+            <div style="font-family:'Sora',sans-serif;font-size:var(--text-lg);font-weight:700;color:white;font-style:italic;line-height:1.5">
+              "Votre argent ne bouge pas avant que votre produit soit confirmé. Point."
+            </div>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:var(--space-3)">
+            <div style="display:flex;gap:var(--space-3);align-items:flex-start">
+              <span style="color:var(--color-gold);margin-top:2px;flex-shrink:0">✓</span>
+              <span style="font-size:var(--text-sm);color:rgba(255,255,255,0.55)">Aucun accès aux fonds escrow sans accord des deux parties</span>
+            </div>
+            <div style="display:flex;gap:var(--space-3);align-items:flex-start">
+              <span style="color:var(--color-gold);margin-top:2px;flex-shrink:0">✓</span>
+              <span style="font-size:var(--text-sm);color:rgba(255,255,255,0.55)">Arbitrage impartial en cas de litige par notre équipe juridique</span>
+            </div>
+            <div style="display:flex;gap:var(--space-3);align-items:flex-start">
+              <span style="color:var(--color-gold);margin-top:2px;flex-shrink:0">✓</span>
+              <span style="font-size:var(--text-sm);color:rgba(255,255,255,0.55)">Conformité RGPD, KYC/AML et réglementations internationales</span>
+            </div>
+            <div style="display:flex;gap:var(--space-3);align-items:flex-start">
+              <span style="color:var(--color-gold);margin-top:2px;flex-shrink:0">✓</span>
+              <span style="font-size:var(--text-sm);color:rgba(255,255,255,0.55)">Traçabilité complète et immuable de chaque transaction</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════ CHIFFRES ══ -->
+<section class="section" style="background:var(--color-black)">
+  <div class="container">
+    <div class="text-center mb-12 reveal">
+      <div class="section-label">SecureDeal en chiffres</div>
+      <h2 class="text-h2">La confiance, mesurable</h2>
+    </div>
+    <div class="stats-row reveal">
+      <div class="stat-box"><div class="stat-box-value">12 400+</div><div class="stat-box-label">Transactions sécurisées</div></div>
+      <div class="stat-box"><div class="stat-box-value">94</div><div class="stat-box-label">Pays couverts</div></div>
+      <div class="stat-box"><div class="stat-box-value">99,8%</div><div class="stat-box-label">Taux de satisfaction</div></div>
+      <div class="stat-box"><div class="stat-box-value">€ 480M+</div><div class="stat-box-label">Volume traité</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════ NOS VALEURS ══ -->
+<section class="section" style="background:var(--color-dark)">
+  <div class="container">
+    <div class="text-center mb-12 reveal">
+      <div class="section-label">Ce qui nous guide</div>
+      <h2 class="text-h2 mb-4">Nos valeurs fondamentales</h2>
+      <p style="color:rgba(255,255,255,0.40);max-width:520px;margin:0 auto;line-height:1.7">
+        Chaque décision que nous prenons est guidée par ces principes non négociables.
+      </p>
+    </div>
+    <div class="values-grid">
+      <div class="value-card reveal">
+        <div class="value-icon">🛡️</div>
+        <div class="value-title">Sécurité avant tout</div>
+        <p class="value-desc">Nous ne faisons aucun compromis sur la protection des fonds et des données de nos utilisateurs. Chaque ligne de code, chaque procédure est conçue pour vous protéger.</p>
+      </div>
+      <div class="value-card reveal" style="transition-delay:0.1s">
+        <div class="value-icon">🔍</div>
+        <div class="value-title">Transparence totale</div>
+        <p class="value-desc">Nos commissions sont affichées clairement, nos procédures sont documentées, et chaque étape de votre transaction est visible en temps réel. Aucune surprise.</p>
+      </div>
+      <div class="value-card reveal" style="transition-delay:0.2s">
+        <div class="value-icon">⚖️</div>
+        <div class="value-title">Impartialité absolue</div>
+        <p class="value-desc">En tant que tiers de confiance, nous n'avons aucun intérêt dans l'issue de la transaction. Notre seul objectif est que chaque partie obtienne ce qui lui revient.</p>
+      </div>
+      <div class="value-card reveal">
+        <div class="value-icon">🌍</div>
+        <div class="value-title">Accessibilité mondiale</div>
+        <p class="value-desc">Qu'il s'agisse d'un véhicule vendu de Lyon à Dubai ou d'un équipement expédié de Chine vers l'Afrique, SecureDeal est là pour sécuriser l'échange.</p>
+      </div>
+      <div class="value-card reveal" style="transition-delay:0.1s">
+        <div class="value-icon">🤝</div>
+        <div class="value-title">Respect mutuel</div>
+        <p class="value-desc">Nous traitons acheteurs et vendeurs avec la même considération. Notre plateforme est conçue pour rétablir l'équilibre dans des transactions souvent asymétriques.</p>
+      </div>
+      <div class="value-card reveal" style="transition-delay:0.2s">
+        <div class="value-icon">🚀</div>
+        <div class="value-title">Innovation continue</div>
+        <p class="value-desc">Nous investissons constamment dans la technologie de traçabilité, les processus de vérification et les outils de suivi pour rester à la pointe du secteur.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════ NOTRE HISTOIRE ═ -->
+<section class="section" style="background:var(--color-black)">
+  <div class="container">
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:var(--space-16);align-items:start" class="about-grid">
+      <div class="reveal">
+        <div class="section-label">Notre parcours</div>
+        <h2 class="text-h2 mb-8">De l'idée à la plateforme de référence</h2>
+        <div class="history-item">
+          <div class="history-year">2021</div>
+          <div class="history-content">
+            <h3>Genèse du projet</h3>
+            <p>Après avoir perdu €12 000 dans une transaction transfrontalière frauduleuse, nos fondateurs décident de créer la solution qu'ils auraient voulu avoir.</p>
+          </div>
+        </div>
+        <div class="history-item">
+          <div class="history-year">2022</div>
+          <div class="history-content">
+            <h3>Première version — Bêta privée</h3>
+            <p>Lancement auprès de 50 marchands sélectionnés. Première transaction sécurisée : un tracteur agricole expédié de France vers le Sénégal.</p>
+          </div>
+        </div>
+        <div class="history-item">
+          <div class="history-year">2023</div>
+          <div class="history-content">
+            <h3>Ouverture publique et expansion</h3>
+            <p>SecureDeal ouvre ses portes au grand public. 1 000 premières transactions sécurisées. Déploiement dans 42 pays. Obtention de la certification KYC/AML.</p>
+          </div>
+        </div>
+        <div class="history-item">
+          <div class="history-year">2024</div>
+          <div class="history-content">
+            <h3>Accélération internationale</h3>
+            <p>Cap des 10 000 transactions franchi. Levée de fonds série A. Expansion vers l'Asie du Sud-Est et l'Amérique Latine. Lancement de l'application mobile.</p>
+          </div>
+        </div>
+        <div class="history-item">
+          <div class="history-year">2025</div>
+          <div class="history-content">
+            <h3>Leader régional</h3>
+            <p>Plus de 12 400 transactions sécurisées. Présence dans 94 pays. €480M+ de volume traité. Nouvelles fonctionnalités de traçabilité avancée.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="reveal" style="transition-delay:0.1s;padding-top:var(--space-12)">
+        <div class="section-label">Notre équipe</div>
+        <h2 class="text-h2 mb-8">Les personnes derrière SecureDeal</h2>
+        <div class="team-grid" style="grid-template-columns:1fr 1fr">
+          <div class="team-card">
+            <div class="team-avatar">👨‍💼</div>
+            <div class="team-name">Alexandre Merci</div>
+            <div class="team-role">CEO & Co-Fondateur</div>
+            <div class="team-bio">Ex-directeur export chez Renault. 15 ans d'expérience en commerce international B2B.</div>
+          </div>
+          <div class="team-card">
+            <div class="team-avatar">👩‍💻</div>
+            <div class="team-name">Fatima El Khouri</div>
+            <div class="team-role">CTO & Co-Fondatrice</div>
+            <div class="team-bio">Ingénieure en cybersécurité. Ancienne consultante pour des institutions financières européennes.</div>
+          </div>
+          <div class="team-card">
+            <div class="team-avatar">👨‍⚖️</div>
+            <div class="team-name">Thomas Berger</div>
+            <div class="team-role">Directeur Juridique</div>
+            <div class="team-bio">Avocat spécialisé en droit commercial international. Expert en conformité KYC/AML.</div>
+          </div>
+          <div class="team-card">
+            <div class="team-avatar">👩‍🌾</div>
+            <div class="team-name">Amara Kouyaté</div>
+            <div class="team-role">Directrice Opérations Afrique</div>
+            <div class="team-bio">MBA HEC. Spécialiste du commerce franco-africain et de la logistique intercontinentale.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════ CTA ══ -->
+<section style="background:#080800;padding:80px 0">
+  <div class="container text-center reveal">
+    <div class="section-label" style="display:inline-flex;margin-bottom:24px">Rejoignez-nous</div>
+    <h2 class="text-h2 mb-6">Prêt à trader en toute sécurité ?</h2>
+    <p style="color:rgba(255,255,255,0.40);margin-bottom:var(--space-8);max-width:480px;margin-left:auto;margin-right:auto;line-height:1.7">
+      Rejoignez les milliers d'acheteurs et vendeurs qui font confiance à SecureDeal pour leurs transactions internationales.
+    </p>
+    <div style="display:flex;gap:16px;justify-content:center;flex-wrap:wrap">
+      <a href="/pages/auth/register.html" class="btn btn--gold btn--lg btn--shimmer">Créer un compte gratuit</a>
+      <a href="/pages/contact.html"       class="btn btn--outline-white btn--lg">Nous contacter</a>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════ FOOTER ═══════ -->
+<footer class="site-footer">
+  <div class="container">
+    <div class="footer-bottom">
+      <div class="footer-copy">© 2025 SecureDeal. Tous droits réservés.</div>
+      <div class="footer-legal-links">
+        <a href="/pages/legal/mentions-legales.html">Mentions légales</a>
+        <a href="/pages/legal/cgu.html">CGU</a>
+        <a href="/pages/legal/confidentialite.html">Confidentialité</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script>
+'use strict';
+const header = document.getElementById('site-header');
+window.addEventListener('scroll', () => header.classList.toggle('scrolled', window.scrollY > 20), { passive:true });
+
+const burger = document.getElementById('hamburger');
+const menu   = document.getElementById('mobile-menu');
+burger.addEventListener('click', () => {
+  const open = menu.classList.toggle('open');
+  burger.classList.toggle('open', open);
+  burger.setAttribute('aria-expanded', open);
+  document.body.style.overflow = open ? 'hidden' : '';
+});
+menu.querySelectorAll('a').forEach(a => a.addEventListener('click', () => {
+  menu.classList.remove('open'); burger.classList.remove('open');
+  burger.setAttribute('aria-expanded','false'); document.body.style.overflow = '';
+}));
+
+const obs = new IntersectionObserver((entries) => {
+  entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); obs.unobserve(e.target); } });
+}, { threshold: 0.10 });
+document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
+
+// Responsive about grids
+const aboutGrids = document.querySelectorAll('.about-grid');
+function resizeAbout() {
+  aboutGrids.forEach(g => {
+    g.style.gridTemplateColumns = window.innerWidth < 900 ? '1fr' : '1fr 1fr';
+  });
+}
+window.addEventListener('resize', resizeAbout);
+resizeAbout();
+</script>
+<script src="/js/config.js"></script>
+<script src="/js/api.js"></script>
+</body>
+</html>

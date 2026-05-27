@@ -1,0 +1,571 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Produit — SecureDeal</title>
+  <script src="/js/loader.js"></script>
+  <link rel="stylesheet" href="/css/loader.css">
+  <link rel="stylesheet" href="/css/main.css">
+  <link rel="stylesheet" href="/css/brand.css">
+  <link rel="stylesheet" href="/css/backgrounds.css">
+  <link rel="stylesheet" href="/css/responsive-fixes.css">
+  <link rel="icon" href="/images/logo/favicon.svg" type="image/svg+xml">
+  <style>
+    body { background:#0a0a0a; }
+
+    /* ── Layout produit ── */
+    .product-layout {
+      display: grid;
+      grid-template-columns: 1fr 380px;
+      gap: 40px;
+      align-items: start;
+      padding: 40px 0 80px;
+    }
+
+    /* ── Galerie ── */
+    .product-gallery {}
+    .product-main-img {
+      width: 100%; aspect-ratio: 4/3;
+      border-radius: 20px;
+      overflow: hidden;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(201,162,39,0.12);
+      margin-bottom: 12px;
+      position: relative;
+    }
+    .product-main-img img {
+      width: 100%; height: 100%; object-fit: cover;
+    }
+    .product-thumbs {
+      display: flex; gap: 8px; flex-wrap: wrap;
+    }
+    .product-thumb {
+      width: 80px; height: 60px;
+      border-radius: 10px;
+      overflow: hidden;
+      border: 2px solid rgba(255,255,255,0.08);
+      cursor: pointer;
+      transition: border-color .2s;
+      background: rgba(255,255,255,0.04);
+    }
+    .product-thumb.active { border-color: var(--color-gold); }
+    .product-thumb img { width: 100%; height: 100%; object-fit: cover; }
+
+    /* ── Infos produit ── */
+    .product-info { padding-top: 8px; }
+    .product-breadcrumb {
+      display: flex; align-items: center; gap: 8px;
+      font-size: 13px; color: rgba(255,255,255,0.35);
+      margin-bottom: 16px; flex-wrap: wrap;
+    }
+    .product-breadcrumb a { color: rgba(255,255,255,0.35); transition: color .2s; }
+    .product-breadcrumb a:hover { color: var(--color-gold); }
+    .product-breadcrumb span { color: rgba(255,255,255,0.15); }
+
+    .product-title-main {
+      font-family: 'Sora', sans-serif;
+      font-size: clamp(1.4rem, 3vw, 2rem);
+      font-weight: 800; color: white;
+      line-height: 1.2; margin-bottom: 16px;
+    }
+    .product-meta-row {
+      display: flex; align-items: center;
+      gap: 16px; flex-wrap: wrap; margin-bottom: 24px;
+    }
+    .product-meta-item {
+      display: flex; align-items: center; gap: 6px;
+      font-size: 13px; color: rgba(255,255,255,0.45);
+    }
+
+    /* Caractéristiques */
+    .specs-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 10px; margin-bottom: 28px;
+    }
+    .spec-item {
+      background: rgba(255,255,255,0.03);
+      border: 1px solid rgba(255,255,255,0.06);
+      border-radius: 10px; padding: 12px 14px;
+    }
+    .spec-label { font-size: 11px; color: rgba(255,255,255,0.35); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 4px; }
+    .spec-value { font-size: 14px; font-weight: 600; color: white; }
+
+    /* Description */
+    .desc-box {
+      background: rgba(255,255,255,0.02);
+      border: 1px solid rgba(255,255,255,0.06);
+      border-radius: 14px; padding: 20px 22px;
+      margin-bottom: 24px;
+    }
+    .desc-box h3 {
+      font-family: 'Sora', sans-serif;
+      font-size: 15px; font-weight: 700; color: white; margin-bottom: 12px;
+    }
+    .desc-box p { font-size: 14px; color: rgba(255,255,255,0.55); line-height: 1.7; }
+
+    /* ── Purchase Box ── */
+    .purchase-box {
+      background: rgba(255,255,255,0.03);
+      border: 1px solid rgba(201,162,39,0.18);
+      border-radius: 20px; padding: 28px;
+      position: sticky; top: 90px;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.4);
+    }
+    .purchase-price {
+      font-family: 'Sora', sans-serif;
+      font-size: 2.2rem; font-weight: 800; color: white;
+      margin-bottom: 4px;
+    }
+    .purchase-price span { font-size: 1.2rem; color: rgba(255,255,255,0.4); font-weight: 400; }
+    .purchase-stock-row {
+      display: flex; align-items: center; gap: 8px;
+      margin-bottom: 20px; padding-bottom: 20px;
+      border-bottom: 1px solid rgba(255,255,255,0.07);
+    }
+
+    /* Acompte slider */
+    .deposit-row {
+      display: flex; justify-content: space-between;
+      align-items: center; margin-bottom: 10px;
+    }
+    .deposit-label { font-size: 13px; color: rgba(255,255,255,0.55); }
+    .deposit-value {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 15px; font-weight: 700; color: var(--color-gold);
+    }
+    input[type="range"].deposit-slider {
+      width: 100%; accent-color: var(--color-gold);
+      height: 4px; margin-bottom: 16px;
+    }
+
+    /* Récap calcul */
+    .calc-recap {
+      background: rgba(201,162,39,0.05);
+      border: 1px solid rgba(201,162,39,0.12);
+      border-radius: 12px; padding: 14px 16px;
+      margin-bottom: 20px;
+    }
+    .calc-line {
+      display: flex; justify-content: space-between;
+      font-size: 13px; color: rgba(255,255,255,0.45);
+      padding: 4px 0;
+    }
+    .calc-line b { color: rgba(255,255,255,0.8); font-family: 'JetBrains Mono', monospace; }
+    .calc-line.total { border-top: 1px solid rgba(255,255,255,0.07); margin-top: 4px; padding-top: 10px; font-weight: 700; color: white; font-size: 14px; }
+    .calc-line.total b { color: var(--color-gold); }
+
+    /* Boutons action */
+    .btn-buy-main {
+      width: 100%; padding: 16px;
+      background: var(--gradient-gold);
+      color: #000; font-family: 'Sora', sans-serif;
+      font-size: 15px; font-weight: 800;
+      border: none; border-radius: 14px;
+      cursor: pointer; margin-bottom: 10px;
+      box-shadow: 0 6px 24px rgba(201,162,39,0.35);
+      transition: all .25s;
+      display: flex; align-items: center;
+      justify-content: center; gap: 8px;
+    }
+    .btn-buy-main:hover { transform: translateY(-2px); box-shadow: 0 10px 32px rgba(201,162,39,0.45); }
+
+    .btn-contact {
+      width: 100%; padding: 13px;
+      background: transparent;
+      color: rgba(255,255,255,0.7);
+      border: 1.5px solid rgba(255,255,255,0.15);
+      border-radius: 14px; cursor: pointer;
+      font-family: 'Sora', sans-serif; font-size: 14px; font-weight: 600;
+      transition: all .2s; margin-bottom: 18px;
+    }
+    .btn-contact:hover { border-color: rgba(201,162,39,0.4); color: var(--color-gold); }
+
+    /* Trust badges */
+    .trust-mini { display: flex; flex-direction: column; gap: 8px; }
+    .trust-mini-item {
+      display: flex; align-items: center; gap: 10px;
+      font-size: 12px; color: rgba(255,255,255,0.40);
+    }
+    .trust-mini-item .icon { color: var(--color-gold); font-size: 14px; flex-shrink: 0; }
+
+    /* Vendeur card */
+    .vendor-card {
+      display: flex; align-items: center; gap: 14px;
+      background: rgba(255,255,255,0.03);
+      border: 1px solid rgba(255,255,255,0.07);
+      border-radius: 14px; padding: 16px;
+      margin-bottom: 24px;
+    }
+    .vendor-avatar {
+      width: 48px; height: 48px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #C9A227, #A68420);
+      display: flex; align-items: center; justify-content: center;
+      font-family: 'Sora', sans-serif; font-size: 18px;
+      font-weight: 800; color: #000; flex-shrink: 0;
+    }
+    .vendor-name { font-weight: 700; font-size: 14px; color: white; margin-bottom: 2px; }
+    .vendor-stats { font-size: 12px; color: rgba(255,255,255,0.35); }
+    .vendor-verified {
+      display: inline-flex; align-items: center; gap: 4px;
+      font-size: 11px; color: #10B981;
+      background: rgba(16,185,129,0.1);
+      padding: 2px 8px; border-radius: 20px;
+      margin-left: 6px;
+    }
+
+    /* Responsive */
+    @media (max-width: 900px) {
+      .product-layout {
+        grid-template-columns: 1fr;
+        gap: 24px; padding: 24px 0 60px;
+      }
+      .purchase-box { position: static; }
+      .product-order { order: -1; }
+      .specs-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+    @media (max-width: 480px) {
+      .specs-grid { grid-template-columns: 1fr 1fr; }
+      .product-thumbs { gap: 6px; }
+      .product-thumb { width: 64px; height: 48px; }
+    }
+  </style>
+</head>
+<body>
+
+<header class="site-header scrolled" id="site-header">
+  <div class="header-inner">
+    <a href="/index.html" class="header-logo">
+      <svg width="150" height="36" viewBox="0 0 160 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M18 3L31 8V17.5C31 25.5 25 31.5 18 34C11 31.5 5 25.5 5 17.5V8Z" fill="none" stroke="#C9A227" stroke-width="1.5"/>
+        <path d="M18 7.5L27 11.5V17.5C27 23 23 27.5 18 30C13 27.5 9 23 9 17.5V11.5Z" fill="rgba(201,162,39,0.08)" stroke="#C9A227" stroke-width="0.8"/>
+        <polyline points="13 18 16.5 21.5 23 14" stroke="#C9A227" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+        <text x="39" y="26" font-family="Sora, sans-serif" font-size="16" font-weight="800" fill="white" letter-spacing="-0.5">SECURE</text>
+        <text x="106" y="26" font-family="Sora, sans-serif" font-size="16" font-weight="300" fill="#C9A227" letter-spacing="2">DEAL</text>
+      </svg>
+    </a>
+    <nav class="header-nav">
+      <a href="/index.html" class="header-nav-link">Accueil</a>
+      <a href="/pages/how-it-works.html" class="header-nav-link">Fonctionnement</a>
+      <a href="/pages/categories.html" class="header-nav-link active">Catégories</a>
+      <a href="/pages/tracking.html" class="header-nav-link">Suivi</a>
+      <a href="/pages/about.html" class="header-nav-link">À propos</a>
+      <a href="/pages/pricing.html" class="header-nav-link">Tarifs</a>
+      <a href="/pages/contact.html" class="header-nav-link">Contact</a>
+    </nav>
+    <div class="header-actions">
+      <div id="header-auth" style="display:flex;gap:10px;align-items:center">
+        <a href="/pages/auth/login.html" class="btn btn--outline-white btn--sm">Connexion</a>
+        <a href="/pages/auth/register.html" class="btn btn--gold btn--sm btn--shimmer">Créer un compte</a>
+      </div>
+    </div>
+    <button class="hamburger" id="hamburger" aria-label="Menu" aria-expanded="false">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</header>
+
+<nav class="mobile-menu" id="mobile-menu">
+  <a href="/index.html">🏠 Accueil</a>
+  <a href="/pages/how-it-works.html">⚙️ Fonctionnement</a>
+  <a href="/pages/categories.html" class="active">📦 Catégories</a>
+  <a href="/pages/tracking.html">📡 Suivi</a>
+  <a href="/pages/about.html">ℹ️ À propos</a>
+  <a href="/pages/pricing.html">💰 Tarifs</a>
+  <a href="/pages/contact.html">✉️ Contact</a>
+  <div class="mobile-menu-divider"></div>
+  <div class="mobile-menu-actions">
+    <a href="/pages/auth/login.html" class="btn btn--outline-white">Se connecter</a>
+    <a href="/pages/auth/register.html" class="btn btn--gold">Créer un compte</a>
+  </div>
+</nav>
+
+<!-- Breadcrumb mini bar -->
+<div style="background:rgba(255,255,255,0.02);border-bottom:1px solid rgba(255,255,255,0.05);padding:12px 0;margin-top:70px">
+  <div class="container">
+    <div class="product-breadcrumb">
+      <a href="/index.html">Accueil</a>
+      <span>›</span>
+      <a href="/pages/categories.html">Catégories</a>
+      <span>›</span>
+      <a href="/pages/categories.html" id="bc-cat">Catégorie</a>
+      <span>›</span>
+      <span id="bc-title" style="color:rgba(255,255,255,0.6)">Chargement…</span>
+    </div>
+  </div>
+</div>
+
+<div class="container">
+  <div class="product-layout">
+
+    <!-- ── COLONNE GAUCHE : images + infos ── -->
+    <div class="product-info">
+
+      <!-- Galerie -->
+      <div class="product-gallery" style="margin-bottom:32px">
+        <div class="product-main-img">
+          <img id="main-img" src="" alt="Produit">
+          <div id="stock-overlay" style="position:absolute;top:14px;left:14px"></div>
+        </div>
+        <div class="product-thumbs" id="thumbs-wrap"></div>
+      </div>
+
+      <!-- Titre et meta -->
+      <h1 class="product-title-main" id="prod-title">Chargement…</h1>
+      <div class="product-meta-row">
+        <div class="product-meta-item">📍 <span id="prod-location">—</span></div>
+        <div class="product-meta-item">🏷️ <span id="prod-ref">—</span></div>
+        <div class="product-meta-item">📅 Annonce active</div>
+      </div>
+
+      <!-- Vendeur -->
+      <div class="vendor-card">
+        <div class="vendor-avatar" id="vendor-avatar">V</div>
+        <div>
+          <div class="vendor-name">
+            <span id="vendor-name">Vendeur vérifié</span>
+            <span class="vendor-verified">✓ KYC validé</span>
+          </div>
+          <div class="vendor-stats">Membre depuis 2023 · <span id="vendor-transactions">12</span> transactions · Note 4.9/5</div>
+        </div>
+        <a href="/pages/messages.html" class="btn btn--outline-white btn--sm" style="margin-left:auto;flex-shrink:0">
+          💬 Contacter
+        </a>
+      </div>
+
+      <!-- Caractéristiques -->
+      <div class="desc-box">
+        <h3>📋 Description</h3>
+        <p id="prod-desc">—</p>
+      </div>
+
+      <div class="specs-grid" id="specs-grid"></div>
+
+      <!-- Processus escrow -->
+      <div style="background:rgba(201,162,39,0.05);border:1px solid rgba(201,162,39,0.15);border-radius:16px;padding:20px 22px;margin-bottom:24px">
+        <h3 style="font-family:'Sora',sans-serif;font-size:14px;font-weight:700;color:var(--color-gold);margin-bottom:14px">🛡️ Transaction sécurisée SecureDeal</h3>
+        <div style="display:flex;flex-direction:column;gap:8px">
+          <div style="display:flex;gap:10px;align-items:flex-start;font-size:13px;color:rgba(255,255,255,0.55)"><span style="color:var(--color-gold);flex-shrink:0">✓</span> Votre acompte est bloqué chez SecureDeal — jamais transmis directement au vendeur</div>
+          <div style="display:flex;gap:10px;align-items:flex-start;font-size:13px;color:rgba(255,255,255,0.55)"><span style="color:var(--color-gold);flex-shrink:0">✓</span> SecureDeal récupère et inspecte le produit avant l'expédition</div>
+          <div style="display:flex;gap:10px;align-items:flex-start;font-size:13px;color:rgba(255,255,255,0.55)"><span style="color:var(--color-gold);flex-shrink:0">✓</span> Vous confirmez la réception — puis le vendeur est payé (−1,2% commission)</div>
+          <div style="display:flex;gap:10px;align-items:flex-start;font-size:13px;color:rgba(255,255,255,0.55)"><span style="color:var(--color-gold);flex-shrink:0">✓</span> Arbitrage gratuit inclus en cas de litige</div>
+        </div>
+      </div>
+
+      <!-- Mention légale -->
+      <div class="legal-notice">
+        <span class="legal-icon">⚖️</span>
+        <div style="font-size:12px">
+          <strong>Important :</strong> Ne versez jamais d'argent en dehors de la plateforme SecureDeal. Aucun échange d'IBAN personnel. Toute transaction doit transiter par notre système escrow.
+          <a href="/pages/legal/mentions-legales.html" style="color:var(--color-gold)"> Mentions légales →</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── COLONNE DROITE : purchase box ── -->
+    <div class="product-order">
+      <div class="purchase-box">
+        <div class="purchase-price">
+          <span>€</span><span id="box-price">—</span>
+        </div>
+        <div class="purchase-stock-row">
+          <div id="box-badge"></div>
+          <span style="font-size:12px;color:rgba(255,255,255,0.35)">Ref : <span id="box-ref">—</span></span>
+        </div>
+
+        <!-- Slider acompte -->
+        <div class="deposit-row">
+          <span class="deposit-label">Acompte (% du prix)</span>
+          <span class="deposit-value" id="dep-pct">50%</span>
+        </div>
+        <input type="range" class="deposit-slider" id="dep-slider" min="30" max="70" step="10" value="50">
+        <div style="display:flex;justify-content:space-between;font-size:11px;color:rgba(255,255,255,0.25);margin-bottom:16px">
+          <span>30%</span><span>40%</span><span>50%</span><span>60%</span><span>70%</span>
+        </div>
+
+        <!-- Récapitulatif -->
+        <div class="calc-recap">
+          <div class="calc-line">Acompte dû maintenant<b id="r-dep">—</b></div>
+          <div class="calc-line">Solde à la livraison<b id="r-bal">—</b></div>
+          <div class="calc-line">Commission SecureDeal (1,2%)<b id="r-com">—</b></div>
+          <div class="calc-line total">Total pour l'acheteur<b id="r-tot">—</b></div>
+        </div>
+
+        <button class="btn-buy-main" id="btn-buy">
+          🛡️ Acheter via SecureDeal
+        </button>
+        <button class="btn-contact" onclick="window.location.href='/pages/messages.html'">
+          💬 Poser une question au vendeur
+        </button>
+
+        <div class="trust-mini">
+          <div class="trust-mini-item"><span class="icon">🔒</span> Paiement 100% sécurisé par escrow</div>
+          <div class="trust-mini-item"><span class="icon">📡</span> Suivi temps réel de votre envoi</div>
+          <div class="trust-mini-item"><span class="icon">↩️</span> Arbitrage gratuit inclus</div>
+          <div class="trust-mini-item"><span class="icon">⚡</span> Support disponible 24h/7j</div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<footer class="site-footer">
+  <div class="container">
+    <div class="footer-bottom">
+      <div class="footer-copy">© 2025 SecureDeal. Tous droits réservés.</div>
+      <div class="footer-legal-links">
+        <a href="/pages/legal/mentions-legales.html">Mentions légales</a>
+        <a href="/pages/legal/cgu.html">CGU</a>
+        <a href="/pages/legal/confidentialite.html">Confidentialité</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script src="/js/config.js"></script>
+<script src="/js/api.js"></script>
+<script src="/js/utils.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  'use strict';
+
+  // ─── Hamburger ───────────────────────────────────────────
+  var burger = document.getElementById('hamburger');
+  var menu   = document.getElementById('mobile-menu');
+  if (burger && menu) {
+    burger.addEventListener('click', function() {
+      var open = menu.classList.toggle('open');
+      burger.classList.toggle('open', open);
+      document.body.style.overflow = open ? 'hidden' : '';
+    });
+    menu.querySelectorAll('a').forEach(function(a) {
+      a.addEventListener('click', function() {
+        menu.classList.remove('open'); burger.classList.remove('open');
+        document.body.style.overflow = '';
+      });
+    });
+  }
+
+  // ─── Catalogue produits (même que categories.html) ────────
+  var PRODUCTS = [
+    {id:'V001',cat:'cars',title:'Toyota Land Cruiser 200 V8 4x4',price:28500,location:'Lyon, France',stock:'securedeal',img:'/images/categories/cars-toyota-lc200.svg',desc:'Diesel 4.5L, 2018, 180 000 km, full option, docs complets. Véhicule en parfait état, entretien à jour, carnet complet.',specs:{Marque:'Toyota',Modèle:'Land Cruiser 200',Année:'2018',Kilométrage:'180 000 km',Carburant:'Diesel',Transmission:'Automatique',Puissance:'286 ch',Couleur:'Blanc perle'}},
+    {id:'V002',cat:'cars',title:'Mercedes G 63 AMG 2020',price:89000,location:'Paris, France',stock:'vendor',img:'/images/categories/cars-mercedes-g63.svg',desc:'V8 Biturbo 577 ch, 55 000 km, blanc designo, toit panoramique, sellerie cuir AMG, système audio Burmester.',specs:{Marque:'Mercedes-Benz',Modèle:'G 63 AMG',Année:'2020',Kilométrage:'55 000 km',Carburant:'Essence',Transmission:'AMG SpeedShift',Puissance:'577 ch',Couleur:'Blanc Designo'}},
+    {id:'V003',cat:'cars',title:'BMW X5 xDrive 40d Pack M',price:42000,location:'Marseille',stock:'securedeal',img:'/images/categories/cars-bmw-x5.svg',desc:'3.0L Diesel 340 ch, 2019, 95 000 km, 7 places, pack M sport, toit ouvrant, caméra 360°.',specs:{Marque:'BMW',Modèle:'X5 xDrive40d',Année:'2019',Kilométrage:'95 000 km',Carburant:'Diesel',Transmission:'Automatique 8 vitesses',Puissance:'340 ch',Couleur:'Gris Sophistiqué'}},
+    {id:'T001',cat:'tractors',title:'John Deere 8R 410 GPS RTK',price:185000,location:'Bretagne',stock:'vendor',img:'/images/categories/tractors-john-deere.svg',desc:'410 CV, 2022, 1 200 h, transmission IVT, GPS RTK intégré John Deere, cabine CommandView III.',specs:{Marque:'John Deere',Modèle:'8R 410',Année:'2022',Heures:'1 200 h',Puissance:'410 CV',Transmission:'IVT',GPS:'RTK intégré',Cabine:'CommandView III'}},
+    {id:'C001',cat:'containers',title:'Conteneur 20 pieds Standard',price:3200,location:'Le Havre',stock:'securedeal',img:'/images/categories/containers-container-20ft.svg',desc:'Conteneur standard ISO 20 pieds, bon état, portes fonctionnelles, plancher bois neuf, certifié CSC.',specs:{Type:'Standard ISO',Longueur:'20 pieds / 6,06 m',Largeur:'2,44 m',Hauteur:'2,59 m',Capacité:'33 m³',Charge:'28 tonnes',Matériau:'Acier COR-TEN',Certification:'CSC valide'}},
+    {id:'P001',cat:'phones',title:'iPhone 15 Pro Max 256 Go x20',price:19800,location:'Paris',stock:'securedeal',img:'/images/categories/phones-iphone-15pm.svg',desc:'Lot de 20 iPhone 15 Pro Max 256 Go, coloris Titane naturel. Neufs sous scellés Apple Store, IMEI vierges, factures constructeur.',specs:{Modèle:'iPhone 15 Pro Max',Stockage:'256 Go',Couleur:'Titane naturel',Quantité:'20 unités',État:'Neuf scellé',Version:'EU',IMEI:'Vierges',Garantie:'Apple 1 an'}},
+    {id:'E001',cat:'equipment',title:'Groupe électrogène silencieux 100 kVA',price:22000,location:'Lyon',stock:'vendor',img:'/images/categories/equipment-generator-100kva.svg',desc:'Groupe électrogène diesel 100 kVA en caisson insonorisé, monophasé/triphasé, démarrage automatique ATS, protection IP54.',specs:{Puissance:'100 kVA',Carburant:'Diesel',Type:'Silencieux',Phases:'Mono + Triphasé',Démarrage:'Automatique ATS',Protection:'IP54',Réservoir:'150 L',Autonomie:'12 h à pleine charge'}}
+  ];
+
+  // ─── Chargement du produit ────────────────────────────────
+  var params = new URLSearchParams(window.location.search);
+  var id     = params.get('id');
+  var p      = PRODUCTS.find(function(x) { return x.id === id; });
+
+  // Produit par défaut si non trouvé
+  if (!p) { p = PRODUCTS[0]; }
+
+  // ─── Injection des données ────────────────────────────────
+  document.title = p.title + ' — SecureDeal';
+
+  var catLabels = {cars:'Voitures', tractors:'Tracteurs', containers:'Conteneurs', phones:'Téléphones', equipment:'Équipements'};
+  document.getElementById('bc-cat').textContent   = catLabels[p.cat] || 'Catégories';
+  document.getElementById('bc-cat').href          = '/pages/categories.html?cat=' + p.cat;
+  document.getElementById('bc-title').textContent = p.title.length > 40 ? p.title.slice(0,40)+'…' : p.title;
+  document.getElementById('prod-title').textContent    = p.title;
+  document.getElementById('prod-location').textContent = p.location;
+  document.getElementById('prod-ref').textContent      = '#' + p.id;
+  document.getElementById('prod-desc').textContent     = p.desc;
+  document.getElementById('box-ref').textContent       = p.id;
+
+  // Badge stock
+  var inStock = p.stock === 'securedeal';
+  var badgeHTML = inStock
+    ? '<span class="badge badge--active">En stock SecureDeal</span>'
+    : '<span class="badge badge--escrow">Chez le vendeur</span>';
+  document.getElementById('stock-overlay').innerHTML = badgeHTML;
+  document.getElementById('box-badge').innerHTML     = badgeHTML;
+
+  // Vendeur
+  var vendorName = inStock ? 'SecureDeal Stock' : 'Vendeur Vérifié';
+  var vendorInit = inStock ? 'S' : 'V';
+  document.getElementById('vendor-name').textContent  = vendorName;
+  document.getElementById('vendor-avatar').textContent = vendorInit;
+  document.getElementById('vendor-transactions').textContent = Math.floor(Math.random()*20)+5;
+
+  // Image principale
+  var mainImg = document.getElementById('main-img');
+  mainImg.src = p.img;
+  mainImg.alt = p.title;
+
+  // Thumbnails (même image x3 — à remplacer par vraies photos)
+  var thumbsWrap = document.getElementById('thumbs-wrap');
+  var imgs = [p.img, p.img, p.img];
+  imgs.forEach(function(src, i) {
+    var div = document.createElement('div');
+    div.className = 'product-thumb' + (i === 0 ? ' active' : '');
+    var img = document.createElement('img');
+    img.src = src; img.alt = 'Vue ' + (i+1);
+    div.appendChild(img);
+    div.addEventListener('click', function() {
+      document.querySelectorAll('.product-thumb').forEach(function(t) { t.classList.remove('active'); });
+      div.classList.add('active');
+      mainImg.src = src;
+    });
+    thumbsWrap.appendChild(div);
+  });
+
+  // Caractéristiques
+  var specsGrid = document.getElementById('specs-grid');
+  if (p.specs) {
+    Object.keys(p.specs).forEach(function(key) {
+      var div = document.createElement('div');
+      div.className = 'spec-item';
+      div.innerHTML = '<div class="spec-label">' + key + '</div><div class="spec-value">' + p.specs[key] + '</div>';
+      specsGrid.appendChild(div);
+    });
+  }
+
+  // ─── Calcul prix / acompte ────────────────────────────────
+  function fmt(n) { return new Intl.NumberFormat('fr-FR', {style:'currency', currency:'EUR'}).format(n); }
+
+  document.getElementById('box-price').textContent = new Intl.NumberFormat('fr-FR').format(p.price);
+
+  function updateCalc() {
+    var pct   = parseInt(document.getElementById('dep-slider').value) / 100;
+    var dep   = p.price * pct;
+    var bal   = p.price * (1 - pct);
+    var com   = p.price * 0.012;
+    document.getElementById('dep-pct').textContent = Math.round(pct*100) + '%';
+    document.getElementById('r-dep').textContent   = fmt(dep);
+    document.getElementById('r-bal').textContent   = fmt(bal);
+    document.getElementById('r-com').textContent   = '−' + fmt(com);
+    document.getElementById('r-tot').textContent   = fmt(p.price);
+  }
+
+  document.getElementById('dep-slider').addEventListener('input', updateCalc);
+  updateCalc();
+
+  // ─── Bouton acheter ───────────────────────────────────────
+  document.getElementById('btn-buy').addEventListener('click', function() {
+    var pct = document.getElementById('dep-slider').value;
+    window.location.href = '/pages/purchase.html?id=' + p.id + '&dep=' + pct;
+  });
+
+  // Auth header
+  try {
+    var user = (window.SD && SD.Auth) ? SD.Auth.getUser() : null;
+    if (user) {
+      var dashUrl = user.role === 'vendor' ? '/pages/dashboard/vendor.html' : '/pages/dashboard/buyer.html';
+      document.getElementById('header-auth').innerHTML =
+        '<a href="' + dashUrl + '" class="btn btn--outline-white btn--sm">Mon espace</a>';
+    }
+  } catch(e) {}
+
+});
+</script>
+</body>
+</html>

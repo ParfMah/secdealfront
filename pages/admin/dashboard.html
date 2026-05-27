@@ -1,0 +1,882 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Administration — SecureDeal</title>
+  <script src="/js/loader.js"></script>
+  <link rel="stylesheet" href="/css/loader.css">
+  <link rel="stylesheet" href="/css/design-system.css">
+  <link rel="stylesheet" href="/css/dashboard.css">
+  <link rel="stylesheet" href="/css/brand.css">
+  <link rel="stylesheet" href="/css/backgrounds.css">
+  <link rel="stylesheet" href="/css/responsive-fixes.css">
+  <link rel="icon" href="/images/logo/favicon.svg" type="image/svg+xml">
+  <style>
+    .admin-sidebar { background: #0F172A; }
+    .admin-sidebar .sidebar-link.active { background: rgba(239,68,68,0.12); color: #FC8181; }
+    .admin-sidebar .sidebar-link.active::before { background: #FC8181; }
+    .admin-sidebar .sidebar-section-title { color: rgba(255,255,255,0.25); }
+    .admin-badge { background: #EF4444; color: white; font-size: 10px; font-weight: 700; padding: 2px 7px; border-radius: 999px; margin-left: auto; }
+    .risk-high   { color: #EF4444; font-weight: 700; }
+    .risk-medium { color: #F59E0B; font-weight: 600; }
+    .risk-low    { color: #10B981; }
+    .user-row { display:flex; align-items:center; gap:14px; padding:14px 16px; background:white; border-radius:12px; border:1px solid var(--color-grey-100); margin-bottom:8px; }
+    .log-line { font-family:'JetBrains Mono',monospace; font-size:12px; padding:6px 12px; border-radius:6px; margin-bottom:3px; line-height:1.5; }
+    .log-info    { background:rgba(59,130,246,0.06); color:#3B82F6; }
+    .log-warn    { background:rgba(245,158,11,0.06); color:#D97706; }
+    .log-error   { background:rgba(239,68,68,0.06);  color:#EF4444; }
+    .log-success { background:rgba(16,185,129,0.06); color:#059669; }
+    .conv-item { display:flex; gap:12px; padding:14px 16px; border-radius:12px; border:1px solid var(--color-grey-100); background:white; margin-bottom:8px; cursor:pointer; transition:all 0.2s; }
+    .conv-item:hover { border-color:rgba(30,107,184,0.2); box-shadow:var(--shadow-sm); }
+    .conv-item.flagged { border-left:4px solid #EF4444; }
+    .cms-block { background:white; border-radius:20px; padding:28px; border:1px solid var(--color-grey-100); margin-bottom:20px; }
+  </style>
+</head>
+<body>
+
+<!-- ═══ SIDEBAR ADMIN ═════════════════════════════════════════ -->
+<aside class="sidebar admin-sidebar" id="sidebar">
+  <div class="sidebar-logo">
+    <a href="/index.html">
+      <img src="/images/logo/securedeal-logo-white.svg" alt="SecureDeal" style="height:28px"
+           onerror="this.outerHTML='<span style=\'font-family:Sora,sans-serif;font-size:15px;font-weight:800;color:white\'>SECURE<span style=\'color:#C9A227;font-weight:300\'>DEAL</span></span>'">
+    </a>
+    <div style="margin-top:8px;font-size:10px;font-weight:700;color:rgba(239,68,68,0.8);text-transform:uppercase;letter-spacing:2px">Administration</div>
+  </div>
+
+  <!-- Admin info -->
+  <div style="padding:0 16px 16px">
+    <div style="display:flex;align-items:center;gap:10px;padding:12px;background:rgba(239,68,68,0.08);border:1px solid rgba(239,68,68,0.15);border-radius:12px">
+      <div class="avatar avatar--sm" style="background:linear-gradient(135deg,#EF4444,#DC2626);font-size:13px;font-weight:800">A</div>
+      <div>
+        <div style="font-weight:700;font-size:13px;color:white" id="sb-admin-name">Admin SD</div>
+        <div style="font-size:10px;color:rgba(239,68,68,0.7);font-weight:600;text-transform:uppercase;letter-spacing:1px">Super Admin</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="sidebar-section">
+    <div class="sidebar-section-title">Vue d'ensemble</div>
+    <nav class="sidebar-nav">
+      <a href="#" class="sidebar-link active" data-page="overview">
+        <svg class="sidebar-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+        Tableau de bord
+      </a>
+      <a href="#" class="sidebar-link" data-page="stats">
+        <svg class="sidebar-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+        Statistiques globales
+      </a>
+    </nav>
+  </div>
+
+  <div class="sidebar-section">
+    <div class="sidebar-section-title">Gestion</div>
+    <nav class="sidebar-nav">
+      <a href="#" class="sidebar-link" data-page="users">
+        <svg class="sidebar-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+        Utilisateurs
+        <span class="admin-badge" id="sb-users-badge">1 284</span>
+      </a>
+      <a href="#" class="sidebar-link" data-page="products">
+        <svg class="sidebar-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>
+        Produits & Annonces
+      </a>
+      <a href="#" class="sidebar-link" data-page="transactions">
+        <svg class="sidebar-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+        Transactions
+        <span class="admin-badge">127</span>
+      </a>
+      <a href="#" class="sidebar-link" data-page="payments">
+        <svg class="sidebar-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>
+        Paiements & Escrow
+      </a>
+      <a href="#" class="sidebar-link" data-page="deliveries">
+        <svg class="sidebar-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="3" width="15" height="13"/><path d="M16 8h4l3 3v5h-7V8Z"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>
+        Livraisons
+      </a>
+    </nav>
+  </div>
+
+  <div class="sidebar-section">
+    <div class="sidebar-section-title">Surveillance</div>
+    <nav class="sidebar-nav">
+      <a href="#" class="sidebar-link" data-page="conversations">
+        <svg class="sidebar-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+        Conversations
+        <span class="admin-badge" id="sb-fraud-badge">3 🚨</span>
+      </a>
+      <a href="#" class="sidebar-link" data-page="kyc">
+        <svg class="sidebar-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2L20 5.5V12C20 17 16.5 21 12 23C7.5 21 4 17 4 12V5.5Z"/><polyline points="8.5 12 11 14.5 15.5 9.5"/></svg>
+        KYC en attente
+        <span class="admin-badge" id="sb-kyc-badge">18</span>
+      </a>
+      <a href="#" class="sidebar-link" data-page="fraud">
+        <svg class="sidebar-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+        Détection fraude
+        <span class="admin-badge">5 ⚠️</span>
+      </a>
+      <a href="#" class="sidebar-link" data-page="logs">
+        <svg class="sidebar-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+        Logs système
+      </a>
+    </nav>
+  </div>
+
+  <div class="sidebar-section">
+    <div class="sidebar-section-title">Contenu</div>
+    <nav class="sidebar-nav">
+      <a href="#" class="sidebar-link" data-page="cms">
+        <svg class="sidebar-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+        CMS contenu
+      </a>
+      <a href="#" class="sidebar-link" data-page="emails">
+        <svg class="sidebar-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+        Emails automatiques
+      </a>
+      <a href="#" class="sidebar-link" data-page="categories">
+        <svg class="sidebar-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>
+        Catégories
+      </a>
+    </nav>
+  </div>
+
+  <div class="sidebar-section">
+    <div class="sidebar-section-title">Système</div>
+    <nav class="sidebar-nav">
+      <a href="#" class="sidebar-link" data-page="settings">
+        <svg class="sidebar-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+        Paramètres
+      </a>
+    </nav>
+  </div>
+
+  <div style="margin-top:auto;padding:12px 16px">
+    <button onclick="SD.Auth.logout()" style="width:100%;cursor:pointer;border:none;background:rgba(239,68,68,0.1);color:#FC8181;border-radius:10px;padding:9px 12px;display:flex;align-items:center;gap:10px;font-size:13px;font-weight:500">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+      Déconnexion
+    </button>
+  </div>
+</aside>
+
+<!-- ═══ MAIN ═══════════════════════════════════════════════════ -->
+<div class="dashboard-layout">
+<div class="dashboard-main">
+
+  <div class="dashboard-header">
+    <div style="display:flex;align-items:center;gap:14px">
+      <button data-sidebar-toggle class="btn btn--ghost btn--sm" style="padding:8px">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+      </button>
+      <div>
+        <h1 class="page-title" id="dh-title">Vue d'ensemble</h1>
+        <p class="page-subtitle" id="dh-sub">Administration SecureDeal · <span id="live-time"></span></p>
+      </div>
+    </div>
+    <div style="display:flex;align-items:center;gap:10px">
+      <div style="width:8px;height:8px;background:#10B981;border-radius:50%;animation:pulse-dot 2s infinite"></div>
+      <span style="font-size:12px;font-weight:600;color:var(--color-success)">Système opérationnel</span>
+      <button class="btn btn--sm" style="background:rgba(239,68,68,0.08);color:#EF4444;border:1px solid rgba(239,68,68,0.2)" onclick="showPage('fraud')">
+        ⚠️ 5 alertes fraude
+      </button>
+    </div>
+  </div>
+
+  <!-- ══ OVERVIEW ═══════════════════════════════════════════════ -->
+  <div class="dashboard-content" id="page-overview">
+
+    <!-- Quick stats -->
+    <div class="admin-quick-stats" style="margin-bottom:24px">
+      <div class="admin-mini-stat">
+        <div class="admin-mini-value" data-counter="1284">0</div>
+        <div class="admin-mini-label">Utilisateurs</div>
+      </div>
+      <div class="admin-mini-stat">
+        <div class="admin-mini-value" data-counter="4537">0</div>
+        <div class="admin-mini-label">Annonces</div>
+      </div>
+      <div class="admin-mini-stat">
+        <div class="admin-mini-value" data-counter="127">0</div>
+        <div class="admin-mini-label">Transactions actives</div>
+      </div>
+      <div class="admin-mini-stat" style="border-color:rgba(0,212,255,0.2);background:rgba(0,212,255,0.04)">
+        <div class="admin-mini-value" style="color:var(--color-cyan-dim)" data-counter="2847500">0</div>
+        <div class="admin-mini-label">Escrow total (€)</div>
+      </div>
+      <div class="admin-mini-stat" style="border-color:rgba(16,185,129,0.2);background:rgba(16,185,129,0.04)">
+        <div class="admin-mini-value" style="color:var(--color-success)" data-counter="34170">0</div>
+        <div class="admin-mini-label">Commissions (€)</div>
+      </div>
+      <div class="admin-mini-stat" style="border-color:rgba(239,68,68,0.2);background:rgba(239,68,68,0.04)">
+        <div class="admin-mini-value" style="color:var(--color-danger)">5</div>
+        <div class="admin-mini-label">Alertes fraude</div>
+      </div>
+    </div>
+
+    <div style="display:grid;grid-template-columns:1.4fr 1fr;gap:20px;margin-bottom:20px">
+      <!-- Transactions récentes -->
+      <div class="cms-block" style="padding:20px">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px">
+          <h3 style="font-family:'Sora',sans-serif;font-size:14px;font-weight:700;color:var(--color-navy)">Transactions récentes</h3>
+          <button class="btn btn--ghost btn--sm" onclick="showPage('transactions')">Tout voir →</button>
+        </div>
+        <div class="table-wrap" style="border-radius:12px">
+          <table class="table" style="font-size:12px">
+            <thead><tr><th>ID</th><th>Produit</th><th>Montant</th><th>Statut</th><th>Action</th></tr></thead>
+            <tbody id="admin-recent-txn"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- KYC en attente -->
+      <div class="cms-block" style="padding:20px">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px">
+          <h3 style="font-family:'Sora',sans-serif;font-size:14px;font-weight:700;color:var(--color-navy)">KYC en attente <span style="background:rgba(239,68,68,0.1);color:#EF4444;font-size:11px;padding:2px 8px;border-radius:999px;margin-left:6px">18</span></h3>
+          <button class="btn btn--ghost btn--sm" onclick="showPage('kyc')">Tout voir →</button>
+        </div>
+        <div id="admin-kyc-list"></div>
+      </div>
+    </div>
+
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px">
+      <!-- Alertes fraude -->
+      <div class="cms-block" style="padding:20px;border-left:4px solid #EF4444">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px">
+          <h3 style="font-family:'Sora',sans-serif;font-size:14px;font-weight:700;color:var(--color-navy)">⚠️ Alertes fraude actives</h3>
+          <button class="btn btn--sm" style="background:rgba(239,68,68,0.08);color:#EF4444;border:none" onclick="showPage('fraud')">Traiter →</button>
+        </div>
+        <div id="admin-fraud-list"></div>
+      </div>
+
+      <!-- Logs récents -->
+      <div class="cms-block" style="padding:20px">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px">
+          <h3 style="font-family:'Sora',sans-serif;font-size:14px;font-weight:700;color:var(--color-navy)">Logs système</h3>
+          <button class="btn btn--ghost btn--sm" onclick="showPage('logs')">Tout voir →</button>
+        </div>
+        <div id="admin-logs-preview" style="font-size:11px;max-height:200px;overflow-y:auto"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ UTILISATEURS ═══════════════════════════════════════════ -->
+  <div class="dashboard-content" id="page-users" style="display:none">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px">
+      <div><div class="page-title">Gestion utilisateurs</div><div class="page-subtitle">1 284 comptes enregistrés</div></div>
+      <div style="display:flex;gap:8px">
+        <div class="search-bar" style="min-width:280px"><span class="search-icon">🔍</span><input type="text" class="search-input" id="user-search" placeholder="Rechercher un utilisateur…"></div>
+        <select class="form-control" id="user-filter" style="width:160px">
+          <option value="all">Tous les rôles</option>
+          <option value="vendor">Vendeurs</option>
+          <option value="buyer">Acheteurs</option>
+          <option value="admin">Admins</option>
+        </select>
+      </div>
+    </div>
+    <div style="display:flex;gap:8px;margin-bottom:16px">
+      <button class="filter-chip active">Tous (1 284)</button>
+      <button class="filter-chip">Vérifiés (1 021)</button>
+      <button class="filter-chip">En attente KYC (245)</button>
+      <button class="filter-chip">Suspendus (18)</button>
+    </div>
+    <div id="users-list"></div>
+  </div>
+
+  <!-- ══ PRODUITS ══════════════════════════════════════════════ -->
+  <div class="dashboard-content" id="page-products" style="display:none">
+    <div style="margin-bottom:20px"><div class="page-title">Produits & Annonces</div><div class="page-subtitle">4 537 annonces · 3 891 actives · 646 en révision</div></div>
+    <div class="table-wrap">
+      <table class="table">
+        <thead><tr><th>ID</th><th>Titre</th><th>Catégorie</th><th>Vendeur</th><th>Prix</th><th>Statut</th><th>Date</th><th>Actions</th></tr></thead>
+        <tbody id="admin-products-tbody"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- ══ TRANSACTIONS ══════════════════════════════════════════ -->
+  <div class="dashboard-content" id="page-transactions" style="display:none">
+    <div style="margin-bottom:20px"><div class="page-title">Transactions</div><div class="page-subtitle">127 transactions actives · € 2 847 500 sous escrow</div></div>
+    <div class="table-wrap">
+      <table class="table">
+        <thead><tr><th>N° Transaction</th><th>Produit</th><th>Acheteur</th><th>Vendeur</th><th>Montant</th><th>Commission</th><th>Statut</th><th>Actions</th></tr></thead>
+        <tbody id="admin-txn-tbody"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- ══ PAIEMENTS ═════════════════════════════════════════════ -->
+  <div class="dashboard-content" id="page-payments" style="display:none">
+    <div style="margin-bottom:20px"><div class="page-title">Paiements & Escrow</div><div class="page-subtitle">Gestion des flux financiers SecureDeal</div></div>
+    <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:24px">
+      <div class="cms-block" style="padding:20px;text-align:center">
+        <div style="font-size:11px;color:var(--color-grey-400);font-weight:600;text-transform:uppercase;letter-spacing:1px;margin-bottom:6px">Escrow total</div>
+        <div style="font-family:'Sora',sans-serif;font-size:22px;font-weight:800;color:var(--color-cyan-dim)">€ 2 847 500</div>
+      </div>
+      <div class="cms-block" style="padding:20px;text-align:center">
+        <div style="font-size:11px;color:var(--color-grey-400);font-weight:600;text-transform:uppercase;letter-spacing:1px;margin-bottom:6px">Commissions</div>
+        <div style="font-family:'Sora',sans-serif;font-size:22px;font-weight:800;color:var(--color-success)">€ 34 170</div>
+      </div>
+      <div class="cms-block" style="padding:20px;text-align:center">
+        <div style="font-size:11px;color:var(--color-grey-400);font-weight:600;text-transform:uppercase;letter-spacing:1px;margin-bottom:6px">En attente</div>
+        <div style="font-family:'Sora',sans-serif;font-size:22px;font-weight:800;color:var(--color-warning)">€ 847 200</div>
+      </div>
+      <div class="cms-block" style="padding:20px;text-align:center">
+        <div style="font-size:11px;color:var(--color-grey-400);font-weight:600;text-transform:uppercase;letter-spacing:1px;margin-bottom:6px">Virés vendeurs</div>
+        <div style="font-family:'Sora',sans-serif;font-size:22px;font-weight:800;color:var(--color-navy)">€ 1 966 130</div>
+      </div>
+    </div>
+    <div class="table-wrap">
+      <table class="table">
+        <thead><tr><th>Date</th><th>Transaction</th><th>Type</th><th>Montant</th><th>Bénéficiaire</th><th>Statut</th><th>Actions</th></tr></thead>
+        <tbody id="admin-payments-tbody"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- ══ LIVRAISONS ════════════════════════════════════════════ -->
+  <div class="dashboard-content" id="page-deliveries" style="display:none">
+    <div style="margin-bottom:20px"><div class="page-title">Gestion livraisons</div><div class="page-subtitle">Suivi de toutes les livraisons en cours</div></div>
+    <div id="deliveries-list"></div>
+  </div>
+
+  <!-- ══ CONVERSATIONS ═════════════════════════════════════════ -->
+  <div class="dashboard-content" id="page-conversations" style="display:none">
+    <div style="margin-bottom:20px">
+      <div class="page-title">Surveillance conversations</div>
+      <div class="page-subtitle">Accès en lecture à toutes les conversations pour détection de fraude</div>
+    </div>
+    <div class="alert alert--warning" style="margin-bottom:20px">
+      <span>🔒</span>
+      <div>Les conversations sont accessibles uniquement à l'administration SecureDeal pour des raisons de sécurité et de détection de fraude, conformément aux CGU acceptées par les utilisateurs.</div>
+    </div>
+    <div style="display:flex;gap:8px;margin-bottom:16px">
+      <button class="filter-chip active">Toutes</button>
+      <button class="filter-chip">🚨 Signalées (3)</button>
+      <button class="filter-chip">⚠️ Suspectes (7)</button>
+      <button class="filter-chip">✅ Normales</button>
+    </div>
+    <div id="conv-list"></div>
+  </div>
+
+  <!-- ══ KYC EN ATTENTE ════════════════════════════════════════ -->
+  <div class="dashboard-content" id="page-kyc" style="display:none">
+    <div style="margin-bottom:20px">
+      <div class="page-title">KYC en attente de validation</div>
+      <div class="page-subtitle">18 dossiers à traiter</div>
+    </div>
+    <div id="kyc-list"></div>
+  </div>
+
+  <!-- ══ FRAUDE ════════════════════════════════════════════════ -->
+  <div class="dashboard-content" id="page-fraud" style="display:none">
+    <div style="margin-bottom:20px">
+      <div class="page-title">Détection de fraude</div>
+      <div class="page-subtitle">Alertes automatiques basées sur l'analyse comportementale</div>
+    </div>
+    <div class="alert alert--danger" style="margin-bottom:20px">
+      <span>🚨</span>
+      <div><strong>5 alertes actives</strong> nécessitent votre attention immédiate.</div>
+    </div>
+    <div id="fraud-alerts"></div>
+  </div>
+
+  <!-- ══ LOGS ══════════════════════════════════════════════════ -->
+  <div class="dashboard-content" id="page-logs" style="display:none">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px">
+      <div><div class="page-title">Logs système</div><div class="page-subtitle">Journal complet des actions plateforme</div></div>
+      <div style="display:flex;gap:8px">
+        <select class="form-control" style="width:150px" id="log-level">
+          <option value="all">Tous les niveaux</option>
+          <option value="error">Erreurs</option>
+          <option value="warn">Avertissements</option>
+          <option value="info">Info</option>
+        </select>
+        <button class="btn btn--outline" onclick="SD.Toast.info('Export logs en cours…')">⬇️ Exporter</button>
+      </div>
+    </div>
+    <div id="logs-container" style="background:#0F172A;border-radius:16px;padding:20px;font-family:'JetBrains Mono',monospace;font-size:12px;max-height:600px;overflow-y:auto"></div>
+  </div>
+
+  <!-- ══ CMS ═══════════════════════════════════════════════════ -->
+  <div class="dashboard-content" id="page-cms" style="display:none">
+    <div style="margin-bottom:20px"><div class="page-title">CMS — Gestion du contenu</div><div class="page-subtitle">Modifiez les contenus visibles sur la plateforme</div></div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px">
+      <div class="cms-block">
+        <h3 style="font-family:'Sora',sans-serif;font-size:15px;font-weight:700;color:var(--color-navy);margin-bottom:16px">🏠 Hero section</h3>
+        <div style="display:flex;flex-direction:column;gap:12px">
+          <div class="form-group"><label class="form-label">Titre principal</label><input type="text" class="form-control" value="Le commerce international 100% sécurisé"></div>
+          <div class="form-group"><label class="form-label">Sous-titre</label><textarea class="form-control" rows="3">SecureDeal agit comme intermédiaire de confiance entre acheteurs et vendeurs du monde entier.</textarea></div>
+          <div class="form-group"><label class="form-label">Texte bouton principal</label><input type="text" class="form-control" value="Commencer maintenant"></div>
+          <button class="btn btn--primary" onclick="SD.Toast.success('Contenu hero mis à jour.')">Sauvegarder</button>
+        </div>
+      </div>
+      <div class="cms-block">
+        <h3 style="font-family:'Sora',sans-serif;font-size:15px;font-weight:700;color:var(--color-navy);margin-bottom:16px">📊 Statistiques affichées</h3>
+        <div style="display:flex;flex-direction:column;gap:12px">
+          <div class="form-group"><label class="form-label">Transactions sécurisées</label><input type="number" class="form-control" value="12400"></div>
+          <div class="form-group"><label class="form-label">Pays couverts</label><input type="number" class="form-control" value="94"></div>
+          <div class="form-group"><label class="form-label">Taux satisfaction (%)</label><input type="number" class="form-control" value="99.8" step="0.1"></div>
+          <button class="btn btn--primary" onclick="SD.Toast.success('Statistiques mises à jour.')">Sauvegarder</button>
+        </div>
+      </div>
+      <div class="cms-block">
+        <h3 style="font-family:'Sora',sans-serif;font-size:15px;font-weight:700;color:var(--color-navy);margin-bottom:16px">⚖️ Mentions légales banner</h3>
+        <div class="form-group">
+          <label class="form-label">Texte mentions légales (page d'accueil)</label>
+          <textarea class="form-control" rows="5">SecureDeal agit exclusivement comme intermédiaire de confiance entre acheteurs et vendeurs. SecureDeal ne garantit pas les accords conclus en dehors de la plateforme…</textarea>
+        </div>
+        <button class="btn btn--primary" style="margin-top:10px" onclick="SD.Toast.success('Mentions légales mises à jour.')">Sauvegarder</button>
+      </div>
+      <div class="cms-block">
+        <h3 style="font-family:'Sora',sans-serif;font-size:15px;font-weight:700;color:var(--color-navy);margin-bottom:16px">🔧 Paramètres plateforme</h3>
+        <div style="display:flex;flex-direction:column;gap:12px">
+          <div class="form-group"><label class="form-label">Taux commission (%)</label><input type="number" class="form-control" value="1.2" step="0.1" min="0" max="10"></div>
+          <div class="form-group"><label class="form-label">Acompte minimum (%)</label><input type="number" class="form-control" value="50" min="30" max="100"></div>
+          <div class="form-group"><label class="form-label">Délai paiement vendeur (jours)</label><input type="number" class="form-control" value="2" min="1" max="14"></div>
+          <button class="btn btn--primary" onclick="SD.Toast.success('Paramètres plateforme mis à jour.')">Sauvegarder</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ EMAILS ════════════════════════════════════════════════ -->
+  <div class="dashboard-content" id="page-emails" style="display:none">
+    <div style="margin-bottom:20px"><div class="page-title">Emails automatiques</div><div class="page-subtitle">Gestion des templates d'emails transactionnels</div></div>
+    <div id="email-templates"></div>
+  </div>
+
+  <!-- ══ CATÉGORIES ════════════════════════════════════════════ -->
+  <div class="dashboard-content" id="page-categories" style="display:none">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px">
+      <div><div class="page-title">Catégories</div><div class="page-subtitle">Gestion des catégories de produits</div></div>
+      <button class="btn btn--primary" onclick="SD.Toast.info('Ajout de catégorie — modal bientôt disponible')">+ Ajouter une catégorie</button>
+    </div>
+    <div id="categories-admin"></div>
+  </div>
+
+  <!-- ══ PARAMÈTRES ════════════════════════════════════════════ -->
+  <div class="dashboard-content" id="page-settings" style="display:none">
+    <div style="margin-bottom:20px"><div class="page-title">Paramètres système</div></div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px">
+      <div class="cms-block">
+        <h3 style="font-family:'Sora',sans-serif;font-size:15px;font-weight:700;color:var(--color-navy);margin-bottom:16px">🔐 Sécurité</h3>
+        <div style="display:flex;flex-direction:column;gap:14px">
+          <label class="form-check"><input type="checkbox" checked><span style="font-size:13px;color:var(--color-grey-600)">Authentification 2FA obligatoire (admins)</span></label>
+          <label class="form-check"><input type="checkbox" checked><span style="font-size:13px;color:var(--color-grey-600)">Détection automatique partage IBAN</span></label>
+          <label class="form-check"><input type="checkbox" checked><span style="font-size:13px;color:var(--color-grey-600)">Rate limiting anti-bruteforce</span></label>
+          <label class="form-check"><input type="checkbox" checked><span style="font-size:13px;color:var(--color-grey-600)">Journalisation complète (RGPD)</span></label>
+          <label class="form-check"><input type="checkbox"><span style="font-size:13px;color:var(--color-grey-600)">Mode maintenance activé</span></label>
+          <button class="btn btn--primary" onclick="SD.Toast.success('Paramètres de sécurité sauvegardés.')">Sauvegarder</button>
+        </div>
+      </div>
+      <div class="cms-block">
+        <h3 style="font-family:'Sora',sans-serif;font-size:15px;font-weight:700;color:var(--color-navy);margin-bottom:16px">📧 Configuration emails</h3>
+        <div style="display:flex;flex-direction:column;gap:12px">
+          <div class="form-group"><label class="form-label">SMTP Host</label><input type="text" class="form-control" value="smtp.sendgrid.net"></div>
+          <div class="form-group"><label class="form-label">SMTP Port</label><input type="number" class="form-control" value="587"></div>
+          <div class="form-group"><label class="form-label">Email expéditeur</label><input type="email" class="form-control" value="noreply@securedeal.io"></div>
+          <div class="form-group"><label class="form-label">Nom expéditeur</label><input type="text" class="form-control" value="SecureDeal"></div>
+          <button class="btn btn--outline" onclick="SD.Toast.info('Email de test envoyé.')">📧 Tester la configuration</button>
+          <button class="btn btn--primary" onclick="SD.Toast.success('Configuration email sauvegardée.')">Sauvegarder</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ STATISTIQUES GLOBALES ══════════════════════════════════ -->
+  <div class="dashboard-content" id="page-stats" style="display:none">
+    <div style="margin-bottom:20px"><div class="page-title">Statistiques globales</div></div>
+    <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:24px">
+      <div class="stat-block"><div class="stat-block-icon green">📈</div><div class="stat-block-info"><div class="stat-block-value" data-counter="2847500">0</div><div class="stat-block-label">Volume traité (€)</div></div></div>
+      <div class="stat-block"><div class="stat-block-icon blue">👥</div><div class="stat-block-info"><div class="stat-block-value" data-counter="1284">0</div><div class="stat-block-label">Utilisateurs</div></div></div>
+      <div class="stat-block"><div class="stat-block-icon amber">🔄</div><div class="stat-block-info"><div class="stat-block-value" data-counter="2847">0</div><div class="stat-block-label">Transactions totales</div></div></div>
+      <div class="stat-block"><div class="stat-block-icon purple">💰</div><div class="stat-block-info"><div class="stat-block-value" data-counter="34170">0</div><div class="stat-block-label">Commissions (€)</div></div></div>
+    </div>
+    <div class="cms-block">
+      <h3 style="font-family:'Sora',sans-serif;font-size:15px;font-weight:700;color:var(--color-navy);margin-bottom:20px">Volume mensuel (€)</h3>
+      <canvas id="global-chart" style="width:100%;height:200px"></canvas>
+    </div>
+  </div>
+
+</div>
+</div>
+
+<script src="/js/config.js"></script>
+<script src="/js/api.js"></script>
+<script src="/js/utils.js"></script>
+<script src="/js/icons.js"></script>
+<script>
+'use strict';
+
+if (!SD.Auth.requireAuth('admin')) {}
+
+const user = SD.Auth.getUser() || { name:'Admin SecureDeal' };
+document.getElementById('sb-admin-name').textContent = user.name || 'Admin SD';
+
+// ─── Live clock ────────────────────────────────────────────────
+setInterval(() => {
+  document.getElementById('live-time').textContent = new Date().toLocaleTimeString('fr-FR');
+}, 1000);
+
+// ─── Navigation ───────────────────────────────────────────────
+const PAGES = ['overview','users','products','transactions','payments','deliveries','conversations','kyc','fraud','logs','cms','emails','categories','settings','stats'];
+function showPage(name) {
+  PAGES.forEach(p => {
+    const el = document.getElementById(`page-${p}`);
+    if (el) el.style.display = p === name ? 'block' : 'none';
+  });
+  document.querySelectorAll('.sidebar-link[data-page]').forEach(l =>
+    l.classList.toggle('active', l.dataset.page === name)
+  );
+  const T = {
+    overview:'Vue d\'ensemble', users:'Gestion utilisateurs', products:'Produits & Annonces',
+    transactions:'Transactions', payments:'Paiements & Escrow', deliveries:'Livraisons',
+    conversations:'Conversations', kyc:'KYC en attente', fraud:'Détection fraude',
+    logs:'Logs système', cms:'CMS contenu', emails:'Emails automatiques',
+    categories:'Catégories', settings:'Paramètres', stats:'Statistiques globales',
+  };
+  document.getElementById('dh-title').textContent = T[name] || 'Administration';
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+document.querySelectorAll('.sidebar-link[data-page]').forEach(l =>
+  l.addEventListener('click', e => { e.preventDefault(); showPage(l.dataset.page); })
+);
+window.showPage = showPage;
+
+// ─── Data démo ─────────────────────────────────────────────────
+const DEMO_TXN = [
+  { id:'SD-2025-8847', product:'BMW 320d 2021',       buyer:'Ahmed K.',  vendor:'Marc D.',  amount:28500, status:'transit'   },
+  { id:'SD-2025-7733', product:'iPhone 14 Pro ×20',   buyer:'Fatou D.',  vendor:'TechStore',amount:15800, status:'escrow'    },
+  { id:'SD-2025-9102', product:'Conteneur 40\'',       buyer:'Ahmed K.',  vendor:'ContiBox', amount:50700, status:'pending'   },
+  { id:'SD-2025-5521', product:'iPhone 14 Pro ×50',   buyer:'Jean P.',   vendor:'Marc D.',  amount:39500, status:'delivered' },
+  { id:'SD-2025-4488', product:'John Deere 6130M',    buyer:'Carlos M.', vendor:'AgriPro',  amount:85000, status:'delivered' },
+];
+const ST = { transit:{l:'En transit',c:'badge--transit'}, escrow:{l:'Escrow actif',c:'badge--escrow'}, pending:{l:'En attente',c:'badge--pending'}, delivered:{l:'Livré',c:'badge--delivered'} };
+
+// Overview recent txn
+const artEl = document.getElementById('admin-recent-txn');
+DEMO_TXN.slice(0,4).forEach(t => {
+  const s = ST[t.status] || {};
+  artEl.innerHTML += `<tr>
+    <td style="font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--color-blue)">#${t.id.split('-').pop()}</td>
+    <td style="max-width:150px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${SD.Sanitize.html(t.product)}</td>
+    <td style="font-weight:700">${SD.Fmt.currency(t.amount)}</td>
+    <td><span class="badge ${s.c}" style="font-size:10px">${s.l}</span></td>
+    <td><button class="btn btn--ghost btn--sm" style="padding:2px 8px;font-size:11px" onclick="showPage('transactions')">→</button></td>
+  </tr>`;
+});
+
+// All transactions
+const atEl = document.getElementById('admin-txn-tbody');
+DEMO_TXN.forEach(t => {
+  const s = ST[t.status] || {};
+  const comm = t.amount * 0.012;
+  atEl.innerHTML += `<tr>
+    <td style="font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--color-blue)">${t.id}</td>
+    <td>${SD.Sanitize.html(t.product)}</td>
+    <td>${t.buyer}</td>
+    <td>${t.vendor}</td>
+    <td style="font-weight:700">${SD.Fmt.currency(t.amount)}</td>
+    <td style="color:var(--color-success);font-weight:600">+${SD.Fmt.currency(comm)}</td>
+    <td><span class="badge ${s.c}" style="font-size:11px">${s.l}</span></td>
+    <td><div style="display:flex;gap:4px">
+      <button class="btn btn--ghost btn--sm" style="font-size:11px" onclick="SD.Toast.info('Détail #${t.id}')">📋</button>
+      <button class="btn btn--ghost btn--sm" style="font-size:11px" onclick="SD.Toast.info('PDF #${t.id}')">📄</button>
+    </div></td>
+  </tr>`;
+});
+
+// Products
+const apEl = document.getElementById('admin-products-tbody');
+[
+  { id:'SD001', title:'BMW 320d Touring 2021', cat:'Voitures', vendor:'Marc D.', price:28500, status:'active' },
+  { id:'SD004', title:'John Deere 6130M 2019', cat:'Tracteurs', vendor:'AgriPro', price:85000, status:'review' },
+  { id:'SD008', title:'iPhone 14 Pro ×20', cat:'Téléphones', vendor:'TechStore', price:15800, status:'active' },
+  { id:'SD010', title:'Grue Liebherr LTM 1050', cat:'Équipements', vendor:'IndusEq', price:185000, status:'review' },
+].forEach(p => {
+  apEl.innerHTML += `<tr>
+    <td style="font-family:'JetBrains Mono',monospace;font-size:11px">#${p.id}</td>
+    <td style="max-width:200px">${SD.Sanitize.html(p.title)}</td>
+    <td>${p.cat}</td>
+    <td>${p.vendor}</td>
+    <td style="font-weight:600">${SD.Fmt.currency(p.price)}</td>
+    <td><span class="badge ${p.status==='active'?'badge--active':'badge--pending'}" style="font-size:11px">${p.status==='active'?'Actif':'Révision'}</span></td>
+    <td style="font-family:'JetBrains Mono',monospace;font-size:11px">10 mai 2025</td>
+    <td><div style="display:flex;gap:4px">
+      <button class="btn btn--success btn--sm" style="font-size:11px" onclick="SD.Toast.success('Annonce approuvée.')">✓</button>
+      <button class="btn btn--danger btn--sm" style="font-size:11px" onclick="SD.Modal.confirm({title:'Supprimer l\'annonce ?',message:'Cette action est irréversible.',danger:true,onConfirm:()=>SD.Toast.error('Annonce supprimée.')})">✕</button>
+    </div></td>
+  </tr>`;
+});
+
+// Payments
+const ppEl = document.getElementById('admin-payments-tbody');
+[
+  { date:'12 mai', id:'SD-2025-9102', type:'Acompte acheteur', amount:25350, to:'Escrow SD', status:'received' },
+  { date:'11 mai', id:'SD-2025-8847', type:'Acompte acheteur', amount:14250, to:'Escrow SD', status:'received' },
+  { date:'8 mai',  id:'SD-2025-5521', type:'Virement vendeur', amount:39026, to:'Marc Dupont', status:'sent' },
+  { date:'7 mai',  id:'SD-2025-4488', type:'Virement vendeur', amount:83980, to:'AgriPro SARL', status:'sent' },
+].forEach(p => {
+  ppEl.innerHTML += `<tr>
+    <td style="font-family:'JetBrains Mono',monospace;font-size:12px">${p.date}</td>
+    <td style="font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--color-blue)">${p.id}</td>
+    <td>${p.type}</td>
+    <td style="font-weight:700;color:${p.status==='sent'?'var(--color-success)':'var(--color-cyan-dim)'}">${p.status==='sent'?'-':'+'} ${SD.Fmt.currency(p.amount)}</td>
+    <td>${p.to}</td>
+    <td><span class="badge ${p.status==='sent'?'badge--delivered':'badge--active'}" style="font-size:11px">${p.status==='sent'?'Virement effectué':'Reçu'}</span></td>
+    <td><button class="btn btn--ghost btn--sm" style="font-size:11px" onclick="SD.Toast.info('Reçu PDF')">📄</button></td>
+  </tr>`;
+});
+
+// Users
+const ulEl = document.getElementById('users-list');
+const USERS = [
+  { name:'Marc Dupont',    email:'marc@email.com',  role:'vendor', kyc:'verified', status:'active', risk:'low',    country:'🇫🇷' },
+  { name:'Ahmed Khalil',   email:'ahmed@email.com', role:'buyer',  kyc:'verified', status:'active', risk:'low',    country:'🇦🇪' },
+  { name:'Fatou Diallo',   email:'fatou@email.com', role:'buyer',  kyc:'pending',  status:'active', risk:'medium', country:'🇸🇳' },
+  { name:'Carlos Mendes',  email:'carlos@email.com',role:'vendor', kyc:'verified', status:'active', risk:'low',    country:'🇪🇸' },
+  { name:'Anon User 5812', email:'user@temp.com',   role:'buyer',  kyc:'rejected', status:'suspended',risk:'high', country:'❓' },
+];
+USERS.forEach(u => {
+  ulEl.innerHTML += `
+    <div class="user-row">
+      <div class="avatar avatar--sm" style="background:var(--gradient-primary);font-size:13px;font-weight:700;flex-shrink:0">${u.name[0]}</div>
+      <div style="flex:1;min-width:0">
+        <div style="font-weight:600;font-size:14px;color:var(--color-navy)">${u.country} ${SD.Sanitize.html(u.name)}</div>
+        <div style="font-size:12px;color:var(--color-grey-400)">${u.email}</div>
+      </div>
+      <span class="badge badge--${u.role==='vendor'?'transit':'active'}" style="font-size:11px">${u.role==='vendor'?'Vendeur':'Acheteur'}</span>
+      <span class="badge badge--${u.kyc==='verified'?'active':u.kyc==='pending'?'pending':'cancelled'}" style="font-size:11px">KYC: ${u.kyc}</span>
+      <span class="risk-${u.risk}" style="font-size:12px">Risque: ${u.risk}</span>
+      <div style="display:flex;gap:6px">
+        <button class="btn btn--outline btn--sm" onclick="SD.Toast.info('Profil de ${SD.Sanitize.html(u.name)}')">👁️</button>
+        ${u.status === 'active'
+          ? `<button class="btn btn--sm" style="background:rgba(239,68,68,0.08);color:#EF4444;border:1px solid rgba(239,68,68,0.2)" onclick="SD.Modal.confirm({title:'Suspendre le compte ?',message:'L\'utilisateur ne pourra plus accéder à la plateforme.',danger:true,onConfirm:()=>SD.Toast.error('Compte suspendu.')})">🚫 Suspendre</button>`
+          : `<button class="btn btn--success btn--sm" onclick="SD.Toast.success('Compte réactivé.')">✓ Réactiver</button>`
+        }
+      </div>
+    </div>`;
+});
+
+// KYC en attente (overview + page)
+const kycData = [
+  { name:'Moussa Traoré',  country:'🇨🇮', docs:'CNI + Domicile', date:'12 mai', risk:'low' },
+  { name:'Sara Benali',    country:'🇲🇦', docs:'Passeport + Kbis', date:'11 mai', risk:'medium' },
+  { name:'Peter Okonkwo',  country:'🇳🇬', docs:'CNI', date:'10 mai', risk:'high' },
+];
+['admin-kyc-list','kyc-list'].forEach(id => {
+  const el = document.getElementById(id);
+  if (!el) return;
+  kycData.forEach(k => {
+    el.innerHTML += `
+      <div class="user-row" style="margin-bottom:8px">
+        <div class="avatar avatar--sm" style="background:var(--gradient-primary);font-size:13px;font-weight:700">${k.name[0]}</div>
+        <div style="flex:1;min-width:0">
+          <div style="font-weight:600;font-size:13px;color:var(--color-navy)">${k.country} ${SD.Sanitize.html(k.name)}</div>
+          <div style="font-size:11px;color:var(--color-grey-400)">${k.docs} · Soumis le ${k.date}</div>
+        </div>
+        <span class="risk-${k.risk}" style="font-size:12px">Risque: ${k.risk}</span>
+        <div style="display:flex;gap:5px">
+          <button class="btn btn--success btn--sm" onclick="SD.Toast.success('KYC approuvé pour ${SD.Sanitize.html(k.name)}.')">✓ Approuver</button>
+          <button class="btn btn--danger btn--sm" onclick="SD.Toast.error('KYC rejeté.')">✕ Rejeter</button>
+          <button class="btn btn--outline btn--sm" onclick="SD.Toast.info('Documents de ${SD.Sanitize.html(k.name)}')">📋</button>
+        </div>
+      </div>`;
+  });
+});
+
+// Fraud alerts
+const faEl = document.getElementById('admin-fraud-list');
+['admin-fraud-list','fraud-alerts'].forEach(id => {
+  const el = document.getElementById(id);
+  if (!el) return;
+  [
+    { type:'IBAN partagé en messagerie',    user:'Anon User 5812', txn:'SD-2025-9102', level:'critical', time:'Il y a 23 min' },
+    { type:'Tentative paiement externe',    user:'Compte suspect', txn:'SD-2025-8800', level:'high',     time:'Il y a 2h' },
+    { type:'Connexions multiples (IP diff.)',user:'Marc D.',        txn:'—',            level:'medium',   time:'Il y a 4h' },
+    { type:'Tentative bypass escrow',       user:'Inconnu',        txn:'SD-2025-7100', level:'critical', time:'Il y a 6h' },
+    { type:'Document KYC falsifié (détecté)',user:'Peter O.',       txn:'—',            level:'high',     time:'Il y a 1j' },
+  ].forEach(a => {
+    const colors = { critical:'#EF4444', high:'#F59E0B', medium:'#3B82F6' };
+    el.innerHTML += `
+      <div style="display:flex;align-items:flex-start;gap:14px;padding:14px 16px;background:white;border-radius:12px;border:1px solid var(--color-grey-100);border-left:4px solid ${colors[a.level]||'#94A3B8'};margin-bottom:8px">
+        <span style="font-size:22px;flex-shrink:0">${a.level==='critical'?'🚨':a.level==='high'?'⚠️':'🔔'}</span>
+        <div style="flex:1;min-width:0">
+          <div style="font-weight:700;font-size:13px;color:var(--color-navy)">${SD.Sanitize.html(a.type)}</div>
+          <div style="font-size:12px;color:var(--color-grey-400);margin-top:2px">Utilisateur : ${a.user} · Transaction : ${a.txn} · ${a.time}</div>
+        </div>
+        <span style="font-size:11px;font-weight:700;padding:3px 10px;border-radius:999px;background:${colors[a.level]}15;color:${colors[a.level]};flex-shrink:0">${a.level.toUpperCase()}</span>
+        <div style="display:flex;gap:4px;flex-shrink:0">
+          <button class="btn btn--danger btn--sm" onclick="SD.Modal.confirm({title:'Suspendre le compte ?',message:'Suspension immédiate de l\'accès.',danger:true,onConfirm:()=>SD.Toast.error('Compte suspendu et alerte traitée.')})">🚫</button>
+          <button class="btn btn--outline btn--sm" onclick="SD.Toast.info('Alerte marquée comme traitée.')">✓</button>
+        </div>
+      </div>`;
+  });
+});
+
+// Conversations
+const cvEl = document.getElementById('conv-list');
+[
+  { from:'Ahmed K.', to:'Marc D.', product:'BMW 320d', last:'Envoyez-moi votre IBAN directement…', flag:true,  time:'14:32' },
+  { from:'Fatou D.', to:'TechStore', product:'iPhone ×20', last:'Quand puis-je récupérer les unités ?', flag:false, time:'11:20' },
+  { from:'Carlos M.', to:'AgriPro', product:'John Deere', last:'Transaction confirmée, merci.', flag:false, time:'09:45' },
+].forEach(c => {
+  cvEl.innerHTML += `
+    <div class="conv-item ${c.flag?'flagged':''}">
+      ${c.flag ? '<span style="font-size:20px;flex-shrink:0">🚨</span>' : '<span style="font-size:20px;flex-shrink:0">💬</span>'}
+      <div style="flex:1;min-width:0">
+        <div style="font-weight:600;font-size:13px;color:var(--color-navy)">${c.from} ↔ ${c.to} <span style="font-size:11px;color:var(--color-grey-400)">· ${c.product}</span></div>
+        <div style="font-size:12px;color:${c.flag?'var(--color-danger)':'var(--color-grey-400)'};margin-top:2px">${SD.Sanitize.html(c.last)}</div>
+      </div>
+      <div style="font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--color-grey-400)">${c.time}</div>
+      <div style="display:flex;gap:5px">
+        <button class="btn btn--outline btn--sm" onclick="SD.Toast.info('Ouverture conversation')">👁️ Lire</button>
+        ${c.flag ? '<button class="btn btn--danger btn--sm" onclick="SD.Toast.error(\'Conversation bloquée.\')">🚫 Bloquer</button>' : ''}
+      </div>
+    </div>`;
+});
+
+// Logs
+const logsEl = document.getElementById('admin-logs-preview');
+const logsFullEl = document.getElementById('logs-container');
+const LOGS = [
+  { level:'success', msg:'[2025-05-12 14:32:18] AUTH: Connexion réussie — ahmed.khalil@email.com (IP: 185.220.x.x)' },
+  { level:'warn',    msg:'[2025-05-12 14:31:55] FRAUD_DETECT: Pattern IBAN détecté en messagerie — conv_id: 8847_msg_312' },
+  { level:'info',    msg:'[2025-05-12 14:28:00] PAYMENT: Acompte reçu €14 250 — txn: SD-2025-8847 — escrow_secured: true' },
+  { level:'info',    msg:'[2025-05-12 14:15:33] KYC: Dossier soumis par Moussa Traoré — doc_count: 2' },
+  { level:'error',   msg:'[2025-05-12 13:44:12] AUTH: Tentative bruteforce — IP: 203.0.113.x — comptes_tentés: 847' },
+  { level:'success', msg:'[2025-05-12 13:00:00] DELIVERY: Livraison confirmée — txn: SD-2025-5521 — signature: OK' },
+  { level:'info',    msg:'[2025-05-12 12:30:10] PDF: Quittance générée — txn: SD-2025-5521 — qr_code: verified' },
+  { level:'warn',    msg:'[2025-05-12 11:55:00] SYSTEM: Charge serveur élevée — cpu: 87% — auto_scale: triggered' },
+];
+LOGS.forEach(l => {
+  const html = `<div class="log-line log-${l.level}">${SD.Sanitize.html(l.msg)}</div>`;
+  if (logsEl) logsEl.innerHTML += html;
+  if (logsFullEl) {
+    const el = document.createElement('div');
+    el.style.cssText = `font-family:'JetBrains Mono',monospace;font-size:12px;padding:5px 8px;border-radius:4px;margin-bottom:3px;`;
+    const colors = { success:'#10B981', warn:'#F59E0B', info:'#60A5FA', error:'#FC8181' };
+    el.style.color = colors[l.level] || '#94A3B8';
+    el.textContent = l.msg;
+    logsFullEl.appendChild(el);
+  }
+});
+
+// Deliveries
+const dlEl = document.getElementById('deliveries-list');
+DEMO_TXN.filter(t => t.status !== 'delivered').forEach(t => {
+  const s = ST[t.status] || {};
+  dlEl.innerHTML += `
+    <div style="background:white;border-radius:16px;padding:20px;border:1px solid var(--color-grey-100);margin-bottom:12px;display:flex;align-items:center;gap:16px;flex-wrap:wrap">
+      <div style="font-size:24px">📦</div>
+      <div style="flex:1;min-width:0">
+        <div style="font-family:'Sora',sans-serif;font-weight:700;font-size:14px;color:var(--color-navy)">${SD.Sanitize.html(t.product)}</div>
+        <div style="font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--color-blue);margin-top:2px">#${t.id}</div>
+      </div>
+      <span class="badge ${s.c}">${s.l}</span>
+      <div style="display:flex;gap:6px">
+        <button class="btn btn--outline btn--sm" onclick="window.open('/pages/tracking.html?id=${t.id}','_blank')">📡 Suivi</button>
+        <button class="btn btn--success btn--sm" onclick="SD.Toast.success('Livraison confirmée pour #${t.id}.')">✓ Confirmer livraison</button>
+      </div>
+    </div>`;
+});
+
+// Email templates
+const etEl = document.getElementById('email-templates');
+[
+  { name:'Validation compte', trigger:'Inscription', last:'10 mai', active:true },
+  { name:'Vérification KYC approuvée', trigger:'KYC validé', last:'8 mai', active:true },
+  { name:'Paiement acompte reçu', trigger:'Paiement', last:'10 mai', active:true },
+  { name:'Produit récupéré', trigger:'Récupération', last:'5 mai', active:true },
+  { name:'Produit en transit', trigger:'Expédition', last:'5 mai', active:true },
+  { name:'Livraison confirmée', trigger:'Livraison', last:'6 mai', active:true },
+  { name:'Paiement vendeur effectué', trigger:'Virement', last:'7 mai', active:true },
+  { name:'Alerte fraude', trigger:'Fraud detect', last:'12 mai', active:true },
+].forEach(tpl => {
+  etEl.innerHTML += `
+    <div style="display:flex;align-items:center;gap:14px;padding:14px 18px;background:white;border-radius:12px;border:1px solid var(--color-grey-100);margin-bottom:8px">
+      <div style="font-size:20px">📧</div>
+      <div style="flex:1">
+        <div style="font-weight:600;font-size:14px;color:var(--color-navy)">${tpl.name}</div>
+        <div style="font-size:12px;color:var(--color-grey-400)">Déclencheur : ${tpl.trigger} · Dernière modif : ${tpl.last}</div>
+      </div>
+      <span class="badge badge--active" style="font-size:11px">Actif</span>
+      <button class="btn btn--outline btn--sm" onclick="SD.Toast.info('Éditeur email — bientôt disponible')">✏️ Éditer</button>
+      <button class="btn btn--outline btn--sm" onclick="SD.Toast.info('Email de test envoyé.')">📤 Tester</button>
+    </div>`;
+});
+
+// Categories
+const caEl = document.getElementById('categories-admin');
+[
+  { emoji:'🚗', name:'Voitures', slug:'cars', count:847, active:true },
+  { emoji:'🚐', name:'Véhicules', slug:'vehicles', count:312, active:true },
+  { emoji:'🚜', name:'Tracteurs', slug:'tractors', count:228, active:true },
+  { emoji:'📦', name:'Conteneurs', slug:'containers', count:156, active:true },
+  { emoji:'📱', name:'Téléphones', slug:'phones', count:2400, active:true },
+  { emoji:'⚙️', name:'Équipements', slug:'equipment', count:594, active:true },
+].forEach(c => {
+  caEl.innerHTML += `
+    <div style="display:flex;align-items:center;gap:14px;padding:14px 18px;background:white;border-radius:12px;border:1px solid var(--color-grey-100);margin-bottom:8px">
+      <div style="font-size:28px">${c.emoji}</div>
+      <div style="flex:1">
+        <div style="font-weight:600;font-size:14px;color:var(--color-navy)">${c.name}</div>
+        <div style="font-size:12px;color:var(--color-grey-400)">Slug: ${c.slug} · ${c.count} annonces</div>
+      </div>
+      <span class="badge badge--active" style="font-size:11px">Active</span>
+      <button class="btn btn--outline btn--sm" onclick="SD.Toast.info('Édition catégorie')">✏️ Éditer</button>
+      <button class="btn btn--danger btn--sm" onclick="SD.Toast.error('Désactivation catégorie')">🚫</button>
+    </div>`;
+});
+
+// Graphique global
+function drawAdminChart() {
+  const canvas = document.getElementById('global-chart');
+  if (!canvas) return;
+  const ctx = canvas.getContext('2d');
+  canvas.width = canvas.offsetWidth * window.devicePixelRatio || 900;
+  canvas.height = canvas.offsetHeight * window.devicePixelRatio || 220;
+  ctx.scale(window.devicePixelRatio, window.devicePixelRatio);
+  const W = canvas.offsetWidth, H = canvas.offsetHeight;
+  const data = [180000,220000,195000,310000,280000,340000,295000,410000,380000,450000,420000,530000];
+  const max = Math.max(...data);
+  const pad = { top:20, bottom:30, left:10, right:10 };
+  const gW = W - pad.left - pad.right;
+  const gH = H - pad.top - pad.bottom;
+  const step = gW / (data.length - 1);
+  const grad = ctx.createLinearGradient(0, pad.top, 0, H);
+  grad.addColorStop(0, 'rgba(0,212,255,0.25)');
+  grad.addColorStop(1, 'rgba(0,212,255,0)');
+  ctx.beginPath();
+  data.forEach((v, i) => {
+    const x = pad.left + i * step;
+    const y = pad.top + gH - (v / max) * gH;
+    i === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
+  });
+  ctx.lineTo(pad.left + (data.length-1)*step, H-pad.bottom);
+  ctx.lineTo(pad.left, H-pad.bottom);
+  ctx.closePath();
+  ctx.fillStyle = grad; ctx.fill();
+  ctx.beginPath();
+  ctx.strokeStyle = '#C9A227'; ctx.lineWidth = 2.5; ctx.lineJoin = 'round';
+  data.forEach((v, i) => {
+    const x = pad.left + i * step;
+    const y = pad.top + gH - (v / max) * gH;
+    i === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
+  });
+  ctx.stroke();
+}
+setTimeout(drawAdminChart, 200);
+
+SD.Counter.initAll();
+
+// User search
+document.getElementById('user-search')?.addEventListener('input', e => {
+  const q = e.target.value.toLowerCase();
+  document.querySelectorAll('#users-list .user-row').forEach(row => {
+    row.style.display = row.textContent.toLowerCase().includes(q) ? 'flex' : 'none';
+  });
+});
+</script>
+</body>
+</html>

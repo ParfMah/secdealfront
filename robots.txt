@@ -1,0 +1,12 @@
+User-agent: *
+Allow: /
+Disallow: /pages/dashboard/
+Disallow: /pages/auth/
+Disallow: /pages/admin/
+Disallow: /pages/messages.html
+Disallow: /pages/transaction.html
+Disallow: /pages/purchase.html
+Disallow: /pages/kyc.html
+Disallow: /pages/profile.html
+
+Sitemap: https://securedeal.fr/sitemap.xml

@@ -1,0 +1,47 @@
+/* =============================================================
+   SECUREDEAL — AUTH STYLES
+   Styles spécifiques aux pages d'authentification
+   ============================================================= */
+
+/* Rediriger si connecté (JS gère) */
+.auth-redirect-overlay {
+  position: fixed; inset: 0; background: white;
+  display: flex; align-items: center; justify-content: center;
+  z-index: 9999;
+}
+
+/* Verification email badge */
+.verify-badge {
+  display: inline-flex; align-items: center; gap: 8px;
+  padding: 8px 16px; border-radius: var(--radius-full);
+  font-size: var(--text-xs); font-weight: var(--weight-bold);
+  text-transform: uppercase; letter-spacing: 1px;
+}
+
+.verify-badge.pending  { background: var(--color-warning-bg); color: var(--color-warning); }
+.verify-badge.verified { background: var(--color-success-bg); color: var(--color-success); }
+.verify-badge.rejected { background: var(--color-danger-bg);  color: var(--color-danger); }
+
+/* 2FA input */
+.otp-inputs {
+  display: flex; gap: 10px; justify-content: center;
+}
+
+.otp-input {
+  width: 48px; height: 56px;
+  text-align: center; font-size: 1.5rem; font-weight: 700;
+  font-family: var(--font-mono); color: var(--color-navy);
+  border: 2px solid var(--color-grey-200);
+  border-radius: var(--radius-lg); background: white;
+  transition: all var(--transition-fast); outline: none;
+}
+
+.otp-input:focus {
+  border-color: var(--color-blue);
+  box-shadow: 0 0 0 3px rgba(30,107,184,0.12);
+}
+
+.otp-input.filled {
+  border-color: var(--color-blue);
+  background: var(--color-info-bg);
+}

@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 280 60" fill="none">
+  <!-- Icône bouclier -->
+  <path d="M22 6 L36 10 L36 24 C36 32 29 38 22 40 C15 38 8 32 8 24 L8 10 Z" fill="#0A2540"/>
+  <path d="M22 6 L36 10 L36 24 C36 32 29 38 22 40 C15 38 8 32 8 24 L8 10 Z" fill="url(#shieldGrad)" opacity="0.9"/>
+  <!-- Check dans bouclier -->
+  <polyline points="14,22 20,28 30,16" stroke="#00D4FF" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+  <!-- Point de connexion gauche -->
+  <circle cx="6" cy="23" r="2" fill="#00D4FF" opacity="0.7"/>
+  <!-- Ligne connexion -->
+  <line x1="8" y1="23" x2="6" y2="23" stroke="#00D4FF" stroke-width="1.5" opacity="0.5"/>
+  <!-- Texte SECUREDEAL -->
+  <text x="50" y="26" font-family="'Helvetica Neue', Arial, sans-serif" font-weight="800" font-size="19" fill="#0A2540" letter-spacing="-0.5">SECURE</text>
+  <text x="148" y="26" font-family="'Helvetica Neue', Arial, sans-serif" font-weight="300" font-size="19" fill="#0A2540" letter-spacing="2">DEAL</text>
+  <!-- Ligne décorative sous le texte -->
+  <line x1="50" y1="30" x2="195" y2="30" stroke="#00D4FF" stroke-width="1" opacity="0.4"/>
+  <!-- Tagline -->
+  <text x="50" y="42" font-family="'Helvetica Neue', Arial, sans-serif" font-weight="400" font-size="7" fill="#4A6580" letter-spacing="3">PLATEFORME INTERNATIONALE SÉCURISÉE</text>
+  <defs>
+    <linearGradient id="shieldGrad" x1="8" y1="6" x2="36" y2="40" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#0D3B6E"/>
+      <stop offset="100%" stop-color="#0A2540"/>
+    </linearGradient>
+  </defs>
+</svg>

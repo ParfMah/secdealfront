@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Connexion à votre espace SecureDeal — plateforme de commerce international sécurisé.">
+  <title>Connexion — SecureDeal</title>
+  <script src="/js/loader.js"></script>
+  <link rel="stylesheet" href="/css/loader.css">
+  <link rel="stylesheet" href="/css/main.css">
+  <link rel="stylesheet" href="/css/brand.css">
+  <link rel="stylesheet" href="/css/backgrounds.css">
+  <link rel="stylesheet" href="/css/responsive-fixes.css">
+  <link rel="icon" href="/images/logo/favicon.svg" type="image/svg+xml">
+  <style>
+    body { background: var(--color-grey-50); }
+    .auth-layout {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      min-height: 100vh;
+    }
+    .auth-visual {
+      background: var(--gradient-hero);
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 60px 48px;
+    }
+    .auth-visual-grid {
+      position: absolute; inset: 0;
+      background-image:
+        linear-gradient(rgba(201,162,39,0.04) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(201,162,39,0.04) 1px, transparent 1px);
+      background-size: 50px 50px;
+    }
+    .auth-visual-orb {
+      position: absolute; border-radius: 50%; filter: blur(60px); pointer-events: none;
+    }
+    .auth-panel {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 60px 56px;
+      background: #0f0f0f;
+    }
+    .auth-header { margin-bottom: 36px; }
+    .auth-title {
+      font-family: 'Sora', sans-serif;
+      font-size: 1.75rem;
+      font-weight: 800;
+      color: white;
+      margin-bottom: 8px;
+    }
+    .auth-subtitle { font-size: 14px; color: rgba(255,255,255,0.45); line-height: 1.6; }
+    .auth-form { display: flex; flex-direction: column; gap: 20px; }
+    .input-with-icon { position: relative; }
+    .input-with-icon .form-control { padding-left: 44px; }
+    .input-icon {
+      position: absolute; left: 14px; top: 50%; transform: translateY(-50%);
+      color: rgba(255,255,255,0.25); font-size: 18px; pointer-events: none;
+    }
+    .input-eye {
+      position: absolute; right: 14px; top: 50%; transform: translateY(-50%);
+      color: rgba(255,255,255,0.25); cursor: pointer; font-size: 18px;
+      background: none; border: none; padding: 0;
+    }
+    .input-eye:hover { color: var(--color-gold); }
+    .auth-divider {
+      display: flex; align-items: center; gap: 16px;
+      font-size: 12px; color: rgba(255,255,255,0.25); font-weight: 500;
+    }
+    .auth-divider::before, .auth-divider::after {
+      content: ''; flex: 1; height: 1px; background: rgba(255,255,255,0.08);
+    }
+    .auth-footer { margin-top: 32px; text-align: center; font-size: 13px; color: rgba(255,255,255,0.40); }
+    .auth-footer a { color: var(--color-gold); font-weight: 600; }
+    @media (max-width: 900px) {
+      .auth-layout { grid-template-columns: 1fr; }
+      .auth-visual { display: none; }
+      .auth-panel { padding: 40px 24px; min-height: 100vh; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="auth-layout">
+
+  <!-- Panneau visuel gauche -->
+  <div class="auth-visual">
+    <div class="auth-visual-grid" aria-hidden="true"></div>
+    <div class="auth-visual-orb" style="width:400px;height:400px;background:rgba(201,162,39,0.12);top:-100px;right:-100px"></div>
+    <div class="auth-visual-orb" style="width:300px;height:300px;background:rgba(201,162,39,0.08);bottom:-50px;left:-50px"></div>
+
+    <div style="position:relative;z-index:1;text-align:center;max-width:420px">
+      <!-- Logo -->
+      <a href="/index.html" style="display:inline-block;margin-bottom:48px">
+        <img src="/images/logo/securedeal-logo-white.svg" alt="SecureDeal" style="height:40px"
+             onerror="this.outerHTML='<span style=\'font-family:Sora,sans-serif;font-size:20px;font-weight:800;color:white\'>SECURE<span style=\'color:#C9A227;font-weight:300;letter-spacing:2px\'>DEAL</span></span>'">
+      </a>
+
+      <h2 style="font-family:'Sora',sans-serif;font-size:1.8rem;font-weight:800;color:white;margin-bottom:16px;line-height:1.2">
+        Commerce international<br><span style="color:#C9A227">100% sécurisé</span>
+      </h2>
+      <p style="color:rgba(255,255,255,0.6);font-size:15px;line-height:1.7;margin-bottom:40px">
+        Connectez-vous pour accéder à votre espace sécurisé et gérer toutes vos transactions.
+      </p>
+
+      <!-- Points clés -->
+      <div style="display:flex;flex-direction:column;gap:14px;text-align:left">
+        <div style="display:flex;align-items:center;gap:14px;padding:14px 18px;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);border-radius:14px">
+          <span style="font-size:22px">🔒</span>
+          <div>
+            <div style="color:white;font-weight:600;font-size:14px">Paiements escrow sécurisés</div>
+            <div style="color:rgba(255,255,255,0.5);font-size:12px">Vos fonds protégés jusqu'à validation</div>
+          </div>
+        </div>
+        <div style="display:flex;align-items:center;gap:14px;padding:14px 18px;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);border-radius:14px">
+          <span style="font-size:22px">📡</span>
+          <div>
+            <div style="color:white;font-weight:600;font-size:14px">Traçabilité temps réel</div>
+            <div style="color:rgba(255,255,255,0.5);font-size:12px">Suivi GPS + QR codes + signatures</div>
+          </div>
+        </div>
+        <div style="display:flex;align-items:center;gap:14px;padding:14px 18px;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);border-radius:14px">
+          <span style="font-size:22px">🌍</span>
+          <div>
+            <div style="color:white;font-weight:600;font-size:14px">94 pays couverts</div>
+            <div style="color:rgba(255,255,255,0.5);font-size:12px">Logistique internationale organisée</div>
+          </div>
+        </div>
+      </div>
+
+      <div style="margin-top:32px;padding-top:24px;border-top:1px solid rgba(255,255,255,0.08);font-size:12px;color:rgba(255,255,255,0.3)">
+        SecureDeal agit comme intermédiaire sécurisé entre acheteurs et vendeurs.<br>
+        <a href="/pages/legal/mentions-legales.html" style="color:rgba(255,255,255,0.4)">Mentions légales</a> ·
+        <a href="/pages/legal/cgu.html" style="color:rgba(255,255,255,0.4)">CGU</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Panneau formulaire droite -->
+  <div class="auth-panel">
+    <div style="max-width:420px;width:100%;margin:0 auto">
+
+      <!-- Logo mobile -->
+      <a href="/index.html" style="display:none;margin-bottom:32px" class="auth-mobile-logo">
+        <img src="/images/logo/securedeal-logo.svg" alt="SecureDeal" style="height:32px">
+      </a>
+
+      <div class="auth-header">
+        <div style="font-size:12px;font-weight:700;color:var(--color-gold);text-transform:uppercase;letter-spacing:1.5px;margin-bottom:8px">
+          Connexion sécurisée
+        </div>
+        <h1 class="auth-title">Bienvenue</h1>
+        <p class="auth-subtitle">Connectez-vous à votre compte SecureDeal pour accéder à votre espace personnel.</p>
+      </div>
+
+      <!-- Alerte erreur -->
+      <div id="login-error" class="alert alert--danger" style="display:none;margin-bottom:20px">
+        <span>⚠️</span>
+        <span id="login-error-msg">Email ou mot de passe incorrect.</span>
+      </div>
+
+      <!-- Formulaire -->
+      <form id="login-form" class="auth-form" novalidate>
+
+        <div class="form-group">
+          <label class="form-label" for="email">Adresse email</label>
+          <div class="input-with-icon">
+            <span class="input-icon">✉️</span>
+            <input type="email" id="email" name="email" class="form-control"
+                   placeholder="votre@email.com" autocomplete="email" required>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px">
+            <label class="form-label" for="password" style="margin:0">Mot de passe</label>
+            <a href="/pages/auth/forgot-password.html" style="font-size:13px;color:var(--color-gold)">Mot de passe oublié ?</a>
+          </div>
+          <div class="input-with-icon">
+            <span class="input-icon">🔑</span>
+            <input type="password" id="password" name="password" class="form-control"
+                   placeholder="••••••••••" autocomplete="current-password" required
+                   style="padding-right:48px">
+            <button type="button" class="input-eye" id="toggle-pwd" title="Afficher/masquer">👁️</button>
+          </div>
+        </div>
+
+        <label class="form-check">
+          <input type="checkbox" name="remember">
+          <span style="font-size:13px;color:rgba(255,255,255,0.55)">Se souvenir de moi (30 jours)</span>
+        </label>
+
+        <button type="submit" class="btn btn--primary btn--full btn--lg btn--shimmer" id="login-btn">
+          Se connecter →
+        </button>
+
+      </form>
+
+      <div class="auth-divider" style="margin:28px 0">ou</div>
+
+      <!-- Connexion rapide démo -->
+      <div style="display:flex;flex-direction:column;gap:10px">
+        <div style="font-size:11px;font-weight:600;color:var(--color-grey-400);text-transform:uppercase;letter-spacing:1px;text-align:center;margin-bottom:4px">
+          Comptes de démonstration
+        </div>
+        <button class="btn btn--outline btn--sm" id="demo-vendor" type="button">
+          📦 Se connecter en tant que Vendeur
+        </button>
+        <button class="btn btn--outline btn--sm" id="demo-buyer" type="button">
+          🛒 Se connecter en tant qu'Acheteur
+        </button>
+        <button class="btn btn--outline btn--sm" id="demo-admin" type="button" style="border-color:rgba(239,68,68,0.3);color:var(--color-danger)">
+          ⚙️ Se connecter en tant qu'Admin
+        </button>
+      </div>
+
+      <div class="auth-footer">
+        Pas encore de compte ?
+        <a href="/pages/auth/register.html">Créer un compte gratuit →</a>
+      </div>
+
+      <!-- Sécurité notice -->
+      <div style="margin-top:28px;padding:14px;background:rgba(255,255,255,0.04);border-radius:12px;border:1px solid rgba(255,255,255,0.06);display:flex;gap:10px;align-items:flex-start">
+        <span style="font-size:16px;flex-shrink:0;margin-top:1px">🔒</span>
+        <div style="font-size:11px;color:var(--color-grey-400);line-height:1.6">
+          Connexion chiffrée SSL 256 bits. SecureDeal ne vous demandera jamais votre mot de passe par email ou téléphone.
+          <a href="/pages/contact.html" style="color:var(--color-gold)">Signaler une tentative de phishing →</a>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<script src="/js/config.js"></script>
+<script src="/js/api.js"></script>
+<script src="/js/utils.js"></script>
+<script>
+'use strict';
+
+// ─── Afficher/masquer mot de passe ───────────────────────────
+document.getElementById('toggle-pwd').addEventListener('click', () => {
+  const pwd = document.getElementById('password');
+  const btn = document.getElementById('toggle-pwd');
+  if (pwd.type === 'password') { pwd.type = 'text';     btn.textContent = '🙈'; }
+  else                          { pwd.type = 'password'; btn.textContent = '👁️'; }
+});
+
+// ─── Soumission formulaire ───────────────────────────────────
+document.getElementById('login-form').addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const errEl = document.getElementById('login-error');
+  const btn   = document.getElementById('login-btn');
+  errEl.style.display = 'none';
+
+  const email    = document.getElementById('email').value.trim();
+  const password = document.getElementById('password').value;
+
+  if (!SD.Validate.email(email)) {
+    errEl.style.display = 'flex';
+    document.getElementById('login-error-msg').textContent = 'Adresse email invalide.';
+    return;
+  }
+  if (!password) {
+    errEl.style.display = 'flex';
+    document.getElementById('login-error-msg').textContent = 'Veuillez saisir votre mot de passe.';
+    return;
+  }
+
+  btn.disabled = true;
+  btn.textContent = 'Connexion en cours…';
+
+  try {
+    const data = await SD.API.post('/auth/login', { email, password });
+    SD.Storage.set('sd_token', data.token);
+    SD.Storage.set('sd_user',  data.user);
+
+    const redirect = new URLSearchParams(window.location.search).get('redirect');
+    const dashUrl  = data.user.role === 'vendor' ? '/pages/dashboard/vendor.html'
+                   : data.user.role === 'admin'  ? '/pages/admin/dashboard.html'
+                   : '/pages/dashboard/buyer.html';
+    window.location.href = redirect || dashUrl;
+
+  } catch (err) {
+    errEl.style.display = 'flex';
+    document.getElementById('login-error-msg').textContent =
+      err.message || 'Email ou mot de passe incorrect.';
+    btn.disabled = false;
+    btn.textContent = 'Se connecter →';
+  }
+});
+
+// ─── Comptes de démo ─────────────────────────────────────────
+function loginDemo(role) {
+  const demos = {
+    vendor: { token:'demo-vendor-token', user:{ id:'demo-v1', role:'vendor', name:'Marc Dupont', email:'vendor@demo.com', verified:true } },
+    buyer:  { token:'demo-buyer-token',  user:{ id:'demo-b1', role:'buyer',  name:'Ahmed Khalil', email:'buyer@demo.com',  verified:true } },
+    admin:  { token:'demo-admin-token',  user:{ id:'demo-a1', role:'admin',  name:'Admin SecureDeal', email:'admin@securedeal.io', verified:true } },
+  };
+  const d = demos[role];
+  SD.Storage.set('sd_token', d.token);
+  SD.Storage.set('sd_user',  d.user);
+
+  const dashUrl = role === 'vendor' ? '/pages/dashboard/vendor.html'
+                : role === 'admin'  ? '/pages/admin/dashboard.html'
+                : '/pages/dashboard/buyer.html';
+
+  SD.Toast.success(`Connexion démo ${role} — redirection…`);
+  setTimeout(() => window.location.href = dashUrl, 800);
+}
+
+document.getElementById('demo-vendor').addEventListener('click', () => loginDemo('vendor'));
+document.getElementById('demo-buyer') .addEventListener('click', () => loginDemo('buyer'));
+document.getElementById('demo-admin') .addEventListener('click', () => loginDemo('admin'));
+
+// ─── Redirection si déjà connecté ────────────────────────────
+if (SD.Auth.isLoggedIn()) {
+  const role = SD.Auth.getRole();
+  window.location.href = role === 'vendor' ? '/pages/dashboard/vendor.html'
+                       : role === 'admin'  ? '/pages/admin/dashboard.html'
+                       : '/pages/dashboard/buyer.html';
+}
+</script>
+</body>
+</html>

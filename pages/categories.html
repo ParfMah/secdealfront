@@ -1,0 +1,654 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Parcourez toutes les catégories SecureDeal : voitures, véhicules, tracteurs, conteneurs, téléphones, équipements industriels.">
+  <title>Catégories — SecureDeal</title>
+  <script src="/js/loader.js"></script>
+  <link rel="stylesheet" href="/css/loader.css">
+  <link rel="stylesheet" href="/css/main.css">
+  <link rel="stylesheet" href="/css/brand.css">
+  <link rel="stylesheet" href="/css/backgrounds.css">
+  <link rel="stylesheet" href="/css/responsive-fixes.css">
+  <link rel="icon" href="/images/logo/favicon.svg" type="image/svg+xml">
+  <style>
+    /* ── Sidebar filtres ── */
+    .filter-sidebar { width: 260px; flex-shrink: 0; }
+    .listings-main  { flex: 1; min-width: 0; }
+
+    /* Titre Filtres */
+    .filter-title {
+      font-family: 'Sora', sans-serif;
+      font-weight: 700; font-size: 15px;
+      color: white !important;
+      margin-bottom: 20px;
+    }
+
+    /* Labels sections filtres */
+    .filter-section-label {
+      font-size: 11px; font-weight: 700;
+      color: var(--color-gold) !important;
+      text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 10px;
+    }
+
+    /* Checkbox labels */
+    .filter-check-label {
+      font-size: 13px;
+      color: rgba(255,255,255,0.70) !important;
+    }
+
+    /* Bouton appliquer */
+    .btn--primary {
+      background: var(--gradient-gold);
+      color: #000 !important;
+      font-weight: 700;
+      border: none;
+    }
+    .btn--primary:hover { opacity: 0.9; transform: translateY(-1px); }
+    .btn--full { width: 100%; justify-content: center; }
+
+    /* form-check */
+    .form-check { display: flex; align-items: center; gap: 8px; cursor: pointer; }
+    .form-check input[type="checkbox"] { accent-color: var(--color-gold); width: 15px; height: 15px; }
+
+    /* Séparateur filtre */
+    .filter-sep { height: 1px; background: rgba(255,255,255,0.07); }
+
+    /* Résultats count */
+    .results-count-text { font-size: 14px; color: rgba(255,255,255,0.45); white-space: nowrap; }
+
+    /* Barre recherche */
+    .toolbar-wrap {
+      background: rgba(255,255,255,0.03);
+      border-radius: 16px;
+      padding: 16px 20px;
+      border: 1px solid rgba(201,162,39,0.12);
+      margin-bottom: 24px;
+      display: flex;
+      gap: 12px;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+    .toolbar-wrap .search-bar { flex: 1; min-width: 180px; }
+    .toolbar-wrap select { width: auto; min-width: 160px; flex-shrink: 0; }
+
+    /* Mobile toggle filtre */
+    .filter-toggle-btn {
+      display: none;
+      width: 100%;
+      justify-content: space-between;
+      align-items: center;
+      padding: 12px 16px;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(201,162,39,0.15);
+      border-radius: 12px;
+      color: white;
+      font-family: 'Sora', sans-serif;
+      font-size: 14px; font-weight: 600;
+      cursor: pointer;
+      margin-bottom: 12px;
+    }
+    .filter-toggle-btn .toggle-arrow { transition: transform 0.3s; }
+    .filter-toggle-btn.open .toggle-arrow { transform: rotate(180deg); }
+
+    /* ── Responsive ── */
+    @media (max-width: 768px) {
+      .listings-layout  { flex-direction: column !important; }
+      .listings-main    { width: 100% !important; }
+      .filter-toggle-btn{ display: flex !important; }
+
+      .filter-sidebar {
+        width: 100% !important;
+        display: none; /* caché par défaut, révélé par JS toggle */
+      }
+      .filter-sidebar.mobile-open { display: block; }
+
+      #products-grid {
+        grid-template-columns: repeat(2, 1fr) !important;
+      }
+
+      .toolbar-wrap { padding: 12px; gap: 8px; }
+      .toolbar-wrap select { width: 100% !important; }
+    }
+
+    @media (max-width: 420px) {
+      #products-grid { grid-template-columns: 1fr !important; }
+    }
+  </style>
+</head>
+<body>
+
+<header class="site-header" id="site-header">
+  <div class="header-inner">
+    <a href="/index.html" class="header-logo">
+      <img src="/images/logo/securedeal-logo-white.svg" alt="SecureDeal"
+           onerror="this.outerHTML='<span style=\'font-family:Sora,sans-serif;font-size:18px;font-weight:800;color:white\'>SECURE<span style=\'color:#C9A227;font-weight:300;letter-spacing:2px\'>DEAL</span></span>'">
+    </a>
+    <nav class="header-nav" id="main-nav">
+      <a href="/index.html"              class="header-nav-link">Accueil</a>
+      <a href="/pages/how-it-works.html" class="header-nav-link">Fonctionnement</a>
+      <a href="/pages/categories.html"   class="header-nav-link active">Catégories</a>
+      <a href="/pages/tracking.html"     class="header-nav-link">Suivi</a>
+      <a href="/pages/contact.html"      class="header-nav-link">Contact</a>
+    </nav>
+    <div class="header-actions">
+      <div class="header-auth-actions" id="header-auth" style="display:flex;gap:12px;align-items:center">
+        <a href="/pages/auth/login.html"    class="btn btn--outline-white btn--sm">Connexion</a>
+        <a href="/pages/auth/register.html" class="btn btn--cyan btn--sm">Créer un compte</a>
+      </div>
+    </div>
+    <button class="hamburger" id="hamburger" aria-label="Menu" aria-expanded="false"><span></span><span></span><span></span></button>
+  </div>
+</header>
+
+<!-- Menu mobile -->
+<nav class="mobile-menu" id="mobile-menu" aria-label="Menu mobile">
+  <a href="/index.html">🏠 Accueil</a>
+  <a href="/pages/how-it-works.html">⚙️ Fonctionnement</a>
+  <a href="/pages/categories.html"   class="active">📦 Catégories</a>
+  <a href="/pages/tracking.html"    >📡 Suivi</a>
+  <a href="/pages/about.html"       >ℹ️ À propos</a>
+  <a href="/pages/contact.html"     >✉️ Contact</a>
+  <div class="mobile-menu-divider"></div>
+  <div class="mobile-menu-actions">
+    <a href="/pages/auth/login.html"    class="btn btn--outline-white">Se connecter</a>
+    <a href="/pages/auth/register.html" class="btn btn--gold btn--shimmer">Créer un compte</a>
+  </div>
+</nav>
+
+<!-- BREADCRUMB + TOOLBAR -->
+<div style="background:var(--color-navy);padding:80px 0 0">
+  <div class="container">
+    <!-- Tabs catégories -->
+    <div style="display:flex;gap:8px;flex-wrap:wrap;padding-bottom:24px" id="cat-tabs">
+      <button class="cat-tab btn btn--outline-white btn--sm active" data-cat="all">Tout voir</button>
+      <button class="cat-tab btn btn--outline-white btn--sm" data-cat="cars">🚗 Voitures</button>
+      <button class="cat-tab btn btn--outline-white btn--sm" data-cat="vehicles">🚐 Véhicules</button>
+      <button class="cat-tab btn btn--outline-white btn--sm" data-cat="tractors">🚜 Tracteurs</button>
+      <button class="cat-tab btn btn--outline-white btn--sm" data-cat="containers">📦 Conteneurs</button>
+      <button class="cat-tab btn btn--outline-white btn--sm" data-cat="phones">📱 Téléphones</button>
+      <button class="cat-tab btn btn--outline-white btn--sm" data-cat="equipment">⚙️ Équipements</button>
+    </div>
+  </div>
+</div>
+
+<div style="background:var(--color-off-white);min-height:100vh;padding-bottom:60px">
+  <div class="container" style="padding-top:32px">
+
+    <!-- Barre de recherche -->
+    <div class="toolbar-wrap">
+      <div class="search-bar">
+        <span class="search-icon">🔍</span>
+        <input type="text" class="search-input" id="search-input" placeholder="Rechercher un produit, marque, modèle…">
+      </div>
+      <select class="form-control" id="sort-select">
+        <option value="recent">Plus récents</option>
+        <option value="price-asc">Prix croissant</option>
+        <option value="price-desc">Prix décroissant</option>
+      </select>
+      <div id="results-count" class="results-count-text">— annonces</div>
+    </div>
+
+    <!-- Bouton toggle filtres (mobile seulement) -->
+    <button class="filter-toggle-btn" id="filter-toggle-btn" aria-expanded="false">
+      <span>⚙️ Afficher les filtres</span>
+      <span class="toggle-arrow">▼</span>
+    </button>
+
+    <!-- Layout filtres + produits -->
+    <div class="listings-layout" style="display:flex;gap:24px;align-items:flex-start">
+
+      <!-- Sidebar filtres -->
+      <aside class="filter-sidebar">
+        <div style="background:rgba(255,255,255,0.03);border-radius:16px;border:1px solid var(--color-grey-100);padding:24px;box-shadow:var(--shadow-sm)">
+          <div class="filter-title">⚙️ Filtres</div>
+
+          <div style="display:flex;flex-direction:column;gap:20px">
+            <!-- Disponibilité -->
+            <div>
+              <div class="filter-section-label">Disponibilité</div>
+              <label class="form-check">
+                <input type="checkbox" id="filter-stock" checked> <span class="filter-check-label">En stock chez SecureDeal</span>
+              </label>
+              <label class="form-check" style="margin-top:8px">
+                <input type="checkbox" id="filter-seller" checked> <span class="filter-check-label">Chez le vendeur</span>
+              </label>
+            </div>
+
+            <div class="filter-sep"></div>
+
+            <!-- Prix -->
+            <div>
+              <div class="filter-section-label">Fourchette de prix</div>
+              <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
+                <input type="number" class="form-control" id="price-min" placeholder="Min €" style="font-size:13px">
+                <input type="number" class="form-control" id="price-max" placeholder="Max €" style="font-size:13px">
+              </div>
+            </div>
+
+            <div class="filter-sep"></div>
+
+            <!-- Pays vendeur -->
+            <div>
+              <div class="filter-section-label">Pays du vendeur</div>
+              <select class="form-control" id="filter-country" style="font-size:13px">
+                <option value="">Tous les pays</option>
+                <option value="FR">France 🇫🇷</option>
+                <option value="DE">Allemagne 🇩🇪</option>
+                <option value="ES">Espagne 🇪🇸</option>
+                <option value="IT">Italie 🇮🇹</option>
+                <option value="BE">Belgique 🇧🇪</option>
+                <option value="NL">Pays-Bas 🇳🇱</option>
+                <option value="MA">Maroc 🇲🇦</option>
+                <option value="SN">Sénégal 🇸🇳</option>
+                <option value="AE">Émirats 🇦🇪</option>
+              </select>
+            </div>
+
+            <button class="btn btn--primary btn--full" id="apply-filters">Appliquer les filtres</button>
+            <button class="btn btn--ghost btn--full btn--sm" id="reset-filters" style="color:rgba(255,255,255,0.35)">Réinitialiser</button>
+          </div>
+        </div>
+      </aside>
+
+      <!-- Grille produits -->
+      <div class="listings-main">
+        <div class="products-grid" id="products-grid" style="grid-template-columns:repeat(3,1fr)">
+          <!-- Généré par JS -->
+        </div>
+        <div id="no-results" class="empty-state" style="display:none">
+          <div class="empty-state-icon">🔍</div>
+          <div class="empty-state-title">Aucun résultat</div>
+          <div class="empty-state-text">Aucun produit ne correspond à vos critères de recherche. Essayez de modifier les filtres.</div>
+        </div>
+
+        <!-- Pagination -->
+        <div class="pagination" id="pagination"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<footer class="site-footer" style="padding:40px 0">
+  <div class="container">
+    <div class="footer-bottom" style="border-top:none;padding-top:0">
+      <div class="footer-copy">© 2025 SecureDeal. Tous droits réservés.</div>
+      <div class="footer-legal-links">
+        <a href="/pages/legal/mentions-legales.html">Mentions légales</a>
+        <a href="/pages/legal/cgu.html">CGU</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script src="/js/config.js"></script>
+<script src="/js/api.js"></script>
+<script src="/js/utils.js"></script>
+<script src="/js/icons.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  'use strict';
+
+  /* ═══════════════════════════════════════
+     PRODUCTS DATA — 76 annonces de démo
+     (À remplacer via l'espace admin)
+  ═══════════════════════════════════════ */
+  var PRODUCTS = [
+    /* ── VOITURES (16) ── */
+    {id:'V001',cat:'cars',title:'Toyota Land Cruiser 200 V8 4x4',price:28500,location:'Lyon, France',stock:'securedeal',img:'/images/categories/cars-toyota-lc200.svg',desc:'Diesel 4.5L, 2018, 180 000 km, full option'},
+    {id:'V002',cat:'cars',title:'Mercedes G 63 AMG 2020',price:89000,location:'Paris, France',stock:'vendor',img:'/images/categories/cars-mercedes-g63.svg',desc:'V8 Biturbo, 55 000 km, blanc, toit pano'},
+    {id:'V003',cat:'cars',title:'BMW X5 xDrive 40d Pack M',price:42000,location:'Marseille',stock:'securedeal',img:'/images/categories/cars-bmw-x5.svg',desc:'3.0L Diesel 2019, 95 000 km, 7 places'},
+    {id:'V004',cat:'cars',title:'Range Rover Sport HSE 2021',price:74000,location:'Bordeaux',stock:'vendor',img:'/images/categories/cars-toyota-lc200.svg',desc:'3.0L Diesel, 38 000 km, noir, full option'},
+    {id:'V005',cat:'cars',title:'Mercedes Sprinter 316 CDI',price:18500,location:'Toulouse',stock:'securedeal',img:'/images/categories/cars-bmw-x5.svg',desc:'Diesel 2021, 62 000 km, fourgon long'},
+    {id:'V006',cat:'cars',title:'Porsche Cayenne GTS 2022',price:96000,location:'Nice',stock:'vendor',img:'/images/categories/cars-mercedes-g63.svg',desc:'V8 440 ch, 28 000 km, gris Quartzite'},
+    {id:'V007',cat:'cars',title:'Volkswagen Transporter T6.1',price:28000,location:'Nantes',stock:'securedeal',img:'/images/categories/cars-toyota-lc200.svg',desc:'TDI 150 ch, 2020, 85 000 km, 9 places'},
+    {id:'V008',cat:'cars',title:'Audi Q7 50 TDI Quattro',price:58000,location:'Lille',stock:'vendor',img:'/images/categories/cars-bmw-x5.svg',desc:'3.0L TDI 286 ch, 2021, 55 000 km, 7 places'},
+    {id:'V009',cat:'cars',title:'Toyota Hilux Revo 4x4 2022',price:34000,location:'Strasbourg',stock:'securedeal',img:'/images/categories/cars-toyota-lc200.svg',desc:'2.8L Diesel, 40 000 km, double cabine'},
+    {id:'V010',cat:'cars',title:'Nissan Patrol Y62 V8 2020',price:68000,location:'Rennes',stock:'vendor',img:'/images/categories/cars-mercedes-g63.svg',desc:'5.6L V8, 72 000 km, blanc, 8 places'},
+    {id:'V011',cat:'cars',title:'Ford Ranger Raptor 2023',price:52000,location:'Montpellier',stock:'securedeal',img:'/images/categories/cars-bmw-x5.svg',desc:'2.0L EcoBlue 213 ch, 18 000 km, 4x4'},
+    {id:'V012',cat:'cars',title:'Jeep Wrangler Unlimited Rubicon',price:61000,location:'Grenoble',stock:'vendor',img:'/images/categories/cars-toyota-lc200.svg',desc:'3.6L V6, 2021, 48 000 km, rouge'},
+    {id:'V013',cat:'cars',title:'Mercedes Classe G 500 4x4',price:185000,location:'Monaco',stock:'securedeal',img:'/images/categories/cars-mercedes-g63.svg',desc:'4.0L V8, 2022, 22 000 km, noir, rare'},
+    {id:'V014',cat:'cars',title:'Mitsubishi L200 Pick-Up 2022',price:29500,location:'Clermont-Ferrand',stock:'vendor',img:'/images/categories/cars-bmw-x5.svg',desc:'2.2L DI-D, 58 000 km, double cab'},
+    {id:'V015',cat:'cars',title:'Isuzu D-Max 3.0 4x4 2021',price:27000,location:'Dijon',stock:'securedeal',img:'/images/categories/cars-toyota-lc200.svg',desc:'3.0L 163 ch, 74 000 km, double cabine'},
+    {id:'V016',cat:'cars',title:'Lexus GX 460 Premium 2020',price:56000,location:'Lyon',stock:'vendor',img:'/images/categories/cars-mercedes-g63.svg',desc:'4.6L V8, 65 000 km, blanc, 7 places'},
+    /* ── TRACTEURS (15) ── */
+    {id:'T001',cat:'tractors',title:'John Deere 8R 410 GPS RTK',price:185000,location:'Bretagne',stock:'vendor',img:'/images/categories/tractors-john-deere.svg',desc:'410 CV, 2022, 1 200 h, IVT'},
+    {id:'T002',cat:'tractors',title:'Case IH Magnum 380 CVX',price:145000,location:'Champagne',stock:'securedeal',img:'/images/categories/tractors-case-ih.svg',desc:'380 CV, 2021, 1 850 h, CVX'},
+    {id:'T003',cat:'tractors',title:'New Holland T7.300 Dynamic Command',price:118000,location:'Normandie',stock:'vendor',img:'/images/categories/tractors-new-holland.svg',desc:'300 CV, 2020, 2 400 h'},
+    {id:'T004',cat:'tractors',title:'Fendt 724 Vario Gen7',price:165000,location:'Alsace',stock:'securedeal',img:'/images/categories/tractors-john-deere.svg',desc:'240 CV, 2022, 900 h, VarioDrive'},
+    {id:'T005',cat:'tractors',title:'John Deere 6R 215',price:98000,location:'Bourgogne',stock:'vendor',img:'/images/categories/tractors-case-ih.svg',desc:'215 CV, 2021, 2 100 h, CommandPRO'},
+    {id:'T006',cat:'tractors',title:'Massey Ferguson 8S.265',price:128000,location:'Beauce',stock:'securedeal',img:'/images/categories/tractors-new-holland.svg',desc:'265 CV, 2022, 1 400 h, Dyna-7'},
+    {id:'T007',cat:'tractors',title:'Claas Axion 950 CEMOS',price:178000,location:'Picardie',stock:'vendor',img:'/images/categories/tractors-john-deere.svg',desc:'460 CV, 2021, 1 100 h, CEMOS'},
+    {id:'T008',cat:'tractors',title:'John Deere 5090M 4WD',price:62000,location:'Pays de Loire',stock:'securedeal',img:'/images/categories/tractors-case-ih.svg',desc:'90 CV, 2020, 3 200 h, 4RM'},
+    {id:'T009',cat:'tractors',title:'New Holland T5.120 ElectroCommand',price:56000,location:'Midi-Pyrenees',stock:'vendor',img:'/images/categories/tractors-new-holland.svg',desc:'120 CV, 2021, 2 800 h'},
+    {id:'T010',cat:'tractors',title:'Deutz-Fahr Agrotron 7250 TTV',price:142000,location:'Centre-Val de Loire',stock:'securedeal',img:'/images/categories/tractors-john-deere.svg',desc:'250 CV, 2021, 1 600 h, TTV'},
+    {id:'T011',cat:'tractors',title:'Challenger MT775E chenilles',price:189000,location:'Ile-de-France',stock:'vendor',img:'/images/categories/tractors-case-ih.svg',desc:'490 CV, 2020, 2 200 h, chenilles'},
+    {id:'T012',cat:'tractors',title:'Case IH Puma 240 CVX',price:112000,location:'Lorraine',stock:'securedeal',img:'/images/categories/tractors-new-holland.svg',desc:'240 CV, 2020, 2 500 h, AFS Connect'},
+    {id:'T013',cat:'tractors',title:'John Deere 9RX 590 Quadtrac',price:340000,location:'Grand Est',stock:'vendor',img:'/images/categories/tractors-john-deere.svg',desc:'590 CV, 2022, 800 h, 4 chenilles'},
+    {id:'T014',cat:'tractors',title:'Massey Ferguson 5S.145',price:79000,location:'Bretagne',stock:'securedeal',img:'/images/categories/tractors-case-ih.svg',desc:'145 CV, 2021, 1 900 h, Dyna-6'},
+    {id:'T015',cat:'tractors',title:'Fendt 516 Vario chargeur Cargo',price:88000,location:'Auvergne',stock:'vendor',img:'/images/categories/tractors-new-holland.svg',desc:'165 CV, 2020, 3 100 h, VarioDrive'},
+    /* ── CONTENEURS (15) ── */
+    {id:'C001',cat:'containers',title:'Conteneur 20 pieds Standard',price:3200,location:'Le Havre',stock:'securedeal',img:'/images/categories/containers-container-20ft.svg',desc:'Bon etat, portes fonctionnelles, plancher bois'},
+    {id:'C002',cat:'containers',title:'Conteneur 40 pieds High Cube Neuf',price:4800,location:'Marseille',stock:'vendor',img:'/images/categories/containers-container-40ft.svg',desc:'HC 9 pieds 6 pouces, acier COR-TEN, etanche, 2022'},
+    {id:'C003',cat:'containers',title:'Conteneur refrigere Reefer 40 pieds',price:11500,location:'Rotterdam',stock:'securedeal',img:'/images/categories/containers-container-ref.svg',desc:'Groupe froid Carrier, -25C a +30C, certifie'},
+    {id:'C004',cat:'containers',title:'Conteneur 20 pieds Occasion Classe A',price:2400,location:'Dunkerque',stock:'vendor',img:'/images/categories/containers-container-20ft.svg',desc:'Classe A, 3 voyages max, peinture fraiche'},
+    {id:'C005',cat:'containers',title:'Conteneur 40 pieds Open Top',price:6200,location:'Anvers, Belgique',stock:'securedeal',img:'/images/categories/containers-container-40ft.svg',desc:'Toit ouvert bache, ideal vrac'},
+    {id:'C006',cat:'containers',title:'Conteneur Flat Rack 40 pieds',price:5900,location:'Le Havre',stock:'vendor',img:'/images/categories/containers-container-ref.svg',desc:'Plateau plat, charges lourdes, 2020'},
+    {id:'C007',cat:'containers',title:'Conteneur 20 pieds Double Door',price:3800,location:'Marseille',stock:'securedeal',img:'/images/categories/containers-container-20ft.svg',desc:'Portes des deux cotes, acces rapide'},
+    {id:'C008',cat:'containers',title:'Conteneur frigorifique 20 pieds Thermo King',price:9200,location:'Bordeaux',stock:'vendor',img:'/images/categories/containers-container-ref.svg',desc:'Thermo King integre, -30C, certifie ATP'},
+    {id:'C009',cat:'containers',title:'Lot 5 conteneurs 20 pieds Standard',price:13500,location:'Nantes',stock:'securedeal',img:'/images/categories/containers-container-20ft.svg',desc:'5 unites classe B, prix degressif'},
+    {id:'C010',cat:'containers',title:'Conteneur bureau 20 pieds amenage',price:7800,location:'Pau',stock:'vendor',img:'/images/categories/containers-container-40ft.svg',desc:'Isole, electrifie, AC, double vitrage'},
+    {id:'C011',cat:'containers',title:'Conteneur citerne 20 pieds ISO',price:8500,location:'Lyon',stock:'securedeal',img:'/images/categories/containers-container-ref.svg',desc:'20 000 L, acier inox 316L, certifie IMO'},
+    {id:'C012',cat:'containers',title:'Conteneur 40 pieds High Cube Pallet Wide',price:5600,location:'Caen',stock:'vendor',img:'/images/categories/containers-container-40ft.svg',desc:'Largeur palettes EU, plancher bois, 2021'},
+    {id:'C013',cat:'containers',title:'Conteneur 20 pieds Anti-effraction',price:4100,location:'Rennes',stock:'securedeal',img:'/images/categories/containers-container-20ft.svg',desc:'Parois renforcees, serrure haute securite'},
+    {id:'C014',cat:'containers',title:'Conteneur 45 pieds PW High Cube',price:6800,location:'Dunkerque',stock:'vendor',img:'/images/categories/containers-container-40ft.svg',desc:'45 pieds, 2021, pallet wide'},
+    {id:'C015',cat:'containers',title:'Conteneur Tunnel 40 pieds Double portes',price:5200,location:'Le Havre',stock:'securedeal',img:'/images/categories/containers-container-ref.svg',desc:'Portes des 2 extremites et cote'},
+    /* ── TELEPHONES (15) ── */
+    {id:'P001',cat:'phones',title:'iPhone 15 Pro Max 256 Go x20',price:19800,location:'Paris',stock:'securedeal',img:'/images/categories/phones-iphone-15pm.svg',desc:'256 Go Titane naturel, neufs scelles'},
+    {id:'P002',cat:'phones',title:'Samsung Galaxy S24 Ultra x50',price:44500,location:'Amsterdam',stock:'vendor',img:'/images/categories/phones-samsung-s24u.svg',desc:'512 Go Phantom Black, neufs en boite'},
+    {id:'P003',cat:'phones',title:'Google Pixel 8 Pro x15',price:10500,location:'Berlin',stock:'securedeal',img:'/images/categories/phones-pixel-8pro.svg',desc:'128 Go Porcelaine, debloque, neufs'},
+    {id:'P004',cat:'phones',title:'iPhone 14 Pro 128 Go x30',price:21000,location:'Lyon',stock:'vendor',img:'/images/categories/phones-iphone-15pm.svg',desc:'Violet, debloque, neufs scelles, EU'},
+    {id:'P005',cat:'phones',title:'Samsung S23 FE x100',price:34000,location:'Bruxelles',stock:'securedeal',img:'/images/categories/phones-samsung-s24u.svg',desc:'128 Go, graphite, EU, grade A neuf'},
+    {id:'P006',cat:'phones',title:'iPhone 15 128 Go x40',price:26000,location:'Paris',stock:'vendor',img:'/images/categories/phones-iphone-15pm.svg',desc:'Rose, bleu, noir, neufs scelles EU'},
+    {id:'P007',cat:'phones',title:'Xiaomi 14 Ultra x25',price:21250,location:'Madrid',stock:'securedeal',img:'/images/categories/phones-pixel-8pro.svg',desc:'512 Go Titanium, Leica Summilux, neufs'},
+    {id:'P008',cat:'phones',title:'Samsung Galaxy Z Fold 5 x10',price:15990,location:'Munich',stock:'vendor',img:'/images/categories/phones-samsung-s24u.svg',desc:'512 Go Black, pliable, neufs, garantie EU'},
+    {id:'P009',cat:'phones',title:'iPhone 15 Pro 512 Go x12',price:15960,location:'Zurich',stock:'securedeal',img:'/images/categories/phones-iphone-15pm.svg',desc:'Titane bleu, neufs scelles, international'},
+    {id:'P010',cat:'phones',title:'OnePlus 12 256 Go x60',price:31800,location:'Amsterdam',stock:'vendor',img:'/images/categories/phones-pixel-8pro.svg',desc:'Silky Black, Hasselblad, neufs, debloques'},
+    {id:'P011',cat:'phones',title:'Samsung Galaxy A54 5G x200',price:37000,location:'Dubai',stock:'securedeal',img:'/images/categories/phones-samsung-s24u.svg',desc:'128 Go, 3 coloris, neufs, marche africain'},
+    {id:'P012',cat:'phones',title:'iPhone 13 64 Go x50 Reconditiones',price:15000,location:'Liege',stock:'vendor',img:'/images/categories/phones-iphone-15pm.svg',desc:'Grade A+, batterie plus de 90%, debloques'},
+    {id:'P013',cat:'phones',title:'Realme GT5 Pro x30',price:12600,location:'Barcelone',stock:'securedeal',img:'/images/categories/phones-pixel-8pro.svg',desc:'512 Go, neufs en boite, 240W charge'},
+    {id:'P014',cat:'phones',title:'Samsung Galaxy S24 Plus x35',price:24500,location:'Paris',stock:'vendor',img:'/images/categories/phones-samsung-s24u.svg',desc:'256 Go, Cobalt Violet, EU, neufs scelles'},
+    {id:'P015',cat:'phones',title:'Apple iPhone SE 3e generation x80',price:24000,location:'Lyon',stock:'securedeal',img:'/images/categories/phones-iphone-15pm.svg',desc:'64 Go minuit, neufs, debloques'},
+    /* ── EQUIPEMENTS (15) ── */
+    {id:'E001',cat:'equipment',title:'Groupe electrogene silencieux 100 kVA',price:22000,location:'Lyon',stock:'vendor',img:'/images/categories/equipment-generator-100kva.svg',desc:'Diesel, mono/triphase, ATS, IP54, 2022'},
+    {id:'E002',cat:'equipment',title:'Chariot elevateur Toyota 5 tonnes',price:18500,location:'Lille',stock:'securedeal',img:'/images/categories/equipment-forklift-5t.svg',desc:'Toyota 8FBM50, 2021, 1 200 h, 2 batteries'},
+    {id:'E003',cat:'equipment',title:'Compresseur industriel 500 L/min',price:8900,location:'Strasbourg',stock:'vendor',img:'/images/categories/equipment-compressor.svg',desc:'10 bar, moteur 15 kW, reservoir 500 L'},
+    {id:'E004',cat:'equipment',title:'Centrale solaire 50 kWc complete',price:42000,location:'Toulon',stock:'securedeal',img:'/images/categories/equipment-generator-100kva.svg',desc:'250 panneaux 400W, onduleurs Huawei'},
+    {id:'E005',cat:'equipment',title:'Groupe electrogene 500 kVA 3 phases',price:85000,location:'Paris',stock:'vendor',img:'/images/categories/equipment-generator-100kva.svg',desc:'Perkins 1650 kVA, triphase, ATS'},
+    {id:'E006',cat:'equipment',title:'Chariot telescopique Manitou 30 m',price:48000,location:'Nantes',stock:'securedeal',img:'/images/categories/equipment-forklift-5t.svg',desc:'Manitou MRT 3050, 2020, 3 200 h, 3 t'},
+    {id:'E007',cat:'equipment',title:'Compresseur haute pression 350 bar',price:14500,location:'Brest',stock:'vendor',img:'/images/categories/equipment-compressor.svg',desc:'350 bar, 200 L/min, moteur 30 kW, neuf'},
+    {id:'E008',cat:'equipment',title:'Groupe electrogene portable 10 kVA',price:3800,location:'Bordeaux',stock:'securedeal',img:'/images/categories/equipment-generator-100kva.svg',desc:'Diesel, mono, demarrage electrique, AVR'},
+    {id:'E009',cat:'equipment',title:'Nacelle elevatrice Genie Z-45',price:28000,location:'Toulouse',stock:'vendor',img:'/images/categories/equipment-forklift-5t.svg',desc:'14 m, articulee, diesel, 2019, 2 800 h'},
+    {id:'E010',cat:'equipment',title:'Station de pompage 120 m3/h',price:19500,location:'Marseille',stock:'securedeal',img:'/images/categories/equipment-compressor.svg',desc:'Pompe Grundfos, moteur 22 kW, armoire ATV'},
+    {id:'E011',cat:'equipment',title:'Groupe electrogene container 1000 kVA',price:145000,location:'Dunkerque',stock:'vendor',img:'/images/categories/equipment-generator-100kva.svg',desc:'MTU 1000 kVA, container 40 pieds, ATS'},
+    {id:'E012',cat:'equipment',title:'Engin de terrassement Komatsu PC210',price:98000,location:'Nancy',stock:'securedeal',img:'/images/categories/equipment-forklift-5t.svg',desc:'21 t, 2020, 4 500 h, pelle hydraulique'},
+    {id:'E013',cat:'equipment',title:'Tour de forage 100 m complete',price:180000,location:'Pau',stock:'vendor',img:'/images/categories/equipment-compressor.svg',desc:'Foreuse rotative, 100 m, trepan tricone'},
+    {id:'E014',cat:'equipment',title:'Mini-pelle VOLVO EC55D 5.5 t',price:42000,location:'Grenoble',stock:'securedeal',img:'/images/categories/equipment-forklift-5t.svg',desc:'5.5 t, 2021, 2 100 h, godets, bull'},
+    {id:'E015',cat:'equipment',title:'Groupe electrogene 200 kVA Cummins',price:38000,location:'Rouen',stock:'vendor',img:'/images/categories/equipment-generator-100kva.svg',desc:'Cummins QSB7, 200 kVA, 2022, triphase'}
+  ];
+
+  /* ═══════════════════════════════════════
+     ETAT
+  ═══════════════════════════════════════ */
+  var currentCat  = 'all';
+  var searchQuery = '';
+  var sortBy      = 'recent';
+  var currentPage = 1;
+  var PER_PAGE    = 9;
+
+  /* ═══════════════════════════════════════
+     HELPERS
+  ═══════════════════════════════════════ */
+  function fmtPrice(n) {
+    return new Intl.NumberFormat('fr-FR').format(n);
+  }
+  function fmtCur(n) {
+    return new Intl.NumberFormat('fr-FR', {style:'currency', currency:'EUR'}).format(n);
+  }
+  function catLabel(cat) {
+    var map = {cars:'Voitures', vehicles:'Vehicules', tractors:'Tracteurs',
+               containers:'Conteneurs', phones:'Telephones', equipment:'Equipements'};
+    return map[cat] || cat;
+  }
+
+  /* ═══════════════════════════════════════
+     CARTE PRODUIT
+  ═══════════════════════════════════════ */
+  function renderCard(p) {
+    var inStock = (p.stock === 'securedeal');
+    var badge   = inStock
+      ? '<span class="badge badge--active">SecureDeal Stock</span>'
+      : '<span class="badge badge--escrow">Chez vendeur</span>';
+    var stockLabel = inStock ? 'Dispo. immediat' : 'Sur accord';
+    var stockClass = inStock ? 'in-stock' : 'with-seller';
+
+    return '<a href="/pages/product.html?id=' + p.id + '" class="product-card">'
+      + '<div style="position:relative;width:100%;aspect-ratio:16/10;overflow:hidden;background:rgba(255,255,255,0.04)">'
+        + '<img src="' + p.img + '" alt="' + p.title + '" style="width:100%;height:100%;object-fit:cover" loading="lazy">'
+        + '<div style="position:absolute;top:10px;left:10px">' + badge + '</div>'
+      + '</div>'
+      + '<div class="product-body">'
+        + '<div class="product-category">' + catLabel(p.cat) + '</div>'
+        + '<div class="product-title">' + p.title + '</div>'
+        + '<div class="product-meta"><span>&#128205; ' + p.location + '</span></div>'
+        + '<div class="product-price"><span class="product-price-currency">&#8364;</span>' + fmtPrice(p.price) + '</div>'
+      + '</div>'
+      + '<div class="product-footer">'
+        + '<span style="font-size:11px;color:rgba(255,255,255,0.35)">Acompte : <b style="color:var(--color-gold)">' + fmtCur(p.price * 0.5) + '</b></span>'
+        + '<span class="product-stock-badge ' + stockClass + '">' + stockLabel + '</span>'
+      + '</div>'
+    + '</a>';
+  }
+
+  /* ═══════════════════════════════════════
+     FILTRAGE
+  ═══════════════════════════════════════ */
+  function getFiltered() {
+    var list = PRODUCTS.slice();
+
+    /* Categorie */
+    if (currentCat !== 'all') {
+      list = list.filter(function(p) { return p.cat === currentCat; });
+    }
+
+    /* Recherche texte */
+    if (searchQuery) {
+      var q = searchQuery.toLowerCase();
+      list = list.filter(function(p) {
+        return p.title.toLowerCase().indexOf(q) !== -1
+            || p.location.toLowerCase().indexOf(q) !== -1;
+      });
+    }
+
+    /* Prix */
+    var minEl = document.getElementById('price-min');
+    var maxEl = document.getElementById('price-max');
+    var pMin  = minEl ? (parseFloat(minEl.value) || 0)        : 0;
+    var pMax  = maxEl ? (parseFloat(maxEl.value) || Infinity) : Infinity;
+    list = list.filter(function(p) { return p.price >= pMin && p.price <= pMax; });
+
+    /* Disponibilite — si aucune case cochee, tout montrer */
+    var stockEl  = document.getElementById('filter-stock');
+    var sellerEl = document.getElementById('filter-seller');
+    var showS = stockEl  ? stockEl.checked  : true;
+    var showV = sellerEl ? sellerEl.checked : true;
+    if (showS || showV) {
+      list = list.filter(function(p) {
+        return (p.stock === 'securedeal' && showS)
+            || (p.stock === 'vendor'    && showV);
+      });
+    }
+
+    /* Tri */
+    if (sortBy === 'price-asc')  list.sort(function(a,b){ return a.price - b.price; });
+    if (sortBy === 'price-desc') list.sort(function(a,b){ return b.price - a.price; });
+
+    return list;
+  }
+
+  /* ═══════════════════════════════════════
+     RENDU
+  ═══════════════════════════════════════ */
+  function render() {
+    try {
+      var filtered   = getFiltered();
+      var total      = filtered.length;
+      var totalPages = Math.ceil(total / PER_PAGE) || 1;
+      if (currentPage > totalPages) currentPage = 1;
+      var page = filtered.slice((currentPage - 1) * PER_PAGE, currentPage * PER_PAGE);
+
+      /* Compteur */
+      var countEl = document.getElementById('results-count');
+      if (countEl) countEl.textContent = fmtPrice(total) + (total > 1 ? ' annonces' : ' annonce');
+
+      /* Grille */
+      var grid      = document.getElementById('products-grid');
+      var noResults = document.getElementById('no-results');
+      if (!grid) return;
+
+      if (page.length === 0) {
+        grid.style.display = 'none';
+        if (noResults) noResults.style.display = 'flex';
+      } else {
+        grid.style.display = 'grid';
+        if (noResults) noResults.style.display = 'none';
+        grid.innerHTML = page.map(renderCard).join('');
+      }
+
+      /* Pagination */
+      var pag = document.getElementById('pagination');
+      if (!pag) return;
+      pag.innerHTML = '';
+      if (totalPages <= 1) return;
+
+      function mkBtn(label, page, disabled) {
+        var btn = document.createElement('button');
+        btn.className = 'page-btn' + (page === currentPage ? ' active' : '');
+        btn.textContent = label;
+        btn.disabled = !!disabled;
+        btn.addEventListener('click', function() {
+          currentPage = page;
+          render();
+          window.scrollTo({top: 300, behavior: 'smooth'});
+        });
+        pag.appendChild(btn);
+      }
+
+      mkBtn('←', currentPage - 1, currentPage === 1);
+      for (var i = 1; i <= totalPages; i++) mkBtn(i, i, false);
+      mkBtn('→', currentPage + 1, currentPage === totalPages);
+
+    } catch(err) {
+      console.error('SecureDeal render error:', err);
+    }
+  }
+
+  /* ═══════════════════════════════════════
+     EVENEMENTS
+  ═══════════════════════════════════════ */
+  var searchEl = document.getElementById('search-input');
+  if (searchEl) {
+    searchEl.addEventListener('input', function(e) {
+      searchQuery = e.target.value;
+      currentPage = 1;
+      render();
+    });
+  }
+
+  var sortEl = document.getElementById('sort-select');
+  if (sortEl) {
+    sortEl.addEventListener('change', function(e) {
+      sortBy = e.target.value;
+      render();
+    });
+  }
+
+  document.querySelectorAll('.cat-tab').forEach(function(btn) {
+    btn.addEventListener('click', function() {
+      document.querySelectorAll('.cat-tab').forEach(function(b) { b.classList.remove('active'); });
+      btn.classList.add('active');
+      currentCat  = btn.dataset.cat;
+      currentPage = 1;
+      render();
+    });
+  });
+
+  var applyBtn = document.getElementById('apply-filters');
+  if (applyBtn) {
+    applyBtn.addEventListener('click', function() {
+      currentPage = 1;
+      render();
+    });
+  }
+
+  var resetBtn = document.getElementById('reset-filters');
+  if (resetBtn) {
+    resetBtn.addEventListener('click', function() {
+      var pMin = document.getElementById('price-min');
+      var pMax = document.getElementById('price-max');
+      var fS   = document.getElementById('filter-stock');
+      var fV   = document.getElementById('filter-seller');
+      if (pMin) pMin.value = '';
+      if (pMax) pMax.value = '';
+      if (fS)   fS.checked  = true;
+      if (fV)   fV.checked  = true;
+      currentPage = 1;
+      render();
+    });
+  }
+
+  /* ═══════════════════════════════════════
+     INITIALISATION
+  ═══════════════════════════════════════ */
+  /* Categorie depuis l URL */
+  try {
+    var params  = new URLSearchParams(window.location.search);
+    var initCat = params.get('cat') || 'all';
+    currentCat  = initCat;
+    document.querySelectorAll('.cat-tab').forEach(function(btn) {
+      btn.classList.toggle('active', btn.dataset.cat === initCat);
+    });
+  } catch(e) {}
+
+  /* Premier rendu */
+  render();
+
+}); /* fin DOMContentLoaded */
+</script>
+
+<script>
+(function() {
+  var header = document.getElementById('site-header');
+  if (header) {
+    var onScroll = function() { header.classList.toggle('scrolled', window.scrollY > 20); };
+    window.addEventListener('scroll', onScroll, { passive: true });
+    onScroll();
+  }
+  var burger = document.getElementById('hamburger');
+  var menu   = document.getElementById('mobile-menu');
+  if (!burger || !menu) return;
+  burger.addEventListener('click', function() {
+    var open = menu.classList.toggle('open');
+    burger.classList.toggle('open', open);
+    burger.setAttribute('aria-expanded', open);
+    document.body.style.overflow = open ? 'hidden' : '';
+  });
+  menu.querySelectorAll('a').forEach(function(a) {
+    a.addEventListener('click', function() {
+      menu.classList.remove('open');
+      burger.classList.remove('open');
+      burger.setAttribute('aria-expanded', 'false');
+      document.body.style.overflow = '';
+    });
+  });
+})();
+
+// ─── Toggle filtre mobile ────────────────────────────────────
+(function() {
+  var toggleBtn = document.getElementById('filter-toggle-btn');
+  var sidebar   = document.querySelector('.filter-sidebar');
+  if (!toggleBtn || !sidebar) return;
+  toggleBtn.addEventListener('click', function() {
+    var open = sidebar.classList.toggle('mobile-open');
+    toggleBtn.classList.toggle('open', open);
+    toggleBtn.setAttribute('aria-expanded', open);
+    var label = toggleBtn.querySelector('span:first-child');
+    label.textContent = open ? '⚙️ Masquer les filtres' : '⚙️ Afficher les filtres';
+  });
+})();
+
+</script>
+
+</body>
+</html>

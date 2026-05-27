@@ -1,0 +1,564 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ma transaction — SecureDeal</title>
+  <script src="/js/loader.js"></script>
+  <link rel="stylesheet" href="/css/loader.css">
+  <link rel="stylesheet" href="/css/main.css">
+  <link rel="stylesheet" href="/css/brand.css">
+  <link rel="stylesheet" href="/css/backgrounds.css">
+  <link rel="stylesheet" href="/css/responsive-fixes.css">
+  <link rel="icon" href="/images/logo/favicon.svg" type="image/svg+xml">
+  <style>
+    body { background:#050505; }
+
+    .txn-layout {
+      display: grid;
+      grid-template-columns: 1fr 340px;
+      gap: 32px;
+      align-items: start;
+      padding: 32px 0 80px;
+    }
+
+    /* ── Status bar ── */
+    .status-bar {
+      display: flex; align-items: center;
+      justify-content: space-between; flex-wrap: wrap;
+      gap: 16px;
+      background: rgba(255,255,255,0.03);
+      border: 1px solid rgba(201,162,39,0.12);
+      border-radius: 16px; padding: 20px 24px;
+      margin-bottom: 24px;
+    }
+    .status-bar-left h2 {
+      font-family: 'Sora', sans-serif; font-size: 13px;
+      font-weight: 700; color: rgba(255,255,255,0.40);
+      text-transform: uppercase; letter-spacing: 1.5px;
+      margin-bottom: 6px;
+    }
+    .txn-id-display {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 22px; font-weight: 700; color: white;
+    }
+
+    /* ── Section card ── */
+    .txn-card {
+      background: rgba(255,255,255,0.03);
+      border: 1px solid rgba(255,255,255,0.07);
+      border-radius: 18px; padding: 24px;
+      margin-bottom: 20px;
+    }
+    .txn-card-title {
+      font-family: 'Sora', sans-serif;
+      font-size: 15px; font-weight: 700; color: white;
+      margin-bottom: 20px; padding-bottom: 14px;
+      border-bottom: 1px solid rgba(255,255,255,0.07);
+      display: flex; align-items: center; gap: 10px;
+    }
+
+    /* ── Timeline ── */
+    .timeline { display: flex; flex-direction: column; gap: 0; }
+    .tl-step {
+      display: flex; gap: 16px;
+      position: relative; padding-bottom: 24px;
+    }
+    .tl-step:last-child { padding-bottom: 0; }
+    .tl-step:not(:last-child)::before {
+      content: '';
+      position: absolute;
+      left: 19px; top: 40px;
+      bottom: 0; width: 2px;
+      background: rgba(255,255,255,0.07);
+    }
+    .tl-dot {
+      width: 40px; height: 40px;
+      border-radius: 50%; flex-shrink: 0;
+      display: flex; align-items: center;
+      justify-content: center; font-size: 16px;
+      position: relative; z-index: 1;
+      border: 2px solid transparent;
+      transition: all .3s;
+    }
+    .tl-dot.done    { background:rgba(16,185,129,0.15); border-color:rgba(16,185,129,0.35); }
+    .tl-dot.active  { background:rgba(201,162,39,0.15); border-color:rgba(201,162,39,0.40); animation:pulse-gold 2s infinite; }
+    .tl-dot.pending { background:rgba(255,255,255,0.04); border-color:rgba(255,255,255,0.10); opacity:.5; }
+
+    .tl-body { flex: 1; min-width: 0; }
+    .tl-title { font-weight: 700; font-size: 14px; color: white; margin-bottom: 4px; }
+    .tl-title.pending { color: rgba(255,255,255,0.35); }
+    .tl-date  { font-size: 12px; color: rgba(255,255,255,0.30); margin-bottom: 4px; }
+    .tl-note  { font-size: 13px; color: rgba(255,255,255,0.45); line-height: 1.5; }
+    .tl-proof {
+      display: inline-flex; align-items: center; gap: 6px;
+      font-size: 11px; color: var(--color-gold);
+      background: rgba(201,162,39,0.08);
+      border: 1px solid rgba(201,162,39,0.15);
+      border-radius: 6px; padding: 3px 10px;
+      margin-top: 6px; cursor: pointer;
+    }
+    .tl-proof:hover { background: rgba(201,162,39,0.15); }
+
+    /* ── Paiements ── */
+    .payment-row {
+      display: flex; align-items: center;
+      justify-content: space-between; flex-wrap: wrap;
+      gap: 12px; padding: 14px 0;
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+    }
+    .payment-row:last-child { border-bottom: none; padding-bottom: 0; }
+    .payment-label { font-size: 13px; color: rgba(255,255,255,0.55); }
+    .payment-amount {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 16px; font-weight: 700; color: var(--color-gold);
+    }
+    .payment-status {
+      font-size: 11px; font-weight: 700;
+      padding: 3px 10px; border-radius: 20px;
+    }
+    .payment-status.paid    { background:rgba(16,185,129,0.15); color:#10B981; }
+    .payment-status.pending { background:rgba(245,158,11,0.15); color:#F59E0B; }
+    .payment-status.waiting { background:rgba(255,255,255,0.07); color:rgba(255,255,255,0.35); }
+
+    /* ── Sidebar info ── */
+    .info-box {
+      background: rgba(255,255,255,0.03);
+      border: 1px solid rgba(201,162,39,0.12);
+      border-radius: 18px; padding: 22px;
+      position: sticky; top: 90px;
+    }
+    .info-box-title {
+      font-family: 'Sora', sans-serif;
+      font-size: 14px; font-weight: 700; color: white;
+      margin-bottom: 16px; padding-bottom: 12px;
+      border-bottom: 1px solid rgba(255,255,255,0.07);
+    }
+    .info-line {
+      display: flex; justify-content: space-between; align-items: flex-start;
+      gap: 10px; padding: 8px 0;
+      border-bottom: 1px solid rgba(255,255,255,0.04);
+      font-size: 13px;
+    }
+    .info-line:last-child { border-bottom: none; }
+    .info-line .lbl { color: rgba(255,255,255,0.35); flex-shrink: 0; }
+    .info-line .val { color: white; font-weight: 600; text-align: right; }
+
+    /* ── Actions ── */
+    .action-row {
+      display: flex; flex-direction: column; gap: 10px;
+    }
+    .btn-action-primary {
+      width: 100%; padding: 14px;
+      background: var(--gradient-gold); color: #000;
+      border: none; border-radius: 12px;
+      font-family: 'Sora', sans-serif;
+      font-size: 14px; font-weight: 800;
+      cursor: pointer; transition: all .2s;
+      display: flex; align-items: center;
+      justify-content: center; gap: 8px;
+    }
+    .btn-action-primary:hover { transform: translateY(-1px); box-shadow: 0 6px 20px rgba(201,162,39,0.35); }
+    .btn-action-primary:disabled { opacity:.4; cursor:not-allowed; transform:none; }
+    .btn-action-secondary {
+      width: 100%; padding: 12px;
+      background: transparent; color: rgba(255,255,255,0.65);
+      border: 1.5px solid rgba(255,255,255,0.12);
+      border-radius: 12px;
+      font-family: 'Sora', sans-serif;
+      font-size: 13px; font-weight: 600;
+      cursor: pointer; transition: all .2s;
+      text-align: center; text-decoration: none;
+      display: flex; align-items: center;
+      justify-content: center; gap: 8px;
+    }
+    .btn-action-secondary:hover { border-color: rgba(201,162,39,0.3); color: var(--color-gold); }
+    .btn-action-danger {
+      width: 100%; padding: 12px;
+      background: transparent; color: #EF4444;
+      border: 1.5px solid rgba(239,68,68,0.25);
+      border-radius: 12px;
+      font-family: 'Sora', sans-serif;
+      font-size: 13px; font-weight: 600;
+      cursor: pointer; transition: all .2s;
+    }
+    .btn-action-danger:hover { background: rgba(239,68,68,0.08); }
+
+    /* Modal confirmation réception */
+    .modal-backdrop {
+      position: fixed; inset: 0;
+      background: rgba(0,0,0,0.8); backdrop-filter: blur(10px);
+      z-index: 1000; display: none;
+      align-items: center; justify-content: center; padding: 20px;
+    }
+    .modal-backdrop.show { display: flex; }
+    .modal-box {
+      background: #111;
+      border: 1px solid rgba(201,162,39,0.2);
+      border-radius: 24px; padding: 36px;
+      max-width: 460px; width: 100%;
+      text-align: center;
+      animation: fadeInUp .3s ease;
+    }
+
+    @media (max-width: 900px) {
+      .txn-layout { grid-template-columns: 1fr; }
+      .info-box { position: static; }
+    }
+    @media (max-width: 480px) {
+      .status-bar { flex-direction: column; align-items: flex-start; }
+      .txn-id-display { font-size: 18px; }
+      .payment-row { flex-direction: column; align-items: flex-start; }
+    }
+  </style>
+</head>
+<body>
+
+<header class="site-header scrolled" id="site-header">
+  <div class="header-inner">
+    <a href="/index.html" class="header-logo">
+      <svg width="150" height="36" viewBox="0 0 160 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M18 3L31 8V17.5C31 25.5 25 31.5 18 34C11 31.5 5 25.5 5 17.5V8Z" fill="none" stroke="#C9A227" stroke-width="1.5"/>
+        <path d="M18 7.5L27 11.5V17.5C27 23 23 27.5 18 30C13 27.5 9 23 9 17.5V11.5Z" fill="rgba(201,162,39,0.08)" stroke="#C9A227" stroke-width="0.8"/>
+        <polyline points="13 18 16.5 21.5 23 14" stroke="#C9A227" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+        <text x="39" y="26" font-family="Sora, sans-serif" font-size="16" font-weight="800" fill="white" letter-spacing="-0.5">SECURE</text>
+        <text x="106" y="26" font-family="Sora, sans-serif" font-size="16" font-weight="300" fill="#C9A227" letter-spacing="2">DEAL</text>
+      </svg>
+    </a>
+    <nav class="header-nav">
+      <a href="/index.html" class="header-nav-link">Accueil</a>
+      <a href="/pages/tracking.html" class="header-nav-link">Suivi</a>
+      <a href="/pages/messages.html" class="header-nav-link">Messages</a>
+    </nav>
+    <div class="header-actions">
+      <div id="header-auth" style="display:flex;gap:10px;align-items:center">
+        <a href="/pages/auth/login.html" class="btn btn--outline-white btn--sm">Connexion</a>
+        <a href="/pages/auth/register.html" class="btn btn--gold btn--sm">Créer un compte</a>
+      </div>
+    </div>
+    <button class="hamburger" id="hamburger" aria-label="Menu" aria-expanded="false"><span></span><span></span><span></span></button>
+  </div>
+</header>
+<nav class="mobile-menu" id="mobile-menu">
+  <a href="/index.html">🏠 Accueil</a>
+  <a href="/pages/categories.html">📦 Catégories</a>
+  <a href="/pages/tracking.html" class="active">📡 Suivi</a>
+  <a href="/pages/messages.html">💬 Messages</a>
+  <div class="mobile-menu-divider"></div>
+  <div class="mobile-menu-actions">
+    <a href="/pages/auth/login.html" class="btn btn--outline-white">Se connecter</a>
+    <a href="/pages/auth/register.html" class="btn btn--gold">Créer un compte</a>
+  </div>
+</nav>
+
+<!-- Hero mini -->
+<div style="background:var(--gradient-hero);padding:80px 0 0;position:relative;overflow:hidden">
+  <div style="position:absolute;inset:0;background-image:linear-gradient(rgba(201,162,39,0.03) 1px,transparent 1px),linear-gradient(90deg,rgba(201,162,39,0.03) 1px,transparent 1px);background-size:60px 60px" aria-hidden="true"></div>
+  <div class="container" style="position:relative;padding-bottom:28px">
+    <div style="font-size:13px;color:rgba(255,255,255,0.35);margin-bottom:12px">
+      <a href="/pages/dashboard/buyer.html" style="color:rgba(255,255,255,0.35)">Mon espace</a>
+      <span style="margin:0 8px;color:rgba(255,255,255,0.15)">›</span>
+      <span style="color:rgba(255,255,255,0.6)">Transaction</span>
+    </div>
+    <h1 style="font-family:'Sora',sans-serif;font-size:clamp(1.4rem,3vw,2rem);font-weight:800;color:white;margin-bottom:6px">Gestion de transaction</h1>
+    <p style="color:rgba(255,255,255,0.40);font-size:14px">Suivez chaque étape de votre achat sécurisé.</p>
+  </div>
+</div>
+
+<div class="container">
+  <div class="txn-layout">
+
+    <!-- ── COLONNE PRINCIPALE ── -->
+    <div>
+      <!-- Status bar -->
+      <div class="status-bar">
+        <div class="status-bar-left">
+          <h2>Numéro de transaction</h2>
+          <div class="txn-id-display" id="txn-id-display">SD-2025-8847</div>
+        </div>
+        <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap">
+          <span id="txn-status-badge"></span>
+          <span style="font-size:13px;color:rgba(255,255,255,0.35)">Créée le <span id="txn-date">16 mai 2025</span></span>
+        </div>
+      </div>
+
+      <!-- Produit -->
+      <div class="txn-card">
+        <div class="txn-card-title">📦 Produit concerné</div>
+        <div style="display:flex;gap:16px;align-items:center;flex-wrap:wrap">
+          <div style="width:90px;height:68px;border-radius:12px;overflow:hidden;background:rgba(255,255,255,0.04);flex-shrink:0">
+            <img id="txn-prod-img" src="" alt="produit" style="width:100%;height:100%;object-fit:cover">
+          </div>
+          <div style="flex:1;min-width:160px">
+            <div id="txn-prod-title" style="font-weight:700;font-size:15px;color:white;margin-bottom:4px">—</div>
+            <div id="txn-prod-ref" style="font-size:12px;color:rgba(255,255,255,0.35);margin-bottom:8px">—</div>
+            <a id="txn-prod-link" href="#" style="font-size:12px;color:var(--color-gold)">Voir l'annonce →</a>
+          </div>
+          <div style="text-align:right;flex-shrink:0">
+            <div style="font-size:11px;color:rgba(255,255,255,0.35);margin-bottom:4px">Prix total</div>
+            <div id="txn-price" style="font-family:'JetBrains Mono',monospace;font-size:20px;font-weight:800;color:white">—</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Timeline -->
+      <div class="txn-card">
+        <div class="txn-card-title">📋 Historique &amp; Timeline</div>
+        <div class="timeline" id="timeline"></div>
+      </div>
+
+      <!-- Paiements -->
+      <div class="txn-card">
+        <div class="txn-card-title">💰 Paiements</div>
+        <div id="payments-list"></div>
+      </div>
+
+      <!-- Documents -->
+      <div class="txn-card">
+        <div class="txn-card-title">📄 Documents</div>
+        <div style="display:flex;flex-direction:column;gap:10px" id="docs-list"></div>
+      </div>
+    </div>
+
+    <!-- ── SIDEBAR ── -->
+    <div>
+      <div class="info-box" style="margin-top:0">
+        <div class="info-box-title">🔍 Informations</div>
+        <div class="info-line"><span class="lbl">Vendeur</span><span class="val" id="sb-vendor">—</span></div>
+        <div class="info-line"><span class="lbl">Acheteur</span><span class="val" id="sb-buyer">—</span></div>
+        <div class="info-line"><span class="lbl">Livraison</span><span class="val" id="sb-delivery">—</span></div>
+        <div class="info-line"><span class="lbl">ETA</span><span class="val" id="sb-eta">—</span></div>
+        <div class="info-line"><span class="lbl">Commission</span><span class="val" id="sb-com">—</span></div>
+
+        <div style="margin-top:20px;padding-top:16px;border-top:1px solid rgba(255,255,255,0.07)">
+          <div class="action-row" id="action-buttons"></div>
+        </div>
+
+        <div style="margin-top:18px;padding:14px;background:rgba(201,162,39,0.05);border:1px solid rgba(201,162,39,0.12);border-radius:12px">
+          <div style="font-size:12px;color:rgba(255,255,255,0.35);margin-bottom:6px;font-weight:600;text-transform:uppercase;letter-spacing:1px">Besoin d'aide ?</div>
+          <a href="/pages/contact.html" style="font-size:13px;color:var(--color-gold);display:flex;align-items:center;gap:6px">💬 Contacter le support SecureDeal →</a>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- Modal confirmation réception -->
+<div class="modal-backdrop" id="modal-reception">
+  <div class="modal-box">
+    <div style="font-size:3rem;margin-bottom:14px">📦✅</div>
+    <div style="font-family:'Sora',sans-serif;font-size:20px;font-weight:800;color:white;margin-bottom:12px">Confirmer la réception ?</div>
+    <p style="font-size:14px;color:rgba(255,255,255,0.5);line-height:1.6;margin-bottom:24px">
+      En confirmant la réception, vous validez que le produit est conforme à l'annonce. Le solde restant sera immédiatement libéré au vendeur (dans un délai de 48h).
+    </p>
+    <div style="background:rgba(239,68,68,0.08);border:1px solid rgba(239,68,68,0.2);border-radius:10px;padding:12px 14px;margin-bottom:24px;font-size:12px;color:rgba(255,255,255,0.55);line-height:1.5">
+      ⚠️ Cette action est <strong>irréversible</strong>. Vérifiez soigneusement le produit avant de confirmer.
+    </div>
+    <div style="display:flex;gap:12px">
+      <button class="btn btn--outline-white" style="flex:1;justify-content:center" onclick="document.getElementById('modal-reception').classList.remove('show')">Annuler</button>
+      <button class="btn btn--gold" style="flex:1;justify-content:center" id="btn-confirm-reception">✅ Confirmer</button>
+    </div>
+  </div>
+</div>
+
+<!-- Modal litige -->
+<div class="modal-backdrop" id="modal-litige">
+  <div class="modal-box">
+    <div style="font-size:3rem;margin-bottom:14px">⚖️</div>
+    <div style="font-family:'Sora',sans-serif;font-size:20px;font-weight:800;color:white;margin-bottom:12px">Ouvrir un litige</div>
+    <p style="font-size:14px;color:rgba(255,255,255,0.5);line-height:1.6;margin-bottom:20px">Décrivez le problème rencontré. L'équipe SecureDeal examinera votre dossier sous 48h ouvrées.</p>
+    <div class="form-group">
+      <label class="form-label">Motif du litige</label>
+      <select class="form-control" id="litige-motif" style="margin-bottom:14px">
+        <option>Produit non conforme à l'annonce</option>
+        <option>Produit endommagé à la réception</option>
+        <option>Produit non reçu</option>
+        <option>Quantité incorrecte</option>
+        <option>Autre motif</option>
+      </select>
+      <label class="form-label">Description détaillée</label>
+      <textarea class="form-control" id="litige-desc" rows="4" placeholder="Décrivez précisément le problème…" style="resize:vertical"></textarea>
+    </div>
+    <div style="display:flex;gap:12px;margin-top:16px">
+      <button class="btn btn--outline-white" style="flex:1;justify-content:center" onclick="document.getElementById('modal-litige').classList.remove('show')">Annuler</button>
+      <button class="btn btn--gold" style="flex:1;justify-content:center" id="btn-submit-litige">Soumettre le litige</button>
+    </div>
+  </div>
+</div>
+
+<script src="/js/config.js"></script>
+<script src="/js/api.js"></script>
+<script src="/js/utils.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+
+  var burger = document.getElementById('hamburger');
+  var mmenu  = document.getElementById('mobile-menu');
+  if (burger && mmenu) {
+    burger.addEventListener('click', function() {
+      var o = mmenu.classList.toggle('open');
+      burger.classList.toggle('open', o);
+      document.body.style.overflow = o ? 'hidden' : '';
+    });
+    mmenu.querySelectorAll('a').forEach(function(a) {
+      a.addEventListener('click', function() {
+        mmenu.classList.remove('open'); burger.classList.remove('open');
+        document.body.style.overflow = '';
+      });
+    });
+  }
+
+  function fmt(n) { return new Intl.NumberFormat('fr-FR',{style:'currency',currency:'EUR'}).format(n); }
+
+  var PRODUCTS = [
+    {id:'V001',title:'Toyota Land Cruiser 200 V8',price:28500,img:'/images/categories/cars-toyota-lc200.svg'},
+    {id:'V002',title:'Mercedes G 63 AMG 2020',   price:89000,img:'/images/categories/cars-mercedes-g63.svg'},
+    {id:'V003',title:'BMW X5 xDrive 40d Pack M', price:42000,img:'/images/categories/cars-bmw-x5.svg'},
+    {id:'T001',title:'John Deere 8R 410',         price:185000,img:'/images/categories/tractors-john-deere.svg'},
+    {id:'C001',title:'Conteneur 20 pieds',        price:3200,  img:'/images/categories/containers-container-20ft.svg'},
+    {id:'P001',title:'iPhone 15 Pro Max x20',     price:19800, img:'/images/categories/phones-iphone-15pm.svg'},
+    {id:'E001',title:'Groupe electrogene 100kVA', price:22000, img:'/images/categories/equipment-generator-100kva.svg'}
+  ];
+
+  var params  = new URLSearchParams(window.location.search);
+  var txnId   = params.get('id')  || 'SD-2025-8847';
+  var prodId  = params.get('product') || 'V001';
+  var p       = PRODUCTS.find(function(x){ return x.id === prodId; }) || PRODUCTS[0];
+
+  // Simulation statut selon id
+  var statusMap = {
+    'SD-2025-8847': 'transit',
+    'SD-2025-4412': 'delivered',
+  };
+  var txnStatus = statusMap[txnId] || 'deposit_paid';
+
+  var statusLabels = {
+    deposit_paid: {label:'Acompte reçu',    cls:'badge--escrow'},
+    collected:    {label:'Produit récupéré',cls:'badge--escrow'},
+    transit:      {label:'En transit',      cls:'badge--escrow'},
+    delivered:    {label:'Livré',           cls:'badge--active'},
+    disputed:     {label:'Litige ouvert',   cls:'badge--danger'},
+  };
+  var s = statusLabels[txnStatus] || statusLabels['deposit_paid'];
+
+  // Remplissage header
+  document.getElementById('txn-id-display').textContent = txnId;
+  document.getElementById('txn-status-badge').innerHTML = '<span class="badge ' + s.cls + '" style="font-size:12px;padding:5px 14px">' + s.label + '</span>';
+
+  // Produit
+  document.getElementById('txn-prod-img').src       = p.img;
+  document.getElementById('txn-prod-title').textContent = p.title;
+  document.getElementById('txn-prod-ref').textContent   = 'Réf. #' + p.id;
+  document.getElementById('txn-prod-link').href     = '/pages/product.html?id=' + p.id;
+  document.getElementById('txn-price').textContent  = fmt(p.price);
+
+  // Sidebar
+  document.getElementById('sb-vendor').textContent   = 'Vendeur Vérifié';
+  document.getElementById('sb-buyer').textContent    = 'Acheteur Vérifié';
+  document.getElementById('sb-delivery').textContent = 'Lyon → Dubai';
+  document.getElementById('sb-eta').textContent      = '21 mai 2025';
+  document.getElementById('sb-com').textContent      = fmt(p.price * 0.012);
+
+  // Timeline selon statut
+  var tlSteps = [
+    { icon:'✅', label:'Acompte reçu (50%)',         date:'12 mai 2025 · 09:42', note:'Paiement de ' + fmt(p.price*0.5) + ' confirmé et bloqué en escrow.', state: 'done', proof: true },
+    { icon:'🔍', label:'Vérification du produit',    date:'13 mai 2025 · 11:00', note:'Inspection indépendante réalisée par l\'équipe SecureDeal.', state: txnStatus !== 'deposit_paid' ? 'done' : 'pending', proof: txnStatus !== 'deposit_paid' },
+    { icon:'📦', label:'Produit récupéré',           date:'14 mai 2025 · 14:18', note:'Véhicule pris en charge par SecureDeal Logistics.', state: ['transit','delivered'].includes(txnStatus) ? 'done' : 'pending', proof: false },
+    { icon:'🚛', label:'En transit',                 date:'16 mai 2025 · 08:30', note:'Expédié depuis Lyon. BL n° SD-BL-98247. ETA : 21 mai 2025.', state: txnStatus === 'transit' ? 'active' : txnStatus === 'delivered' ? 'done' : 'pending', proof: false },
+    { icon:'🏠', label:'Livraison confirmée',        date: txnStatus === 'delivered' ? '21 mai 2025 · 15:40' : '—', note: txnStatus === 'delivered' ? 'Réception validée par l\'acheteur.' : 'En attente.', state: txnStatus === 'delivered' ? 'done' : 'pending', proof: false },
+    { icon:'💸', label:'Solde libéré au vendeur',    date: txnStatus === 'delivered' ? '22 mai 2025 · 09:00' : '—', note: txnStatus === 'delivered' ? 'Virement de ' + fmt(p.price * 0.5 - p.price*0.012) + ' effectué.' : 'Après validation de réception.', state: txnStatus === 'delivered' ? 'done' : 'pending', proof: false },
+  ];
+
+  var tl = document.getElementById('timeline');
+  tlSteps.forEach(function(step) {
+    var div = document.createElement('div');
+    div.className = 'tl-step';
+    var proof = step.proof ? '<div class="tl-proof">📎 Voir la preuve</div>' : '';
+    div.innerHTML =
+      '<div class="tl-dot ' + step.state + '">' + step.icon + '</div>' +
+      '<div class="tl-body">' +
+        '<div class="tl-title' + (step.state==='pending'?' pending':'') + '">' + step.label + '</div>' +
+        '<div class="tl-date">' + step.date + '</div>' +
+        '<div class="tl-note">' + step.note + '</div>' +
+        proof +
+      '</div>';
+    tl.appendChild(div);
+  });
+
+  // Paiements
+  var paymentsData = [
+    {label:'Acompte 50%',         amount: p.price*0.5, status:'paid', date:'12 mai 2025'},
+    {label:'Solde 50%',           amount: p.price*0.5, status: txnStatus==='delivered'?'paid':'pending', date: txnStatus==='delivered'?'21 mai 2025':'À la livraison'},
+    {label:'Commission SecureDeal (1,2%)', amount: p.price*0.012, status: txnStatus==='delivered'?'paid':'waiting', date: '—'},
+  ];
+  var payList = document.getElementById('payments-list');
+  paymentsData.forEach(function(pay) {
+    var statusLabel = {paid:'Payé', pending:'À payer', waiting:'Déduit'}[pay.status];
+    payList.innerHTML +=
+      '<div class="payment-row">' +
+        '<div><div class="payment-label">' + pay.label + '</div><div style="font-size:11px;color:rgba(255,255,255,0.25);margin-top:2px">' + pay.date + '</div></div>' +
+        '<div style="display:flex;align-items:center;gap:12px"><span class="payment-amount">' + fmt(pay.amount) + '</span><span class="payment-status ' + pay.status + '">' + statusLabel + '</span></div>' +
+      '</div>';
+  });
+
+  // Documents
+  var docs = [
+    {icon:'📋',name:'Contrat de transaction',ext:'PDF',date:'12 mai 2025'},
+    {icon:'🧾',name:'Reçu acompte escrow',   ext:'PDF',date:'12 mai 2025'},
+    {icon:'🔍',name:'Rapport d\'inspection', ext:'PDF',date:'13 mai 2025'},
+  ];
+  if (txnStatus === 'delivered') {
+    docs.push({icon:'✅',name:'Bon de livraison signé', ext:'PDF', date:'21 mai 2025'});
+    docs.push({icon:'💸',name:'Quittance de paiement',  ext:'PDF', date:'22 mai 2025'});
+  }
+  var docsList = document.getElementById('docs-list');
+  docs.forEach(function(doc) {
+    docsList.innerHTML +=
+      '<div style="display:flex;align-items:center;justify-content:space-between;gap:12px;padding:12px 14px;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.06);border-radius:10px;flex-wrap:wrap">' +
+        '<div style="display:flex;align-items:center;gap:10px"><span style="font-size:20px">' + doc.icon + '</span><div><div style="font-size:13px;font-weight:600;color:white">' + doc.name + '</div><div style="font-size:11px;color:rgba(255,255,255,0.30)">' + doc.ext + ' · ' + doc.date + '</div></div></div>' +
+        '<button class="btn btn--outline-white btn--sm" onclick="alert(\'Téléchargement simulé — connectez votre backend.\')">⬇ Télécharger</button>' +
+      '</div>';
+  });
+
+  // Actions sidebar selon statut
+  var actionsEl = document.getElementById('action-buttons');
+  if (txnStatus === 'transit') {
+    actionsEl.innerHTML =
+      '<button class="btn-action-primary" onclick="document.getElementById(\'modal-reception\').classList.add(\'show\')">✅ Confirmer la réception</button>' +
+      '<a href="/pages/messages.html" class="btn-action-secondary">💬 Contacter le vendeur</a>' +
+      '<button class="btn-action-danger" onclick="document.getElementById(\'modal-litige\').classList.add(\'show\')">⚖️ Ouvrir un litige</button>';
+  } else if (txnStatus === 'delivered') {
+    actionsEl.innerHTML =
+      '<div style="background:rgba(16,185,129,0.08);border:1px solid rgba(16,185,129,0.2);border-radius:10px;padding:12px;text-align:center;font-size:13px;color:#10B981;font-weight:600">✅ Transaction complète</div>' +
+      '<a href="/pages/tracking.html" class="btn-action-secondary">📡 Voir le suivi</a>' +
+      '<a href="/pages/categories.html" class="btn-action-secondary">🛒 Nouvelle annonce</a>';
+  } else {
+    actionsEl.innerHTML =
+      '<a href="/pages/tracking.html" class="btn-action-secondary">📡 Suivre la livraison</a>' +
+      '<a href="/pages/messages.html" class="btn-action-secondary">💬 Contacter le vendeur</a>' +
+      '<button class="btn-action-danger" onclick="document.getElementById(\'modal-litige\').classList.add(\'show\')">⚖️ Signaler un problème</button>';
+  }
+
+  // Confirmation réception
+  document.getElementById('btn-confirm-reception').addEventListener('click', function() {
+    document.getElementById('modal-reception').classList.remove('show');
+    window.location.href = '/pages/transaction.html?id=' + txnId + '&product=' + p.id + '&status=delivered';
+  });
+
+  // Litige
+  document.getElementById('btn-submit-litige').addEventListener('click', function() {
+    document.getElementById('modal-litige').classList.remove('show');
+    alert('Votre litige a été enregistré. Notre équipe vous contactera sous 48h ouvrées.');
+  });
+
+  // Fermer modals sur backdrop
+  ['modal-reception','modal-litige'].forEach(function(id) {
+    document.getElementById(id).addEventListener('click', function(e) {
+      if (e.target === this) this.classList.remove('show');
+    });
+  });
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Publier une annonce — SecureDeal</title>
+  <script src="/js/loader.js"></script>
+  <link rel="stylesheet" href="/css/loader.css">
+  <link rel="stylesheet" href="/css/main.css">
+  <link rel="stylesheet" href="/css/brand.css">
+  <link rel="stylesheet" href="/css/backgrounds.css">
+  <link rel="stylesheet" href="/css/responsive-fixes.css">
+  <link rel="icon" href="/images/logo/favicon.svg" type="image/svg+xml">
+  <style>
+    body { background:#050505; }
+    .pub-layout { display:grid; grid-template-columns:1fr 300px; gap:32px; align-items:start; padding:32px 0 80px; }
+    .form-section { background:rgba(255,255,255,0.03); border:1px solid rgba(255,255,255,0.07); border-radius:18px; padding:26px; margin-bottom:18px; }
+    .form-section-title { font-family:'Sora',sans-serif; font-size:15px; font-weight:700; color:white; margin-bottom:18px; padding-bottom:12px; border-bottom:1px solid rgba(255,255,255,0.07); display:flex; align-items:center; gap:10px; }
+    .form-grid-2 { display:grid; grid-template-columns:1fr 1fr; gap:14px; }
+    .char-count { font-size:11px; color:rgba(255,255,255,0.25); text-align:right; margin-top:4px; }
+    .upload-zone { border:2px dashed rgba(201,162,39,0.25); border-radius:14px; padding:24px 16px; text-align:center; cursor:pointer; transition:all .2s; background:rgba(201,162,39,0.03); min-height:120px; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:8px; }
+    .upload-zone:hover { border-color:rgba(201,162,39,0.5); background:rgba(201,162,39,0.06); }
+    .photos-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:10px; margin-top:12px; }
+    .photo-thumb { aspect-ratio:4/3; border-radius:10px; overflow:hidden; background:rgba(255,255,255,0.04); border:1px solid rgba(255,255,255,0.08); position:relative; display:flex; align-items:center; justify-content:center; }
+    .photo-thumb img { width:100%; height:100%; object-fit:cover; }
+    .photo-thumb .remove { position:absolute; top:4px; right:4px; width:20px; height:20px; border-radius:50%; background:rgba(239,68,68,0.8); color:white; border:none; cursor:pointer; font-size:11px; display:flex; align-items:center; justify-content:center; }
+    .tips-box { background:rgba(255,255,255,0.03); border:1px solid rgba(201,162,39,0.12); border-radius:18px; padding:22px; position:sticky; top:90px; }
+    .tips-box-title { font-family:'Sora',sans-serif; font-size:14px; font-weight:700; color:white; margin-bottom:16px; padding-bottom:12px; border-bottom:1px solid rgba(255,255,255,0.07); }
+    .tip-item { display:flex; gap:10px; font-size:12px; color:rgba(255,255,255,0.45); line-height:1.5; margin-bottom:10px; }
+    .tip-item .tip-icon { color:var(--color-gold); flex-shrink:0; }
+    .price-preview { background:rgba(201,162,39,0.06); border:1px solid rgba(201,162,39,0.15); border-radius:12px; padding:14px 16px; margin-top:14px; }
+    @media(max-width:900px){ .pub-layout{grid-template-columns:1fr;} .tips-box{position:static;} .form-grid-2{grid-template-columns:1fr;} .photos-grid{grid-template-columns:repeat(3,1fr);} }
+    @media(max-width:480px){ .photos-grid{grid-template-columns:repeat(2,1fr);} }
+  </style>
+</head>
+<body>
+
+<header class="site-header scrolled" id="site-header">
+  <div class="header-inner">
+    <a href="/index.html" class="header-logo">
+      <svg width="150" height="36" viewBox="0 0 160 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M18 3L31 8V17.5C31 25.5 25 31.5 18 34C11 31.5 5 25.5 5 17.5V8Z" fill="none" stroke="#C9A227" stroke-width="1.5"/>
+        <path d="M18 7.5L27 11.5V17.5C27 23 23 27.5 18 30C13 27.5 9 23 9 17.5V11.5Z" fill="rgba(201,162,39,0.08)" stroke="#C9A227" stroke-width="0.8"/>
+        <polyline points="13 18 16.5 21.5 23 14" stroke="#C9A227" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+        <text x="39" y="26" font-family="Sora, sans-serif" font-size="16" font-weight="800" fill="white" letter-spacing="-0.5">SECURE</text>
+        <text x="106" y="26" font-family="Sora, sans-serif" font-size="16" font-weight="300" fill="#C9A227" letter-spacing="2">DEAL</text>
+      </svg>
+    </a>
+    <nav class="header-nav">
+      <a href="/pages/dashboard/vendor.html" class="header-nav-link">Mon espace</a>
+      <a href="/pages/categories.html" class="header-nav-link">Catégories</a>
+      <a href="/pages/messages.html" class="header-nav-link">Messages</a>
+    </nav>
+    <div class="header-actions">
+      <div id="header-auth" style="display:flex;gap:10px;align-items:center">
+        <a href="/pages/dashboard/vendor.html" class="btn btn--outline-white btn--sm">Mon espace vendeur</a>
+      </div>
+    </div>
+    <button class="hamburger" id="hamburger" aria-label="Menu" aria-expanded="false"><span></span><span></span><span></span></button>
+  </div>
+</header>
+<nav class="mobile-menu" id="mobile-menu">
+  <a href="/index.html">🏠 Accueil</a>
+  <a href="/pages/categories.html">📦 Catégories</a>
+  <a href="/pages/messages.html">💬 Messages</a>
+  <a href="/pages/dashboard/vendor.html">⚙️ Mon espace vendeur</a>
+  <div class="mobile-menu-divider"></div>
+  <div class="mobile-menu-actions">
+    <a href="/pages/auth/login.html" class="btn btn--outline-white">Se connecter</a>
+  </div>
+</nav>
+
+<div style="background:var(--gradient-hero);padding:80px 0 0;position:relative;overflow:hidden">
+  <div style="position:absolute;inset:0;background-image:linear-gradient(rgba(201,162,39,0.03) 1px,transparent 1px),linear-gradient(90deg,rgba(201,162,39,0.03) 1px,transparent 1px);background-size:60px 60px" aria-hidden="true"></div>
+  <div class="container" style="position:relative;padding-bottom:28px">
+    <div style="font-size:13px;color:rgba(255,255,255,0.35);margin-bottom:12px">
+      <a href="/pages/dashboard/vendor.html" style="color:rgba(255,255,255,0.35)">Espace vendeur</a>
+      <span style="margin:0 8px;color:rgba(255,255,255,0.15)">›</span>
+      <span style="color:rgba(255,255,255,0.6)">Publier une annonce</span>
+    </div>
+    <h1 style="font-family:'Sora',sans-serif;font-size:clamp(1.5rem,3vw,2.2rem);font-weight:800;color:white;margin-bottom:8px">Publier une annonce</h1>
+    <p style="color:rgba(255,255,255,0.40);font-size:14px">Remplissez le formulaire ci-dessous. Votre annonce sera examinée par SecureDeal avant publication.</p>
+  </div>
+</div>
+
+<div class="container">
+  <form id="publish-form">
+  <div class="pub-layout">
+    <div>
+
+      <!-- Catégorie -->
+      <div class="form-section">
+        <div class="form-section-title">📦 Catégorie</div>
+        <div class="form-grid-2">
+          <div class="form-group">
+            <label class="form-label">Catégorie principale *</label>
+            <select class="form-control" id="f-cat" required>
+              <option value="">— Choisir une catégorie —</option>
+              <option value="cars">🚗 Voitures &amp; SUV</option>
+              <option value="vehicles">🚐 Véhicules utilitaires</option>
+              <option value="tractors">🚜 Tracteurs &amp; engins agricoles</option>
+              <option value="containers">📦 Conteneurs</option>
+              <option value="phones">📱 Téléphones portables</option>
+              <option value="equipment">⚙️ Équipements &amp; machines</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Disponibilité *</label>
+            <select class="form-control" id="f-stock" required>
+              <option value="vendor">Je possède encore le produit (Mode 1)</option>
+              <option value="securedeal">Produit déjà chez SecureDeal (Mode 2)</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <!-- Informations produit -->
+      <div class="form-section">
+        <div class="form-section-title">📋 Informations produit</div>
+        <div class="form-group">
+          <label class="form-label">Titre de l'annonce * <span style="font-size:11px;color:rgba(255,255,255,0.25)">(max 80 caractères)</span></label>
+          <input type="text" class="form-control" id="f-title" placeholder="Ex: Toyota Land Cruiser 200 V8 4x4 — 2018 — 180 000 km" maxlength="80" required>
+          <div class="char-count"><span id="title-count">0</span>/80</div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Description détaillée * <span style="font-size:11px;color:rgba(255,255,255,0.25)">(min 100 caractères)</span></label>
+          <textarea class="form-control" id="f-desc" rows="5" placeholder="Décrivez précisément le produit : état, caractéristiques, historique d'entretien, documents inclus…" minlength="100" required style="resize:vertical"></textarea>
+          <div class="char-count"><span id="desc-count">0</span> caractères</div>
+        </div>
+        <div class="form-grid-2">
+          <div class="form-group">
+            <label class="form-label">Marque / Fabricant *</label>
+            <input type="text" class="form-control" id="f-brand" placeholder="Ex: Toyota, John Deere, Apple…" required>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Modèle *</label>
+            <input type="text" class="form-control" id="f-model" placeholder="Ex: Land Cruiser 200, 8R 410…" required>
+          </div>
+        </div>
+        <div class="form-grid-2">
+          <div class="form-group">
+            <label class="form-label">Année / Date de fabrication</label>
+            <input type="number" class="form-control" id="f-year" placeholder="Ex: 2021" min="1980" max="2025">
+          </div>
+          <div class="form-group">
+            <label class="form-label">État général *</label>
+            <select class="form-control" id="f-condition" required>
+              <option value="">— Sélectionner —</option>
+              <option value="new">Neuf / Jamais utilisé</option>
+              <option value="like_new">Comme neuf</option>
+              <option value="good">Bon état</option>
+              <option value="fair">État correct</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Quantité disponible</label>
+          <input type="number" class="form-control" id="f-qty" value="1" min="1" placeholder="1">
+        </div>
+      </div>
+
+      <!-- Prix -->
+      <div class="form-section">
+        <div class="form-section-title">💰 Prix</div>
+        <div class="form-grid-2">
+          <div class="form-group">
+            <label class="form-label">Prix de vente (€) *</label>
+            <input type="number" class="form-control" id="f-price" placeholder="Ex: 28500" min="100" step="100" required>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Acompte minimum demandé</label>
+            <select class="form-control" id="f-dep">
+              <option value="30">30% (minimum)</option>
+              <option value="40">40%</option>
+              <option value="50" selected>50% (recommandé)</option>
+              <option value="60">60%</option>
+              <option value="70">70%</option>
+            </select>
+          </div>
+        </div>
+        <div class="price-preview" id="price-preview" style="display:none">
+          <div style="font-size:11px;color:rgba(255,255,255,0.35);text-transform:uppercase;letter-spacing:1px;margin-bottom:10px">Aperçu de votre transaction</div>
+          <div style="display:flex;justify-content:space-between;font-size:13px;padding:5px 0;border-bottom:1px solid rgba(255,255,255,0.06)"><span style="color:rgba(255,255,255,0.5)">Prix total</span><span style="color:white;font-weight:600" id="pp-total">—</span></div>
+          <div style="display:flex;justify-content:space-between;font-size:13px;padding:5px 0;border-bottom:1px solid rgba(255,255,255,0.06)"><span style="color:rgba(255,255,255,0.5)">Commission SecureDeal (1,2%)</span><span style="color:rgba(239,68,68,0.8);font-weight:600" id="pp-com">—</span></div>
+          <div style="display:flex;justify-content:space-between;font-size:14px;padding:8px 0"><span style="color:white;font-weight:700">Vous recevrez</span><span style="color:var(--color-gold);font-weight:800;font-family:'JetBrains Mono',monospace" id="pp-net">—</span></div>
+        </div>
+      </div>
+
+      <!-- Localisation -->
+      <div class="form-section">
+        <div class="form-section-title">📍 Localisation &amp; Expédition</div>
+        <div class="form-grid-2">
+          <div class="form-group">
+            <label class="form-label">Pays du vendeur *</label>
+            <select class="form-control" id="f-country" required>
+              <option value="">— Sélectionner —</option>
+              <option value="FR">🇫🇷 France</option>
+              <option value="BE">🇧🇪 Belgique</option>
+              <option value="CH">🇨🇭 Suisse</option>
+              <option value="SN">🇸🇳 Sénégal</option>
+              <option value="CI">🇨🇮 Côte d'Ivoire</option>
+              <option value="MA">🇲🇦 Maroc</option>
+              <option value="DZ">🇩🇿 Algérie</option>
+              <option value="AE">🇦🇪 Émirats Arabes Unis</option>
+              <option value="OTHER">Autre</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Ville / Région *</label>
+            <input type="text" class="form-control" id="f-city" placeholder="Ex: Lyon, Île-de-France…" required>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Zones de livraison acceptées</label>
+          <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:6px">
+            <label style="display:flex;align-items:center;gap:6px;font-size:13px;color:rgba(255,255,255,0.6);cursor:pointer"><input type="checkbox" id="z-eu" style="accent-color:var(--color-gold)"> Europe</label>
+            <label style="display:flex;align-items:center;gap:6px;font-size:13px;color:rgba(255,255,255,0.6);cursor:pointer"><input type="checkbox" id="z-af" style="accent-color:var(--color-gold)"> Afrique</label>
+            <label style="display:flex;align-items:center;gap:6px;font-size:13px;color:rgba(255,255,255,0.6);cursor:pointer"><input type="checkbox" id="z-me" style="accent-color:var(--color-gold)"> Moyen-Orient</label>
+            <label style="display:flex;align-items:center;gap:6px;font-size:13px;color:rgba(255,255,255,0.6);cursor:pointer"><input type="checkbox" id="z-as" style="accent-color:var(--color-gold)"> Asie</label>
+            <label style="display:flex;align-items:center;gap:6px;font-size:13px;color:rgba(255,255,255,0.6);cursor:pointer"><input type="checkbox" id="z-am" style="accent-color:var(--color-gold)"> Amériques</label>
+          </div>
+        </div>
+      </div>
+
+      <!-- Photos -->
+      <div class="form-section">
+        <div class="form-section-title">📸 Photos du produit</div>
+        <p style="font-size:13px;color:rgba(255,255,255,0.40);margin-bottom:16px;line-height:1.6">Ajoutez jusqu'à 10 photos de haute qualité. Les annonces avec photos reçoivent 4× plus de vues. Formats acceptés : JPG, PNG, WEBP · Max 8 Mo par photo.</p>
+        <div class="upload-zone" onclick="document.getElementById('f-photos').click()">
+          <div style="font-size:2.5rem">📷</div>
+          <div style="font-size:14px;color:rgba(255,255,255,0.55);font-weight:600">Cliquez pour ajouter des photos</div>
+          <div style="font-size:12px;color:rgba(255,255,255,0.30)">ou glissez-déposez ici</div>
+        </div>
+        <input type="file" id="f-photos" multiple accept="image/*" style="display:none">
+        <div class="photos-grid" id="photos-preview"></div>
+      </div>
+
+      <!-- Conditions -->
+      <div class="form-section">
+        <div class="form-section-title">📜 Conditions &amp; Validation</div>
+        <div style="display:flex;flex-direction:column;gap:10px">
+          <label style="display:flex;align-items:flex-start;gap:12px;padding:14px;background:rgba(255,255,255,0.02);border:1px solid rgba(255,255,255,0.07);border-radius:12px;cursor:pointer">
+            <input type="checkbox" id="c1" style="accent-color:var(--color-gold);margin-top:2px;flex-shrink:0" required>
+            <span style="font-size:13px;color:rgba(255,255,255,0.55);line-height:1.6">Je certifie être le propriétaire légitime de ce produit et disposer du droit de le vendre.</span>
+          </label>
+          <label style="display:flex;align-items:flex-start;gap:12px;padding:14px;background:rgba(255,255,255,0.02);border:1px solid rgba(255,255,255,0.07);border-radius:12px;cursor:pointer">
+            <input type="checkbox" id="c2" style="accent-color:var(--color-gold);margin-top:2px;flex-shrink:0" required>
+            <span style="font-size:13px;color:rgba(255,255,255,0.55);line-height:1.6">Je m'engage à ne réaliser aucune transaction financière en dehors de la plateforme SecureDeal et à ne pas partager mes coordonnées bancaires avec l'acheteur.</span>
+          </label>
+          <label style="display:flex;align-items:flex-start;gap:12px;padding:14px;background:rgba(255,255,255,0.02);border:1px solid rgba(255,255,255,0.07);border-radius:12px;cursor:pointer">
+            <input type="checkbox" id="c3" style="accent-color:var(--color-gold);margin-top:2px;flex-shrink:0" required>
+            <span style="font-size:13px;color:rgba(255,255,255,0.55);line-height:1.6">J'accepte les <a href="/pages/legal/cgu.html" target="_blank" style="color:var(--color-gold)">CGU de SecureDeal</a>, la commission de 1,2% sur le montant total, et le processus de validation par l'équipe SecureDeal avant publication.</span>
+          </label>
+        </div>
+      </div>
+
+      <button type="submit" class="btn btn--gold btn--lg" style="width:100%;justify-content:center;font-size:16px;padding:18px" id="btn-submit">
+        🚀 Soumettre mon annonce
+      </button>
+    </div>
+
+    <!-- Sidebar conseils -->
+    <div>
+      <div class="tips-box" style="margin-top:32px">
+        <div class="tips-box-title">💡 Conseils vendeur</div>
+        <div class="tip-item"><span class="tip-icon">📸</span><span>Des photos claires et variées augmentent votre taux de conversion de 300%.</span></div>
+        <div class="tip-item"><span class="tip-icon">✍️</span><span>Une description complète (kilométrage, entretien, défauts) inspire confiance et évite les litiges.</span></div>
+        <div class="tip-item"><span class="tip-icon">💰</span><span>Proposez un acompte de 50% pour équilibrer la confiance acheteur/vendeur.</span></div>
+        <div class="tip-item"><span class="tip-icon">📍</span><span>Indiquez la ville précise pour aider les acheteurs à estimer les frais de transport.</span></div>
+        <div class="tip-item"><span class="tip-icon">⏱️</span><span>Les annonces sont validées par SecureDeal sous 24-48h ouvrées.</span></div>
+
+        <div style="margin-top:20px;padding:14px;background:rgba(201,162,39,0.06);border:1px solid rgba(201,162,39,0.12);border-radius:12px">
+          <div style="font-size:12px;color:rgba(255,255,255,0.35);margin-bottom:8px;font-weight:600;text-transform:uppercase;letter-spacing:1px">Commission transparente</div>
+          <div style="font-size:13px;color:rgba(255,255,255,0.55);line-height:1.5">SecureDeal prélève <strong style="color:var(--color-gold)">1,2%</strong> du prix de vente final. C'est tout. Aucun frais de publication.</div>
+        </div>
+
+        <div style="margin-top:16px">
+          <a href="/pages/how-it-works.html" style="font-size:13px;color:var(--color-gold);display:flex;align-items:center;gap:6px">⚙️ Comment fonctionne la vente ? →</a>
+        </div>
+      </div>
+    </div>
+
+  </div>
+  </form>
+</div>
+
+<!-- Modal succès -->
+<div class="modal-backdrop" id="modal-success" style="display:none;align-items:center;justify-content:center;padding:20px">
+  <div style="background:#111;border:1px solid rgba(201,162,39,0.2);border-radius:24px;padding:40px;max-width:460px;width:100%;text-align:center;animation:fadeInUp .3s ease">
+    <div style="font-size:4rem;margin-bottom:16px">🎉</div>
+    <div style="font-family:'Sora',sans-serif;font-size:22px;font-weight:800;color:white;margin-bottom:12px">Annonce soumise !</div>
+    <p style="font-size:14px;color:rgba(255,255,255,0.5);line-height:1.7;margin-bottom:24px">Votre annonce a été soumise avec succès. L'équipe SecureDeal va l'examiner et la publier sous 24-48h ouvrées. Vous recevrez un email de confirmation.</p>
+    <div style="display:flex;flex-direction:column;gap:10px">
+      <a href="/pages/dashboard/vendor.html" class="btn btn--gold btn--lg" style="justify-content:center">📊 Voir mon espace vendeur</a>
+      <a href="/pages/categories.html" class="btn btn--outline-white" style="justify-content:center">🔍 Parcourir les annonces</a>
+    </div>
+  </div>
+</div>
+
+<script src="/js/config.js"></script>
+<script src="/js/api.js"></script>
+<script src="/js/utils.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  var burger = document.getElementById('hamburger');
+  var mmenu  = document.getElementById('mobile-menu');
+  if (burger && mmenu) {
+    burger.addEventListener('click', function() {
+      var o = mmenu.classList.toggle('open');
+      burger.classList.toggle('open', o);
+      document.body.style.overflow = o ? 'hidden' : '';
+    });
+    mmenu.querySelectorAll('a').forEach(function(a) {
+      a.addEventListener('click', function() {
+        mmenu.classList.remove('open'); burger.classList.remove('open');
+        document.body.style.overflow = '';
+      });
+    });
+  }
+
+  function fmt(n){ return new Intl.NumberFormat('fr-FR',{style:'currency',currency:'EUR'}).format(n); }
+
+  // Compteurs de caractères
+  document.getElementById('f-title').addEventListener('input', function() {
+    document.getElementById('title-count').textContent = this.value.length;
+  });
+  document.getElementById('f-desc').addEventListener('input', function() {
+    document.getElementById('desc-count').textContent = this.value.length;
+  });
+
+  // Aperçu prix
+  function updatePrice() {
+    var price = parseFloat(document.getElementById('f-price').value);
+    var preview = document.getElementById('price-preview');
+    if (!price || price < 100) { preview.style.display = 'none'; return; }
+    var com = price * 0.012;
+    var net = price - com;
+    document.getElementById('pp-total').textContent = fmt(price);
+    document.getElementById('pp-com').textContent   = '-' + fmt(com);
+    document.getElementById('pp-net').textContent   = fmt(net);
+    preview.style.display = 'block';
+  }
+  document.getElementById('f-price').addEventListener('input', updatePrice);
+
+  // Photos preview
+  document.getElementById('f-photos').addEventListener('change', function() {
+    var grid = document.getElementById('photos-preview');
+    var files = Array.from(this.files).slice(0, 10);
+    grid.innerHTML = '';
+    files.forEach(function(file) {
+      var reader = new FileReader();
+      reader.onload = function(e) {
+        var div = document.createElement('div');
+        div.className = 'photo-thumb';
+        div.innerHTML = '<img src="' + e.target.result + '" alt="photo">' +
+          '<button class="remove" type="button" onclick="this.parentElement.remove()">×</button>';
+        grid.appendChild(div);
+      };
+      reader.readAsDataURL(file);
+    });
+  });
+
+  // Soumission
+  document.getElementById('publish-form').addEventListener('submit', function(e) {
+    e.preventDefault();
+    var modal = document.getElementById('modal-success');
+    modal.style.display = 'flex';
+  });
+  document.getElementById('modal-success').addEventListener('click', function(e) {
+    if (e.target === this) this.style.display = 'none';
+  });
+});
+</script>
+</body>
+</html>

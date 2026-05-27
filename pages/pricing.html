@@ -1,0 +1,612 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tarification — SecureDeal</title>
+  <script src="/js/loader.js"></script>
+  <link rel="stylesheet" href="/css/loader.css">
+  <link rel="stylesheet" href="/css/main.css">
+  <link rel="stylesheet" href="/css/brand.css">
+  <link rel="stylesheet" href="/css/responsive-fixes.css">
+  <link rel="stylesheet" href="/css/backgrounds.css">
+  <link rel="icon" href="/images/logo/favicon.svg" type="image/svg+xml">
+  <script src="/js/pricing.js"></script>
+  <style>
+    body { background:#050505; }
+
+    /* ── Sélecteur Standard / Concierge ── */
+    .level-toggle {
+      display:flex; gap:0;
+      background:rgba(255,255,255,0.04);
+      border:1px solid rgba(255,255,255,0.08);
+      border-radius:14px; padding:4px;
+    }
+    .level-btn {
+      flex:1; padding:11px 16px; border:none; cursor:pointer;
+      border-radius:10px; font-family:'Sora',sans-serif;
+      font-size:14px; font-weight:700; transition:all .25s;
+      background:transparent; color:rgba(255,255,255,0.40);
+      display:flex; align-items:center; justify-content:center; gap:8px;
+    }
+    .level-btn.active-std {
+      background:linear-gradient(135deg,#1a1400,#2a2100);
+      color:var(--color-gold);
+      border:1px solid rgba(201,162,39,0.30);
+      box-shadow:0 4px 16px rgba(201,162,39,0.15);
+    }
+    .level-btn.active-cnc {
+      background:linear-gradient(135deg,#0d001a,#1a0030);
+      color:#A78BFA;
+      border:1px solid rgba(167,139,250,0.30);
+      box-shadow:0 4px 16px rgba(167,139,250,0.15);
+    }
+
+    /* ── Options paiement / international ── */
+    .option-row {
+      display:flex; align-items:center; justify-content:space-between;
+      padding:12px 14px;
+      background:rgba(255,255,255,0.03);
+      border:1px solid rgba(255,255,255,0.07);
+      border-radius:12px; cursor:pointer;
+      transition:border-color .2s;
+    }
+    .option-row:hover { border-color:rgba(201,162,39,0.20); }
+    .option-label { font-size:14px; color:rgba(255,255,255,0.70); display:flex; align-items:center; gap:10px; }
+    .option-sub   { font-size:11px; color:rgba(255,255,255,0.30); margin-top:2px; }
+
+    /* Toggle switch */
+    .toggle-switch {
+      width:42px; height:24px; border-radius:12px;
+      background:rgba(255,255,255,0.10); position:relative;
+      transition:background .2s; flex-shrink:0;
+    }
+    .toggle-switch::after {
+      content:''; width:18px; height:18px; border-radius:50%;
+      background:white; position:absolute; top:3px; left:3px;
+      transition:transform .2s; box-shadow:0 1px 4px rgba(0,0,0,0.3);
+    }
+    .toggle-switch.on { background:var(--color-gold); }
+    .toggle-switch.on::after { transform:translateX(18px); }
+
+    /* ── Résultat ── */
+    .result-card {
+      background:rgba(255,255,255,0.03);
+      border:1px solid rgba(201,162,39,0.15);
+      border-radius:18px; padding:24px;
+    }
+    .result-line {
+      display:flex; justify-content:space-between; align-items:center;
+      padding:9px 0; border-bottom:1px solid rgba(255,255,255,0.05);
+      font-size:13px; gap:12px;
+    }
+    .result-line:last-child { border-bottom:none; }
+    .result-label { color:rgba(255,255,255,0.50); flex-shrink:0; }
+    .result-value { font-family:'JetBrains Mono',monospace; font-weight:700; color:white; text-align:right; }
+    .result-value.gold  { color:var(--color-gold); font-size:16px; }
+    .result-value.green { color:#10B981; }
+    .result-value.red   { color:#EF4444; }
+    .result-value.purple{ color:#A78BFA; }
+    .result-total {
+      margin-top:12px; padding-top:16px;
+      border-top:2px solid rgba(201,162,39,0.20);
+      display:flex; justify-content:space-between; align-items:center;
+    }
+    .result-total-label { font-family:'Sora',sans-serif; font-size:16px; font-weight:800; color:white; }
+    .result-total-value { font-family:'JetBrains Mono',monospace; font-size:24px; font-weight:800; color:var(--color-gold); }
+
+    /* Badge min appliqué */
+    .badge-min {
+      font-size:10px; font-weight:700;
+      background:rgba(245,158,11,0.15); color:#F59E0B;
+      border-radius:4px; padding:2px 7px; margin-left:8px;
+    }
+
+    /* ── Grille tarifaire ── */
+    .pricing-table { width:100%; border-collapse:collapse; }
+    .pricing-table th {
+      padding:12px 14px; text-align:left;
+      font-size:11px; font-weight:700;
+      text-transform:uppercase; letter-spacing:1px;
+      color:rgba(255,255,255,0.35);
+      background:rgba(255,255,255,0.03);
+      border-bottom:1px solid rgba(255,255,255,0.07);
+    }
+    .pricing-table td {
+      padding:13px 14px;
+      border-bottom:1px solid rgba(255,255,255,0.04);
+      font-size:13px; color:rgba(255,255,255,0.65);
+    }
+    .pricing-table tr:hover td { background:rgba(201,162,39,0.03); }
+    .pricing-table tr:last-child td { border-bottom:none; }
+    .pricing-table .td-tier  { font-weight:600; color:white; }
+    .pricing-table .td-std   { color:var(--color-gold); font-family:'JetBrains Mono',monospace; }
+    .pricing-table .td-cnc   { color:#A78BFA; font-family:'JetBrains Mono',monospace; }
+    .pricing-table .td-quote { color:rgba(255,255,255,0.30); font-style:italic; }
+    .pricing-table .row-highlight td { background:rgba(201,162,39,0.05); }
+
+    /* Comparateur */
+    .compare-card {
+      flex:1; padding:24px;
+      border-radius:18px; border:1px solid rgba(255,255,255,0.08);
+      background:rgba(255,255,255,0.02); min-width:0;
+    }
+    .compare-card.std { border-color:rgba(201,162,39,0.15); }
+    .compare-card.cnc { border-color:rgba(167,139,250,0.15); background:rgba(167,139,250,0.03); }
+
+    @media(max-width:768px) {
+      .calc-layout { flex-direction:column !important; }
+      .compare-row  { flex-direction:column !important; }
+      .pricing-table th:nth-child(3),
+      .pricing-table td:nth-child(3) { display:none; }
+    }
+    @media(max-width:480px) {
+      .pricing-table th:nth-child(4),
+      .pricing-table td:nth-child(4) { display:none; }
+    }
+  </style>
+</head>
+<body>
+
+<header class="site-header scrolled" id="site-header">
+  <div class="header-inner">
+    <a href="/index.html" class="header-logo">
+      <svg width="150" height="36" viewBox="0 0 160 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M18 3L31 8V17.5C31 25.5 25 31.5 18 34C11 31.5 5 25.5 5 17.5V8Z" fill="none" stroke="#C9A227" stroke-width="1.5"/>
+        <path d="M18 7.5L27 11.5V17.5C27 23 23 27.5 18 30C13 27.5 9 23 9 17.5V11.5Z" fill="rgba(201,162,39,0.08)" stroke="#C9A227" stroke-width="0.8"/>
+        <polyline points="13 18 16.5 21.5 23 14" stroke="#C9A227" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+        <text x="39" y="26" font-family="Sora, sans-serif" font-size="16" font-weight="800" fill="white" letter-spacing="-0.5">SECURE</text>
+        <text x="106" y="26" font-family="Sora, sans-serif" font-size="16" font-weight="300" fill="#C9A227" letter-spacing="2">DEAL</text>
+      </svg>
+    </a>
+    <nav class="header-nav">
+      <a href="/index.html" class="header-nav-link">Accueil</a>
+      <a href="/pages/how-it-works.html" class="header-nav-link">Fonctionnement</a>
+      <a href="/pages/categories.html" class="header-nav-link">Catégories</a>
+      <a href="/pages/pricing.html" class="header-nav-link active">Tarifs</a>
+      <a href="/pages/contact.html" class="header-nav-link">Contact</a>
+    </nav>
+    <div class="header-actions">
+      <div id="header-auth" style="display:flex;gap:10px;align-items:center">
+        <a href="/pages/auth/login.html" class="btn btn--outline-white btn--sm">Connexion</a>
+        <a href="/pages/auth/register.html" class="btn btn--gold btn--sm btn--shimmer">Créer un compte</a>
+      </div>
+    </div>
+    <button class="hamburger" id="hamburger" aria-label="Menu" aria-expanded="false"><span></span><span></span><span></span></button>
+  </div>
+</header>
+<nav class="mobile-menu" id="mobile-menu">
+  <a href="/index.html">🏠 Accueil</a>
+  <a href="/pages/how-it-works.html">⚙️ Fonctionnement</a>
+  <a href="/pages/categories.html">📦 Catégories</a>
+  <a href="/pages/pricing.html" class="active">💰 Tarifs</a>
+  <a href="/pages/contact.html">✉️ Contact</a>
+  <div class="mobile-menu-divider"></div>
+  <div class="mobile-menu-actions">
+    <a href="/pages/auth/login.html" class="btn btn--outline-white">Se connecter</a>
+    <a href="/pages/auth/register.html" class="btn btn--gold">Créer un compte</a>
+  </div>
+</nav>
+
+<!-- Hero -->
+<div style="background:var(--gradient-hero);padding:100px 0 60px;position:relative;overflow:hidden">
+  <div style="position:absolute;inset:0;background-image:linear-gradient(rgba(201,162,39,0.04)1px,transparent 1px),linear-gradient(90deg,rgba(201,162,39,0.04)1px,transparent 1px);background-size:60px 60px" aria-hidden="true"></div>
+  <div class="container text-center" style="position:relative">
+    <div class="section-label" style="display:inline-flex;margin-bottom:20px">Transparence totale</div>
+    <h1 style="font-family:'Sora',sans-serif;font-size:clamp(2rem,4vw,3.2rem);font-weight:800;color:white;margin-bottom:16px;letter-spacing:-1px">
+      Tarification simple &amp; dégressive
+    </h1>
+    <p style="font-size:16px;color:rgba(255,255,255,0.50);max-width:560px;margin:0 auto;line-height:1.8">
+      Frais d'escrow dégressifs selon le montant. Aucun frais caché. Deux niveaux de service.
+    </p>
+  </div>
+</div>
+
+<!-- ══════════════════════ CALCULATEUR ══════════════════════════ -->
+<section style="background:var(--color-dark);padding:64px 0">
+  <div class="container" style="max-width:1000px">
+    <div class="text-center" style="margin-bottom:40px">
+      <div class="section-label" style="display:inline-flex;margin-bottom:12px">Simulateur</div>
+      <h2 style="font-family:'Sora',sans-serif;font-size:clamp(1.4rem,3vw,2rem);font-weight:800;color:white">
+        Calculez vos frais en temps réel
+      </h2>
+    </div>
+
+    <div class="calc-layout" style="display:flex;gap:28px;align-items:flex-start">
+
+      <!-- Formulaire -->
+      <div style="flex:1;min-width:0">
+
+        <!-- Niveau de service -->
+        <div style="margin-bottom:18px">
+          <div class="form-label" style="margin-bottom:10px">Niveau de service</div>
+          <div class="level-toggle">
+            <button class="level-btn active-std" id="btn-std" onclick="setLevel('standard')">
+              <span>⚡</span> Standard
+            </button>
+            <button class="level-btn" id="btn-cnc" onclick="setLevel('concierge')">
+              <span>👑</span> Concierge
+            </button>
+          </div>
+          <div id="level-desc" style="margin-top:10px;padding:10px 14px;border-radius:10px;font-size:12px;line-height:1.6"></div>
+        </div>
+
+        <!-- Montant -->
+        <div class="form-group">
+          <label class="form-label">Montant de la transaction (€) *</label>
+          <div style="position:relative">
+            <input type="number" class="form-control" id="calc-amount"
+                   placeholder="Ex: 15 000" min="1" step="100"
+                   style="padding-left:44px;font-size:18px;font-weight:700">
+            <span style="position:absolute;left:14px;top:50%;transform:translateY(-50%);font-size:16px;color:var(--color-gold);font-weight:700">€</span>
+          </div>
+        </div>
+
+        <!-- Acompte -->
+        <div class="form-group">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
+            <span class="form-label" style="margin:0">Acompte</span>
+            <span style="font-family:'JetBrains Mono',monospace;font-size:15px;font-weight:700;color:var(--color-gold)" id="dep-pct-label">50%</span>
+          </div>
+          <input type="range" id="calc-dep" min="30" max="70" step="10" value="50"
+                 style="width:100%;accent-color:var(--color-gold);margin-bottom:4px">
+          <div style="display:flex;justify-content:space-between;font-size:11px;color:rgba(255,255,255,0.25)">
+            <span>30%</span><span>40%</span><span>50%</span><span>60%</span><span>70%</span>
+          </div>
+        </div>
+
+        <!-- Options -->
+        <div style="display:flex;flex-direction:column;gap:10px;margin-bottom:20px">
+          <div class="option-row" onclick="toggleOption('card_paypal')">
+            <div class="option-label">
+              <span>💳</span>
+              <div>
+                <div>Paiement par carte / PayPal</div>
+                <div class="option-sub">+3,05% du montant TTC</div>
+              </div>
+            </div>
+            <div class="toggle-switch" id="toggle-card"></div>
+          </div>
+          <div class="option-row" onclick="toggleOption('international')">
+            <div class="option-label">
+              <span>🌍</span>
+              <div>
+                <div>Transaction internationale</div>
+                <div class="option-sub">+23 € frais fixes</div>
+              </div>
+            </div>
+            <div class="toggle-switch" id="toggle-intl"></div>
+          </div>
+        </div>
+
+        <button class="btn btn--gold btn--lg" style="width:100%;justify-content:center;font-size:15px"
+                onclick="calculate()">
+          Calculer mes frais →
+        </button>
+      </div>
+
+      <!-- Résultat -->
+      <div style="flex:1;min-width:0" id="result-panel">
+        <div style="background:rgba(255,255,255,0.02);border:1px dashed rgba(255,255,255,0.10);border-radius:18px;padding:40px;text-align:center">
+          <div style="font-size:3rem;margin-bottom:12px;opacity:.3">🧮</div>
+          <div style="font-size:14px;color:rgba(255,255,255,0.30)">Entrez un montant pour voir le détail des frais</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════ COMPARATEUR ══════════════════════════ -->
+<section style="background:var(--color-black);padding:64px 0" id="compare-section" style="display:none">
+  <div class="container" style="max-width:900px">
+    <div class="text-center" style="margin-bottom:32px">
+      <div class="section-label" style="display:inline-flex;margin-bottom:12px">Comparaison</div>
+      <h2 style="font-family:'Sora',sans-serif;font-size:clamp(1.3rem,3vw,1.8rem);font-weight:800;color:white">
+        Standard vs Concierge
+      </h2>
+    </div>
+    <div class="compare-row" style="display:flex;gap:20px" id="compare-cards">
+      <div class="compare-card std">
+        <div style="display:flex;align-items:center;gap:10px;margin-bottom:20px">
+          <span style="font-size:1.5rem">⚡</span>
+          <div>
+            <div style="font-family:'Sora',sans-serif;font-weight:800;font-size:18px;color:white">Standard</div>
+            <div style="font-size:12px;color:rgba(255,255,255,0.35)">Traitement automatisé</div>
+          </div>
+        </div>
+        <div id="cmp-std"></div>
+      </div>
+      <div style="display:flex;align-items:center;justify-content:center;flex-shrink:0;color:rgba(255,255,255,0.20);font-size:18px">vs</div>
+      <div class="compare-card cnc">
+        <div style="display:flex;align-items:center;gap:10px;margin-bottom:20px">
+          <span style="font-size:1.5rem">👑</span>
+          <div>
+            <div style="font-family:'Sora',sans-serif;font-weight:800;font-size:18px;color:#A78BFA">Concierge</div>
+            <div style="font-size:12px;color:rgba(255,255,255,0.35)">Assistance humaine dédiée</div>
+          </div>
+        </div>
+        <div id="cmp-cnc"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════ GRILLE TARIFAIRE ═════════════════════ -->
+<section style="background:var(--color-dark);padding:64px 0">
+  <div class="container">
+    <div class="text-center" style="margin-bottom:40px">
+      <div class="section-label" style="display:inline-flex;margin-bottom:12px">Grille complète</div>
+      <h2 style="font-family:'Sora',sans-serif;font-size:clamp(1.4rem,3vw,2rem);font-weight:800;color:white;margin-bottom:12px">
+        Frais par tranche de montant
+      </h2>
+      <p style="color:rgba(255,255,255,0.40);font-size:14px;max-width:560px;margin:0 auto">
+        Frais calculés sur le montant de la transaction hors frais d'expédition.
+      </p>
+    </div>
+
+    <div style="overflow-x:auto;border-radius:16px;border:1px solid rgba(255,255,255,0.07)">
+      <table class="pricing-table">
+        <thead>
+          <tr>
+            <th>Tranche</th>
+            <th>⚡ Standard</th>
+            <th>Minimum Standard</th>
+            <th>👑 Concierge</th>
+            <th>Minimum Concierge</th>
+          </tr>
+        </thead>
+        <tbody id="pricing-grid-body"></tbody>
+      </table>
+    </div>
+
+    <!-- Suppléments -->
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:14px;margin-top:24px">
+      <div style="background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.07);border-radius:14px;padding:18px;display:flex;gap:14px;align-items:flex-start">
+        <span style="font-size:1.5rem;flex-shrink:0">💳</span>
+        <div>
+          <div style="font-weight:700;font-size:14px;color:white;margin-bottom:4px">Carte / PayPal</div>
+          <div style="font-size:13px;color:rgba(255,255,255,0.45)">+3,05% du montant total TTC (montant + frais de base)</div>
+        </div>
+      </div>
+      <div style="background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.07);border-radius:14px;padding:18px;display:flex;gap:14px;align-items:flex-start">
+        <span style="font-size:1.5rem;flex-shrink:0">🌍</span>
+        <div>
+          <div style="font-weight:700;font-size:14px;color:white;margin-bottom:4px">Transaction internationale</div>
+          <div style="font-size:13px;color:rgba(255,255,255,0.45)">+23 € fixes (livraison hors zone de résidence de l'acheteur)</div>
+        </div>
+      </div>
+      <div style="background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.07);border-radius:14px;padding:18px;display:flex;gap:14px;align-items:flex-start">
+        <span style="font-size:1.5rem;flex-shrink:0">📋</span>
+        <div>
+          <div style="font-weight:700;font-size:14px;color:white;margin-bottom:4px">> 10 000 000 €</div>
+          <div style="font-size:13px;color:rgba(255,255,255,0.45)">Sur devis personnalisé — Contactez notre équipe dédiée</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════ DIFFÉRENCES STD vs CNC ══════════════ -->
+<section style="background:var(--color-black);padding:64px 0">
+  <div class="container" style="max-width:900px">
+    <div class="text-center" style="margin-bottom:40px">
+      <h2 style="font-family:'Sora',sans-serif;font-size:clamp(1.3rem,3vw,1.8rem);font-weight:800;color:white;margin-bottom:12px">
+        Que comprend chaque niveau ?
+      </h2>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:24px">
+      <div style="background:rgba(201,162,39,0.04);border:1px solid rgba(201,162,39,0.15);border-radius:18px;padding:28px">
+        <div style="font-size:1.5rem;margin-bottom:12px">⚡</div>
+        <div style="font-family:'Sora',sans-serif;font-size:18px;font-weight:800;color:white;margin-bottom:16px">Standard</div>
+        <div style="display:flex;flex-direction:column;gap:10px">
+          <div style="display:flex;gap:10px;font-size:13px;color:rgba(255,255,255,0.60)"><span style="color:var(--color-gold);flex-shrink:0">✓</span> Escrow sécurisé des fonds</div>
+          <div style="display:flex;gap:10px;font-size:13px;color:rgba(255,255,255,0.60)"><span style="color:var(--color-gold);flex-shrink:0">✓</span> Inspection standard du produit</div>
+          <div style="display:flex;gap:10px;font-size:13px;color:rgba(255,255,255,0.60)"><span style="color:var(--color-gold);flex-shrink:0">✓</span> Suivi en temps réel</div>
+          <div style="display:flex;gap:10px;font-size:13px;color:rgba(255,255,255,0.60)"><span style="color:var(--color-gold);flex-shrink:0">✓</span> Support email & chat</div>
+          <div style="display:flex;gap:10px;font-size:13px;color:rgba(255,255,255,0.60)"><span style="color:var(--color-gold);flex-shrink:0">✓</span> Arbitrage inclus</div>
+          <div style="display:flex;gap:10px;font-size:13px;color:rgba(255,255,255,0.60)"><span style="color:var(--color-gold);flex-shrink:0">✓</span> Documentation complète</div>
+        </div>
+      </div>
+      <div style="background:rgba(167,139,250,0.05);border:1px solid rgba(167,139,250,0.20);border-radius:18px;padding:28px">
+        <div style="font-size:1.5rem;margin-bottom:12px">👑</div>
+        <div style="font-family:'Sora',sans-serif;font-size:18px;font-weight:800;color:#A78BFA;margin-bottom:16px">Concierge</div>
+        <div style="display:flex;flex-direction:column;gap:10px">
+          <div style="display:flex;gap:10px;font-size:13px;color:rgba(255,255,255,0.60)"><span style="color:#A78BFA;flex-shrink:0">✓</span> <strong style="color:white">Tout le niveau Standard</strong></div>
+          <div style="display:flex;gap:10px;font-size:13px;color:rgba(255,255,255,0.60)"><span style="color:#A78BFA;flex-shrink:0">✓</span> Gestionnaire dédié personnel</div>
+          <div style="display:flex;gap:10px;font-size:13px;color:rgba(255,255,255,0.60)"><span style="color:#A78BFA;flex-shrink:0">✓</span> Inspection approfondie certifiée</div>
+          <div style="display:flex;gap:10px;font-size:13px;color:rgba(255,255,255,0.60)"><span style="color:#A78BFA;flex-shrink:0">✓</span> Assistance téléphonique 24/7</div>
+          <div style="display:flex;gap:10px;font-size:13px;color:rgba(255,255,255,0.60)"><span style="color:#A78BFA;flex-shrink:0">✓</span> Priorité de traitement</div>
+          <div style="display:flex;gap:10px;font-size:13px;color:rgba(255,255,255,0.60)"><span style="color:#A78BFA;flex-shrink:0">✓</span> Rapport d'expertise inclus</div>
+          <div style="display:flex;gap:10px;font-size:13px;color:rgba(255,255,255,0.60)"><span style="color:#A78BFA;flex-shrink:0">✓</span> Couverture assurance renforcée</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer class="site-footer">
+  <div class="container">
+    <div class="footer-bottom">
+      <div class="footer-copy">© 2025 SecureDeal. Tous droits réservés.</div>
+      <div class="footer-legal-links">
+        <a href="/pages/legal/mentions-legales.html">Mentions légales</a>
+        <a href="/pages/legal/cgu.html">CGU</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script src="/js/config.js"></script>
+<script src="/js/api.js"></script>
+<script src="/js/utils.js"></script>
+<script>
+'use strict';
+
+// ─── Hamburger ──────────────────────────────────────────────
+(function(){
+  var b = document.getElementById('hamburger');
+  var m = document.getElementById('mobile-menu');
+  if(!b||!m) return;
+  b.addEventListener('click',function(){
+    var o=m.classList.toggle('open'); b.classList.toggle('open',o);
+    document.body.style.overflow=o?'hidden':'';
+  });
+  m.querySelectorAll('a').forEach(function(a){
+    a.addEventListener('click',function(){
+      m.classList.remove('open'); b.classList.remove('open');
+      document.body.style.overflow='';
+    });
+  });
+})();
+
+// ─── État ────────────────────────────────────────────────────
+var state = { level:'standard', cardPaypal:false, international:false };
+
+function setLevel(lv) {
+  state.level = lv;
+  var btnStd = document.getElementById('btn-std');
+  var btnCnc = document.getElementById('btn-cnc');
+  var desc   = document.getElementById('level-desc');
+  btnStd.className = 'level-btn' + (lv==='standard' ? ' active-std' : '');
+  btnCnc.className = 'level-btn' + (lv==='concierge'? ' active-cnc' : '');
+  if (lv === 'standard') {
+    desc.innerHTML = '<span style="color:var(--color-gold)">⚡ Standard</span> — Traitement automatisé, support email & chat. Idéal pour la plupart des transactions.';
+    desc.style.background = 'rgba(201,162,39,0.06)';
+    desc.style.border = '1px solid rgba(201,162,39,0.15)';
+    desc.style.color = 'rgba(255,255,255,0.55)';
+  } else {
+    desc.innerHTML = '<span style="color:#A78BFA">👑 Concierge</span> — Gestionnaire personnel dédié, inspection certifiée, assistance 24/7. Pour les transactions complexes ou à forte valeur.';
+    desc.style.background = 'rgba(167,139,250,0.06)';
+    desc.style.border = '1px solid rgba(167,139,250,0.15)';
+    desc.style.color = 'rgba(255,255,255,0.55)';
+  }
+  calculate();
+}
+
+function toggleOption(opt) {
+  if (opt === 'card_paypal') {
+    state.cardPaypal = !state.cardPaypal;
+    var t = document.getElementById('toggle-card');
+    t.classList.toggle('on', state.cardPaypal);
+  } else {
+    state.international = !state.international;
+    var ti = document.getElementById('toggle-intl');
+    ti.classList.toggle('on', state.international);
+  }
+  calculate();
+}
+
+document.getElementById('calc-dep').addEventListener('input', function() {
+  document.getElementById('dep-pct-label').textContent = this.value + '%';
+  calculate();
+});
+
+document.getElementById('calc-amount').addEventListener('input', calculate);
+
+// ─── Calcul ──────────────────────────────────────────────────
+function calculate() {
+  var amount = parseFloat(document.getElementById('calc-amount').value);
+  if (!amount || amount <= 0) return;
+
+  var P = SecureDealPricing;
+  var result = P.compute({
+    amount:          amount,
+    level:           state.level,
+    paymentMethod:   state.cardPaypal ? 'card_paypal' : 'transfer',
+    isInternational: state.international,
+    depositPct:      parseInt(document.getElementById('calc-dep').value),
+  });
+
+  renderResult(result);
+  renderCompare(amount);
+}
+
+function renderResult(r) {
+  var P   = SecureDealPricing;
+  var isC = r.level === 'concierge';
+  var accentColor = isC ? '#A78BFA' : 'var(--color-gold)';
+  var panel = document.getElementById('result-panel');
+
+  if (r.isQuote) {
+    panel.innerHTML = '<div class="result-card" style="text-align:center;padding:36px">' +
+      '<div style="font-size:3rem;margin-bottom:16px">📋</div>' +
+      '<div style="font-family:\'Sora\',sans-serif;font-size:20px;font-weight:800;color:white;margin-bottom:10px">Sur devis</div>' +
+      '<p style="color:rgba(255,255,255,0.50);font-size:14px;line-height:1.7;margin-bottom:24px">Pour les transactions supérieures à 10 000 000 €, notre équipe vous établit un devis personnalisé sous 24h.</p>' +
+      '<a href="/pages/contact.html" class="btn btn--gold" style="justify-content:center">Demander un devis →</a></div>';
+    return;
+  }
+
+  var minBadge = r.minimumApplied ? '<span class="badge-min">minimum appliqué</span>' : '';
+
+  panel.innerHTML = '<div class="result-card">' +
+    '<div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:rgba(255,255,255,0.30);margin-bottom:16px">Tranche : ' + r.tierLabel + '</div>' +
+
+    '<div class="result-line"><span class="result-label">Montant transaction</span><span class="result-value">' + r.fmt.amount + '</span></div>' +
+    '<div class="result-line"><span class="result-label">Frais escrow (' + r.fmt.rate + ')' + minBadge + '</span><span class="result-value" style="color:' + accentColor + '">' + r.fmt.baseFee + '</span></div>' +
+    (r.cardFee > 0 ? '<div class="result-line"><span class="result-label">Supplément carte/PayPal (+3,05%)</span><span class="result-value red">+ ' + r.fmt.cardFee + '</span></div>' : '') +
+    (r.internationalFee > 0 ? '<div class="result-line"><span class="result-label">Frais international</span><span class="result-value red">+ ' + r.fmt.internationalFee + '</span></div>' : '') +
+    '<div class="result-line"><span class="result-label">Total frais SecureDeal</span><span class="result-value red">' + r.fmt.totalFee + '</span></div>' +
+
+    '<div style="height:1px;background:rgba(255,255,255,0.07);margin:12px 0"></div>' +
+
+    '<div class="result-line"><span class="result-label">Acompte acheteur (' + r.depositPct + '%)</span><span class="result-value green">' + r.fmt.deposit + '</span></div>' +
+    '<div class="result-line"><span class="result-label">Solde à la livraison</span><span class="result-value">' + r.fmt.balance + '</span></div>' +
+    '<div class="result-line"><span class="result-label">Net versé au vendeur</span><span class="result-value green">' + r.fmt.netToVendor + '</span></div>' +
+
+    '<div class="result-total">' +
+      '<span class="result-total-label">Total payé par l\'acheteur</span>' +
+      '<span class="result-total-value">' + r.fmt.totalAmount + '</span>' +
+    '</div>' +
+  '</div>';
+}
+
+function renderCompare(amount) {
+  var cmpSection = document.getElementById('compare-section');
+  cmpSection.style.display = 'block';
+  var P    = SecureDealPricing;
+  var comp = P.compare({
+    amount:          amount,
+    paymentMethod:   state.cardPaypal ? 'card_paypal' : 'transfer',
+    isInternational: state.international,
+  });
+  document.getElementById('cmp-std').innerHTML = renderCmpCard(comp.standard, '#C9A227');
+  document.getElementById('cmp-cnc').innerHTML = renderCmpCard(comp.concierge, '#A78BFA');
+}
+
+function renderCmpCard(r, color) {
+  if (r.isQuote) return '<div style="font-size:13px;color:rgba(255,255,255,0.35);text-align:center;padding:20px">Sur devis</div>';
+  return '' +
+    '<div style="font-family:\'JetBrains Mono\',monospace;font-size:28px;font-weight:800;color:' + color + ';margin-bottom:8px">' + r.fmt.baseFee + '</div>' +
+    '<div style="font-size:12px;color:rgba(255,255,255,0.35);margin-bottom:16px">Taux : ' + r.fmt.rate + (r.minimumApplied?' (minimum appliqué)':'') + '</div>' +
+    '<div style="font-size:13px;color:rgba(255,255,255,0.45);display:flex;justify-content:space-between;padding:5px 0;border-bottom:1px solid rgba(255,255,255,0.05)"><span>Total frais</span><span style="color:white;font-weight:600">' + r.fmt.totalFee + '</span></div>' +
+    '<div style="font-size:13px;color:rgba(255,255,255,0.45);display:flex;justify-content:space-between;padding:5px 0"><span>Net vendeur</span><span style="color:#10B981;font-weight:600">' + r.fmt.netToVendor + '</span></div>';
+}
+
+// ─── Grille tarifaire ────────────────────────────────────────
+(function buildGrid() {
+  var grid = SecureDealPricing.getGrid();
+  var tbody = document.getElementById('pricing-grid-body');
+  grid.forEach(function(row, idx) {
+    var tr = document.createElement('tr');
+    if (idx % 2 === 0) tr.className = 'row-highlight';
+    if (row.quote) {
+      tr.innerHTML = '<td class="td-tier">' + row.tranche + '</td>' +
+        '<td class="td-quote" colspan="4">Sur devis personnalisé — <a href="/pages/contact.html" style="color:var(--color-gold)">Contactez-nous</a></td>';
+    } else {
+      tr.innerHTML =
+        '<td class="td-tier">' + row.tranche + '</td>' +
+        '<td class="td-std">'  + row.stdRate  + '</td>' +
+        '<td style="color:rgba(255,255,255,0.45)">' + row.stdMin + '</td>' +
+        '<td class="td-cnc">'  + row.cncRate  + '</td>' +
+        '<td style="color:rgba(255,255,255,0.45)">' + row.cncMin + '</td>';
+    }
+    tbody.appendChild(tr);
+  });
+})();
+
+// Init
+setLevel('standard');
+</script>
+</body>
+</html>

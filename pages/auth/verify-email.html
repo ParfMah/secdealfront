@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Vérification email — SecureDeal</title>
+  <link rel="icon" href="/images/logo/favicon.svg" type="image/svg+xml">
+</head>
+<body style="background:#080808;color:white;display:flex;align-items:center;justify-content:center;min-height:100vh;font-family:'Inter',sans-serif;text-align:center">
+  <div>
+    <div style="font-size:48px;margin-bottom:16px">🔐</div>
+    <p style="color:rgba(255,255,255,0.5)">Redirection en cours…</p>
+  </div>
+  <script>
+    // Redirige vers la nouvelle page OTP
+    var params = new URLSearchParams(window.location.search);
+    var email  = params.get('email') || sessionStorage.getItem('sd_pending_email') || '';
+    window.location.replace('/pages/auth/verify-otp.html' + (email ? '?email=' + encodeURIComponent(email) : ''));
+  </script>
+</body>
+</html>

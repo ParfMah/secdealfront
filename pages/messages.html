@@ -1,0 +1,600 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Messagerie — SecureDeal</title>
+  <script src="/js/loader.js"></script>
+  <link rel="stylesheet" href="/css/loader.css">
+  <link rel="stylesheet" href="/css/main.css">
+  <link rel="stylesheet" href="/css/brand.css">
+  <link rel="stylesheet" href="/css/backgrounds.css">
+  <link rel="stylesheet" href="/css/responsive-fixes.css">
+  <link rel="icon" href="/images/logo/favicon.svg" type="image/svg+xml">
+  <style>
+    body { background:#050505; overflow:hidden; }
+
+    .msg-app {
+      display: grid;
+      grid-template-columns: 320px 1fr;
+      height: calc(100vh - 70px);
+      margin-top: 70px;
+      background: #0a0a0a;
+      overflow: hidden;
+    }
+
+    /* ── Liste conversations ── */
+    .conv-list {
+      border-right: 1px solid rgba(255,255,255,0.07);
+      display: flex; flex-direction: column;
+      background: #080808; overflow: hidden;
+    }
+    .conv-list-header {
+      padding: 20px 16px 14px;
+      border-bottom: 1px solid rgba(255,255,255,0.07);
+      flex-shrink: 0;
+    }
+    .conv-list-title {
+      font-family: 'Sora', sans-serif; font-size: 16px;
+      font-weight: 700; color: white; margin-bottom: 12px;
+    }
+    .conv-search {
+      display: flex; align-items: center; gap: 8px;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 10px; padding: 8px 12px;
+    }
+    .conv-search input {
+      flex: 1; border: none; background: none;
+      color: white; font-size: 13px; outline: none;
+    }
+    .conv-search input::placeholder { color: rgba(255,255,255,0.25); }
+
+    .conv-items { flex: 1; overflow-y: auto; padding: 8px; }
+    .conv-items::-webkit-scrollbar { width: 4px; }
+    .conv-items::-webkit-scrollbar-thumb { background: #2a2a2a; border-radius: 2px; }
+
+    .conv-item {
+      display: flex; align-items: center; gap: 12px;
+      padding: 12px; border-radius: 12px; cursor: pointer;
+      transition: background .15s; position: relative;
+    }
+    .conv-item:hover { background: rgba(255,255,255,0.04); }
+    .conv-item.active { background: rgba(201,162,39,0.08); border: 1px solid rgba(201,162,39,0.12); }
+
+    .conv-avatar {
+      width: 44px; height: 44px; border-radius: 50%; flex-shrink: 0;
+      display: flex; align-items: center; justify-content: center;
+      font-family: 'Sora', sans-serif; font-size: 16px;
+      font-weight: 800; color: #000;
+    }
+    .conv-body { flex: 1; min-width: 0; }
+    .conv-name {
+      font-size: 14px; font-weight: 600; color: white;
+      white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+    }
+    .conv-preview {
+      font-size: 12px; color: rgba(255,255,255,0.35);
+      white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+      margin-top: 2px;
+    }
+    .conv-meta { flex-shrink: 0; text-align: right; }
+    .conv-time { font-size: 11px; color: rgba(255,255,255,0.25); }
+    .conv-unread {
+      width: 18px; height: 18px; border-radius: 50%;
+      background: var(--color-gold); color: #000;
+      font-size: 10px; font-weight: 800;
+      display: flex; align-items: center; justify-content: center;
+      margin-left: auto; margin-top: 4px;
+    }
+    .conv-product-tag {
+      font-size: 10px; color: var(--color-gold);
+      background: rgba(201,162,39,0.08);
+      border: 1px solid rgba(201,162,39,0.15);
+      border-radius: 4px; padding: 1px 6px;
+      display: inline-block; margin-top: 3px;
+      white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+      max-width: 100%;
+    }
+
+    /* ── Zone chat ── */
+    .chat-zone {
+      display: flex; flex-direction: column;
+      background: #0a0a0a; overflow: hidden;
+    }
+
+    /* Header chat */
+    .chat-header {
+      display: flex; align-items: center; gap: 14px;
+      padding: 14px 20px;
+      border-bottom: 1px solid rgba(255,255,255,0.07);
+      flex-shrink: 0; background: #080808;
+    }
+    .chat-header-avatar {
+      width: 40px; height: 40px; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-family: 'Sora', sans-serif; font-weight: 800; font-size: 15px;
+      color: #000; flex-shrink: 0;
+    }
+    .chat-header-name { font-weight: 700; font-size: 15px; color: white; }
+    .chat-header-status { font-size: 12px; color: rgba(255,255,255,0.35); margin-top: 1px; }
+    .chat-header-actions { margin-left: auto; display: flex; gap: 8px; }
+
+    /* Bannière sécurité */
+    .chat-security-banner {
+      display: flex; align-items: center; gap: 10px;
+      padding: 10px 20px; font-size: 12px;
+      background: rgba(201,162,39,0.06);
+      border-bottom: 1px solid rgba(201,162,39,0.12);
+      color: rgba(255,255,255,0.50); flex-shrink: 0;
+    }
+    .chat-security-banner strong { color: rgba(255,255,255,0.75); }
+
+    /* Messages */
+    .chat-messages {
+      flex: 1; overflow-y: auto;
+      padding: 20px 20px 10px;
+      display: flex; flex-direction: column; gap: 12px;
+    }
+    .chat-messages::-webkit-scrollbar { width: 4px; }
+    .chat-messages::-webkit-scrollbar-thumb { background: #1a1a1a; border-radius: 2px; }
+
+    .chat-day-separator {
+      text-align: center; font-size: 11px;
+      color: rgba(255,255,255,0.20);
+      margin: 8px 0; letter-spacing: 0.5px;
+    }
+
+    .msg-row {
+      display: flex; align-items: flex-end; gap: 8px;
+    }
+    .msg-row.mine { flex-direction: row-reverse; }
+
+    .msg-bubble {
+      max-width: min(70%, 420px); padding: 10px 14px;
+      border-radius: 16px; font-size: 14px; line-height: 1.5;
+      word-break: break-word;
+    }
+    .msg-row.theirs .msg-bubble {
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.08);
+      color: rgba(255,255,255,0.85);
+      border-bottom-left-radius: 4px;
+    }
+    .msg-row.mine .msg-bubble {
+      background: linear-gradient(135deg, #1a1400, #2a2100);
+      border: 1px solid rgba(201,162,39,0.20);
+      color: white;
+      border-bottom-right-radius: 4px;
+    }
+
+    .msg-meta {
+      font-size: 10px; color: rgba(255,255,255,0.20);
+      padding: 0 4px; flex-shrink: 0; white-space: nowrap;
+    }
+    .msg-row.mine .msg-meta { text-align: right; }
+
+    .msg-avatar-small {
+      width: 28px; height: 28px; border-radius: 50%; flex-shrink: 0;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 11px; font-weight: 800; color: #000;
+    }
+
+    /* Carte produit en message */
+    .msg-product-card {
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(201,162,39,0.15);
+      border-radius: 12px; padding: 12px 14px;
+      display: flex; align-items: center; gap: 12px;
+      max-width: 280px; cursor: pointer;
+      transition: background .15s;
+    }
+    .msg-product-card:hover { background: rgba(201,162,39,0.06); }
+    .msg-product-card img { width: 52px; height: 40px; border-radius: 6px; object-fit: cover; flex-shrink: 0; }
+    .msg-product-card-name { font-size: 12px; font-weight: 600; color: white; margin-bottom: 2px; }
+    .msg-product-card-price { font-size: 11px; color: var(--color-gold); font-family: 'JetBrains Mono', monospace; }
+
+    /* Message système */
+    .msg-system {
+      text-align: center; font-size: 12px;
+      color: rgba(255,255,255,0.35);
+      padding: 8px 16px;
+      background: rgba(255,255,255,0.03);
+      border-radius: 20px; align-self: center;
+    }
+
+    /* Zone saisie */
+    .chat-input-area {
+      padding: 14px 16px;
+      border-top: 1px solid rgba(255,255,255,0.07);
+      flex-shrink: 0; background: #080808;
+    }
+    .chat-input-row {
+      display: flex; align-items: flex-end; gap: 10px;
+    }
+    .chat-input {
+      flex: 1; background: rgba(255,255,255,0.04);
+      border: 1.5px solid rgba(255,255,255,0.10);
+      border-radius: 12px; padding: 10px 14px;
+      color: white; font-size: 14px; font-family: 'DM Sans', sans-serif;
+      outline: none; resize: none;
+      max-height: 120px; line-height: 1.5;
+      transition: border-color .2s;
+    }
+    .chat-input:focus { border-color: rgba(201,162,39,0.35); }
+    .chat-input::placeholder { color: rgba(255,255,255,0.25); }
+    .send-btn {
+      width: 40px; height: 40px; flex-shrink: 0;
+      background: var(--gradient-gold); border: none;
+      border-radius: 12px; cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 16px; transition: all .2s;
+      box-shadow: 0 4px 12px rgba(201,162,39,0.25);
+    }
+    .send-btn:hover { transform: scale(1.05); }
+
+    /* Écran vide (aucune conv sélectionnée) */
+    .chat-empty {
+      flex: 1; display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      color: rgba(255,255,255,0.25); text-align: center; padding: 40px;
+    }
+    .chat-empty-icon { font-size: 4rem; margin-bottom: 16px; opacity: .4; }
+
+    /* Bouton retour mobile */
+    .mobile-back-btn {
+      display: none;
+      align-items: center; gap: 8px;
+      background: none; border: none;
+      color: var(--color-gold); font-size: 14px;
+      font-family: 'Sora', sans-serif; font-weight: 600;
+      cursor: pointer; padding: 0; flex-shrink: 0;
+    }
+
+    /* ── Responsive ── */
+    @media (max-width: 768px) {
+      body { overflow: auto; }
+      .msg-app {
+        grid-template-columns: 1fr;
+        height: auto;
+        min-height: calc(100vh - 70px);
+      }
+      .conv-list { height: auto; max-height: 45vh; }
+      .chat-zone { min-height: 55vh; }
+      .mobile-back-btn { display: flex; }
+      .msg-app.chat-open .conv-list { display: none; }
+      .msg-app.chat-open .chat-zone { display: flex; }
+      .msg-app:not(.chat-open) .chat-zone { display: none; }
+      .msg-app:not(.chat-open) .conv-list { display: flex; }
+      .chat-messages { max-height: 50vh; }
+    }
+  </style>
+</head>
+<body>
+
+<header class="site-header scrolled" id="site-header">
+  <div class="header-inner">
+    <a href="/index.html" class="header-logo">
+      <svg width="150" height="36" viewBox="0 0 160 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M18 3L31 8V17.5C31 25.5 25 31.5 18 34C11 31.5 5 25.5 5 17.5V8Z" fill="none" stroke="#C9A227" stroke-width="1.5"/>
+        <path d="M18 7.5L27 11.5V17.5C27 23 23 27.5 18 30C13 27.5 9 23 9 17.5V11.5Z" fill="rgba(201,162,39,0.08)" stroke="#C9A227" stroke-width="0.8"/>
+        <polyline points="13 18 16.5 21.5 23 14" stroke="#C9A227" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+        <text x="39" y="26" font-family="Sora, sans-serif" font-size="16" font-weight="800" fill="white" letter-spacing="-0.5">SECURE</text>
+        <text x="106" y="26" font-family="Sora, sans-serif" font-size="16" font-weight="300" fill="#C9A227" letter-spacing="2">DEAL</text>
+      </svg>
+    </a>
+    <nav class="header-nav">
+      <a href="/index.html" class="header-nav-link">Accueil</a>
+      <a href="/pages/categories.html" class="header-nav-link">Catégories</a>
+      <a href="/pages/tracking.html" class="header-nav-link">Suivi</a>
+      <a href="/pages/messages.html" class="header-nav-link active">Messages</a>
+    </nav>
+    <div class="header-actions">
+      <div id="header-auth" style="display:flex;gap:10px;align-items:center">
+        <a href="/pages/auth/login.html" class="btn btn--outline-white btn--sm">Connexion</a>
+        <a href="/pages/auth/register.html" class="btn btn--gold btn--sm">Créer un compte</a>
+      </div>
+    </div>
+    <button class="hamburger" id="hamburger" aria-label="Menu" aria-expanded="false"><span></span><span></span><span></span></button>
+  </div>
+</header>
+<nav class="mobile-menu" id="mobile-menu">
+  <a href="/index.html">🏠 Accueil</a>
+  <a href="/pages/categories.html">📦 Catégories</a>
+  <a href="/pages/tracking.html">📡 Suivi</a>
+  <a href="/pages/messages.html" class="active">💬 Messages</a>
+  <div class="mobile-menu-divider"></div>
+  <div class="mobile-menu-actions">
+    <a href="/pages/auth/login.html" class="btn btn--outline-white">Se connecter</a>
+    <a href="/pages/auth/register.html" class="btn btn--gold">Créer un compte</a>
+  </div>
+</nav>
+
+<!-- App messagerie -->
+<div class="msg-app" id="msg-app">
+
+  <!-- Liste conversations -->
+  <div class="conv-list">
+    <div class="conv-list-header">
+      <div class="conv-list-title">💬 Messagerie</div>
+      <div class="conv-search">
+        <span style="color:rgba(255,255,255,0.25);font-size:14px">🔍</span>
+        <input type="text" placeholder="Rechercher une conversation…" id="search-conv">
+      </div>
+    </div>
+    <div class="conv-items" id="conv-items"></div>
+  </div>
+
+  <!-- Zone chat -->
+  <div class="chat-zone" id="chat-zone">
+    <div class="chat-empty" id="chat-empty">
+      <div class="chat-empty-icon">💬</div>
+      <div style="font-size:16px;font-weight:600;color:rgba(255,255,255,0.35);margin-bottom:8px">Sélectionnez une conversation</div>
+      <div style="font-size:13px">Choisissez une conversation dans la liste à gauche pour commencer.</div>
+    </div>
+    <div id="chat-active" style="display:none;flex:1;flex-direction:column;overflow:hidden">
+      <div class="chat-header" id="chat-header"></div>
+      <div class="chat-security-banner">
+        <span style="font-size:14px;flex-shrink:0">🔒</span>
+        <span><strong>Rappel sécurité :</strong> Ne partagez jamais votre IBAN ou coordonnées bancaires dans cette messagerie. Toute transaction doit passer par l'escrow SecureDeal.</span>
+      </div>
+      <div class="chat-messages" id="chat-messages"></div>
+      <div class="chat-input-area">
+        <div class="chat-input-row">
+          <textarea class="chat-input" id="msg-input" placeholder="Écrivez votre message… (Entrée pour envoyer)" rows="1"></textarea>
+          <button class="send-btn" id="send-btn" title="Envoyer">➤</button>
+        </div>
+        <div style="font-size:11px;color:rgba(255,255,255,0.20);margin-top:6px;text-align:center">Entrée pour envoyer · Shift+Entrée pour nouvelle ligne</div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script src="/js/config.js"></script>
+<script src="/js/api.js"></script>
+<script src="/js/utils.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+
+  var burger = document.getElementById('hamburger');
+  var mmenu  = document.getElementById('mobile-menu');
+  if (burger && mmenu) {
+    burger.addEventListener('click', function() {
+      var o = mmenu.classList.toggle('open');
+      burger.classList.toggle('open', o);
+      document.body.style.overflow = o ? 'hidden' : '';
+    });
+    mmenu.querySelectorAll('a').forEach(function(a) {
+      a.addEventListener('click', function() {
+        mmenu.classList.remove('open'); burger.classList.remove('open');
+        document.body.style.overflow = '';
+      });
+    });
+  }
+
+  // ── Données de démo ───────────────────────────────────────
+  var convs = [
+    {
+      id: 'c1',
+      name: 'Ahmed Khalil', role: 'Acheteur', color: '#C9A227',
+      product: 'Toyota Land Cruiser 200',
+      productId: 'V001', productImg: '/images/categories/cars-toyota-lc200.svg',
+      productPrice: '28 500 €',
+      unread: 2, time: '09:42', online: true,
+      msgs: [
+        {mine:false, text:'Bonjour, est-ce que le Toyota Land Cruiser est toujours disponible ?', time:'09:30'},
+        {mine:true,  text:'Oui, il est disponible. Je peux vous envoyer des photos supplémentaires si vous le souhaitez.', time:'09:35'},
+        {mine:false, text:'Oui merci ! Et quel est l\'état réel du moteur ? Y a-t-il des réparations récentes ?', time:'09:38'},
+        {mine:false, text:'Est-ce que le prix est négociable ?', time:'09:42'},
+      ]
+    },
+    {
+      id: 'c2',
+      name: 'Marie Dubois', role: 'Acheteuse', color: '#8B5CF6',
+      product: 'iPhone 15 Pro Max ×20',
+      productId: 'P001', productImg: '/images/categories/phones-iphone-15pm.svg',
+      productPrice: '19 800 €',
+      unread: 0, time: 'Hier', online: false,
+      msgs: [
+        {mine:false, text:'Bonjour, je suis intéressée par le lot d\'iPhone. Les IMEI sont-ils vraiment vierges ?', time:'14:20'},
+        {mine:true,  text:'Absolument. Chaque unité est scellée directement de l\'Apple Store EU. IMEI certifiés vierges avec factures.', time:'14:35'},
+        {mine:false, text:'Parfait. J\'aimerais initier la transaction via SecureDeal dès que possible.', time:'14:50'},
+        {mine:true,  text:'Bien sûr ! Cliquez sur "Acheter via SecureDeal" sur la fiche produit. Notre équipe vous guidera.', time:'15:00'},
+        {mine:false, text:'Merci, c\'est fait ! J\'attends la confirmation.', time:'15:10'},
+      ]
+    },
+    {
+      id: 'c3',
+      name: 'SecureDeal Support', role: 'Support', color: '#10B981',
+      product: null,
+      productId: null, productImg: null,
+      productPrice: null,
+      unread: 0, time: 'Lun.', online: true,
+      msgs: [
+        {mine:false, text:'Bonjour ! Bienvenue sur SecureDeal. Je suis votre gestionnaire de compte. N\'hésitez pas à me contacter pour toute question.', time:'10:00'},
+        {mine:false, text:'📋 Votre annonce "Toyota Land Cruiser 200" a été soumise et est en cours de vérification. Elle sera publiée sous 24h.', time:'10:05'},
+        {mine:true,  text:'Merci pour la confirmation ! Combien de temps pour la première transaction ?', time:'10:30'},
+        {mine:false, text:'Dès qu\'un acheteur effectue son acompte, vous en serez notifié immédiatement par email et ici. La transaction est ensuite gérée étape par étape avec notre équipe logistique.', time:'10:35'},
+      ]
+    },
+    {
+      id: 'c4',
+      name: 'Kofi Mensah', role: 'Acheteur', color: '#F59E0B',
+      product: 'Conteneur 40 pieds HC',
+      productId: 'C002', productImg: '/images/categories/containers-container-40ft.svg',
+      productPrice: '4 800 €',
+      unread: 1, time: 'Lun.', online: false,
+      msgs: [
+        {mine:false, text:'Hello, I\'m interested in the 40ft HC container. Can you confirm the CSC certification is valid?', time:'16:00'},
+        {mine:true,  text:'Oui, le certificat CSC est valide jusqu\'en 2026. Je peux vous envoyer le scan si nécessaire.', time:'16:20'},
+        {mine:false, text:'Great! What are the shipping options to Accra, Ghana?', time:'16:45'},
+      ]
+    },
+  ];
+
+  var activeConv = null;
+
+  // ── Rendu liste ───────────────────────────────────────────
+  function renderConvList(filter) {
+    var container = document.getElementById('conv-items');
+    container.innerHTML = '';
+    convs.filter(function(c) {
+      if (!filter) return true;
+      return c.name.toLowerCase().indexOf(filter.toLowerCase()) !== -1;
+    }).forEach(function(conv) {
+      var lastMsg = conv.msgs[conv.msgs.length - 1];
+      var div = document.createElement('div');
+      div.className = 'conv-item' + (activeConv && activeConv.id === conv.id ? ' active' : '');
+      div.innerHTML =
+        '<div class="conv-avatar" style="background:' + conv.color + '">' + conv.name[0] + '</div>' +
+        '<div class="conv-body">' +
+          '<div class="conv-name">' + conv.name + '</div>' +
+          (conv.product ? '<div class="conv-product-tag">📦 ' + conv.product + '</div>' : '') +
+          '<div class="conv-preview">' + (lastMsg ? lastMsg.text.slice(0,50) + (lastMsg.text.length>50?'…':'') : '') + '</div>' +
+        '</div>' +
+        '<div class="conv-meta">' +
+          '<div class="conv-time">' + conv.time + '</div>' +
+          (conv.unread ? '<div class="conv-unread">' + conv.unread + '</div>' : '') +
+        '</div>';
+      div.addEventListener('click', function() { openConv(conv); });
+      container.appendChild(div);
+    });
+  }
+
+  // ── Ouverture conversation ─────────────────────────────────
+  function openConv(conv) {
+    activeConv = conv;
+    conv.unread = 0;
+    renderConvList(document.getElementById('search-conv').value);
+
+    document.getElementById('chat-empty').style.display  = 'none';
+    var active = document.getElementById('chat-active');
+    active.style.display = 'flex';
+
+    // Header
+    var header = document.getElementById('chat-header');
+    header.innerHTML =
+      '<button class="mobile-back-btn" id="back-to-list">← Retour</button>' +
+      '<div class="chat-header-avatar" style="background:' + conv.color + '">' + conv.name[0] + '</div>' +
+      '<div>' +
+        '<div class="chat-header-name">' + conv.name + '</div>' +
+        '<div class="chat-header-status">' + conv.role + (conv.online ? ' · <span style="color:#10B981">● En ligne</span>' : ' · Hors ligne') + '</div>' +
+      '</div>' +
+      '<div class="chat-header-actions">' +
+        (conv.productId ? '<a href="/pages/product.html?id=' + conv.productId + '" class="btn btn--outline-white btn--sm" style="font-size:11px">📦 Voir l\'annonce</a>' : '') +
+        '<a href="/pages/transaction.html?id=SD-2025-8847&product=' + (conv.productId||'V001') + '" class="btn btn--gold btn--sm" style="font-size:11px">📊 Transaction</a>' +
+      '</div>';
+
+    // Back button mobile
+    document.getElementById('back-to-list').addEventListener('click', function() {
+      document.getElementById('msg-app').classList.remove('chat-open');
+      active.style.display = 'none';
+      document.getElementById('chat-empty').style.display = 'flex';
+    });
+
+    // Messages
+    renderMessages(conv);
+
+    // Mobile
+    document.getElementById('msg-app').classList.add('chat-open');
+    document.getElementById('msg-input').focus();
+  }
+
+  function renderMessages(conv) {
+    var container = document.getElementById('chat-messages');
+    container.innerHTML = '';
+
+    // Produit card si première visite
+    if (conv.productId) {
+      var sysDiv = document.createElement('div');
+      sysDiv.className = 'msg-system';
+      sysDiv.textContent = 'Conversation liée à une annonce';
+      container.appendChild(sysDiv);
+
+      var cardRow = document.createElement('div');
+      cardRow.style.cssText = 'display:flex;justify-content:center;margin:8px 0';
+      cardRow.innerHTML =
+        '<a href="/pages/product.html?id=' + conv.productId + '" class="msg-product-card" style="text-decoration:none">' +
+          '<img src="' + conv.productImg + '" alt="produit">' +
+          '<div>' +
+            '<div class="msg-product-card-name">' + conv.product + '</div>' +
+            '<div class="msg-product-card-price">' + conv.productPrice + '</div>' +
+          '</div>' +
+        '</a>';
+      container.appendChild(cardRow);
+    }
+
+    var lastDate = '';
+    conv.msgs.forEach(function(msg) {
+      var dateDiv = document.createElement('div');
+      dateDiv.className = 'chat-day-separator';
+      dateDiv.textContent = 'Aujourd\'hui';
+      if (lastDate !== 'today') { container.appendChild(dateDiv); lastDate = 'today'; }
+
+      var row = document.createElement('div');
+      row.className = 'msg-row ' + (msg.mine ? 'mine' : 'theirs');
+
+      var avatarColor = msg.mine ? '#C9A227' : conv.color;
+      var avatarLetter = msg.mine ? 'M' : conv.name[0];
+
+      row.innerHTML =
+        '<div class="msg-avatar-small" style="background:' + avatarColor + '">' + avatarLetter + '</div>' +
+        '<div>' +
+          '<div class="msg-bubble">' + msg.text + '</div>' +
+          '<div class="msg-meta">' + msg.time + (msg.mine ? ' · Lu ✓✓' : '') + '</div>' +
+        '</div>';
+      container.appendChild(row);
+    });
+
+    container.scrollTop = container.scrollHeight;
+  }
+
+  // ── Envoi de message ──────────────────────────────────────
+  function sendMsg() {
+    var input = document.getElementById('msg-input');
+    var text  = input.value.trim();
+    if (!text || !activeConv) return;
+
+    var now = new Date();
+    var time = now.getHours().toString().padStart(2,'0') + ':' + now.getMinutes().toString().padStart(2,'0');
+
+    activeConv.msgs.push({ mine: true, text: text, time: time });
+    input.value = '';
+    input.style.height = '';
+    renderMessages(activeConv);
+    renderConvList(document.getElementById('search-conv').value);
+
+    // Réponse auto du support
+    if (activeConv.id === 'c3') {
+      setTimeout(function() {
+        activeConv.msgs.push({ mine: false, text: 'Merci pour votre message ! Un conseiller SecureDeal vous répondra dans les plus brefs délais (temps moyen : 2 minutes).', time: time });
+        renderMessages(activeConv);
+      }, 1200);
+    }
+  }
+
+  document.getElementById('send-btn').addEventListener('click', sendMsg);
+  document.getElementById('msg-input').addEventListener('keydown', function(e) {
+    if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendMsg(); }
+  });
+
+  // Auto-resize textarea
+  document.getElementById('msg-input').addEventListener('input', function() {
+    this.style.height = '';
+    this.style.height = Math.min(this.scrollHeight, 120) + 'px';
+  });
+
+  // Recherche conversations
+  document.getElementById('search-conv').addEventListener('input', function() {
+    renderConvList(this.value);
+  });
+
+  // Init
+  renderConvList();
+  // Ouvrir première conversation par défaut sur desktop
+  if (window.innerWidth > 768) { openConv(convs[0]); }
+});
+</script>
+</body>
+</html>

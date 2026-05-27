@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Vérification email — SecureDeal</title>
+  <link rel="stylesheet" href="/css/design-system.css">
+  <link rel="icon" href="/images/logo/favicon.svg" type="image/svg+xml">
+  <script src="/js/loader.js"></script>
+  <style>
+    body { min-height:100vh; display:flex; align-items:center; justify-content:center; background:#080808; font-family:'Inter',sans-serif; }
+    .card { max-width:420px; width:100%; margin:auto; padding:24px; }
+    .logo { text-align:center; margin-bottom:32px; font-size:22px; font-weight:900; color:white; letter-spacing:-1px; text-decoration:none; display:block; }
+    .logo span { color:#C9A227; font-weight:300; letter-spacing:2px; }
+    .box { background:rgba(255,255,255,0.03); border:1px solid rgba(255,255,255,0.08); border-radius:20px; padding:36px 28px; text-align:center; }
+    h1 { font-size:22px; font-weight:800; color:white; margin-bottom:8px; }
+    .subtitle { font-size:14px; color:rgba(255,255,255,0.45); margin-bottom:32px; line-height:1.6; }
+    .email-display { display:inline-block; background:rgba(201,162,39,0.08); border:1px solid rgba(201,162,39,0.2); border-radius:8px; padding:4px 12px; font-size:13px; color:#C9A227; font-weight:600; margin-bottom:28px; }
+
+    /* ── OTP inputs ── */
+    .otp-inputs { display:flex; gap:10px; justify-content:center; margin-bottom:28px; }
+    .otp-inputs input {
+      width:52px; height:64px;
+      text-align:center; font-size:28px; font-weight:800; color:white;
+      background:rgba(255,255,255,0.04);
+      border:2px solid rgba(255,255,255,0.1);
+      border-radius:12px; outline:none;
+      caret-color:#C9A227;
+      transition:border-color 0.2s, background 0.2s;
+      -moz-appearance:textfield;
+    }
+    .otp-inputs input::-webkit-outer-spin-button,
+    .otp-inputs input::-webkit-inner-spin-button { -webkit-appearance:none; }
+    .otp-inputs input:focus { border-color:#C9A227; background:rgba(201,162,39,0.06); }
+    .otp-inputs input.filled { border-color:rgba(201,162,39,0.4); }
+    .otp-inputs input.error { border-color:#EF4444; background:rgba(239,68,68,0.06); animation:shake 0.3s; }
+    @keyframes shake { 0%,100%{transform:translateX(0)} 25%{transform:translateX(-6px)} 75%{transform:translateX(6px)} }
+
+    .btn-verify { width:100%; padding:16px; background:linear-gradient(90deg,#C9A227,#E6C84E); border:none; border-radius:12px; font-size:15px; font-weight:800; color:#000; cursor:pointer; transition:opacity 0.2s; }
+    .btn-verify:disabled { opacity:0.5; cursor:not-allowed; }
+    .btn-verify:hover:not(:disabled) { opacity:0.9; }
+
+    .resend-row { margin-top:20px; font-size:13px; color:rgba(255,255,255,0.35); }
+    .resend-row button { background:none; border:none; color:#C9A227; font-size:13px; font-weight:600; cursor:pointer; padding:0; }
+    .resend-row button:disabled { color:rgba(255,255,255,0.2); cursor:default; }
+
+    .timer { font-size:12px; color:rgba(255,255,255,0.3); margin-top:6px; }
+    .error-msg { color:#EF4444; font-size:13px; margin-bottom:16px; min-height:18px; }
+    .success-state { display:none; }
+  </style>
+</head>
+<body>
+<div class="card">
+  <a href="/index.html" class="logo">SECURE<span>DEAL</span></a>
+
+  <div class="box" id="verify-box">
+    <div style="font-size:48px;margin-bottom:12px">📬</div>
+    <h1>Vérifiez votre email</h1>
+    <p class="subtitle">Nous avons envoyé un code à 6 chiffres à</p>
+    <div class="email-display" id="email-display">votre adresse email</div>
+    <p class="subtitle" style="margin-bottom:20px;font-size:12px">Saisissez le code ci-dessous. Il expire dans <strong style="color:white">15 minutes</strong>.</p>
+
+    <div class="otp-inputs" id="otp-inputs">
+      <input type="number" maxlength="1" min="0" max="9" id="otp-0" autocomplete="one-time-code" inputmode="numeric">
+      <input type="number" maxlength="1" min="0" max="9" id="otp-1" inputmode="numeric">
+      <input type="number" maxlength="1" min="0" max="9" id="otp-2" inputmode="numeric">
+      <input type="number" maxlength="1" min="0" max="9" id="otp-3" inputmode="numeric">
+      <input type="number" maxlength="1" min="0" max="9" id="otp-4" inputmode="numeric">
+      <input type="number" maxlength="1" min="0" max="9" id="otp-5" inputmode="numeric">
+    </div>
+
+    <div class="error-msg" id="error-msg"></div>
+
+    <button class="btn-verify" id="btn-verify" disabled>Vérifier mon compte →</button>
+
+    <div class="resend-row">
+      Pas reçu le code ?
+      <button id="btn-resend" disabled>Renvoyer</button>
+      <div class="timer" id="timer-display"></div>
+    </div>
+  </div>
+
+  <!-- État succès -->
+  <div class="box success-state" id="success-box">
+    <div style="font-size:56px;margin-bottom:16px">✅</div>
+    <h1>Compte activé !</h1>
+    <p class="subtitle">Votre email est confirmé. Vous allez être redirigé vers la connexion…</p>
+    <div style="margin-top:20px"><a href="/pages/auth/login.html" style="color:#C9A227;font-size:14px;font-weight:600">→ Se connecter maintenant</a></div>
+  </div>
+</div>
+
+<script src="/js/config.js"></script>
+<script>
+(function() {
+  var API_BASE = window.SD_API_BASE ||
+    (window.location.hostname === 'localhost'
+      ? 'http://localhost:3001/api/v1'
+      : 'https://securedeal-api.onrender.com/api/v1');
+
+  // Récupérer l'email depuis l'URL ou sessionStorage
+  var params = new URLSearchParams(window.location.search);
+  var email  = params.get('email') || sessionStorage.getItem('sd_pending_email') || '';
+
+  var emailDisplay = document.getElementById('email-display');
+  emailDisplay.textContent = email || 'votre adresse email';
+
+  // ── OTP inputs logic ──────────────────────────────────────
+  var inputs = Array.from(document.querySelectorAll('.otp-inputs input'));
+  var btnVerify = document.getElementById('btn-verify');
+  var errorMsg  = document.getElementById('error-msg');
+
+  function getCode() {
+    return inputs.map(function(i) { return i.value; }).join('');
+  }
+
+  function checkReady() {
+    var code = getCode();
+    btnVerify.disabled = code.length < 6;
+    inputs.forEach(function(i) {
+      i.classList.toggle('filled', i.value !== '');
+      i.classList.remove('error');
+    });
+  }
+
+  inputs.forEach(function(input, idx) {
+    input.addEventListener('input', function(e) {
+      // Garder un seul chiffre
+      var val = this.value.replace(/[^0-9]/g, '').slice(-1);
+      this.value = val;
+      if (val && idx < inputs.length - 1) inputs[idx + 1].focus();
+      checkReady();
+    });
+
+    input.addEventListener('keydown', function(e) {
+      if (e.key === 'Backspace' && !this.value && idx > 0) {
+        inputs[idx - 1].value = '';
+        inputs[idx - 1].focus();
+        checkReady();
+      }
+      if (e.key === 'ArrowLeft'  && idx > 0) inputs[idx - 1].focus();
+      if (e.key === 'ArrowRight' && idx < inputs.length - 1) inputs[idx + 1].focus();
+    });
+
+    // Paste — coller un code complet
+    input.addEventListener('paste', function(e) {
+      e.preventDefault();
+      var pasted = (e.clipboardData || window.clipboardData).getData('text').replace(/\D/g, '').slice(0, 6);
+      pasted.split('').forEach(function(ch, i) {
+        if (inputs[i]) inputs[i].value = ch;
+      });
+      if (inputs[pasted.length - 1]) inputs[Math.min(pasted.length, 5)].focus();
+      checkReady();
+    });
+  });
+
+  // Focus le premier champ au chargement
+  inputs[0].focus();
+
+  // ── Vérification ─────────────────────────────────────────
+  async function verify() {
+    var code = getCode();
+    if (code.length < 6) return;
+    btnVerify.disabled   = true;
+    btnVerify.textContent = '⏳ Vérification…';
+    errorMsg.textContent  = '';
+
+    try {
+      var resp = await fetch(API_BASE + '/auth/verify-email', {
+        method:  'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body:    JSON.stringify({ email, code }),
+      });
+      var data = await resp.json();
+
+      if (resp.ok && data.success) {
+        // Succès
+        document.getElementById('verify-box').style.display  = 'none';
+        document.getElementById('success-box').style.display = 'block';
+        sessionStorage.removeItem('sd_pending_email');
+        setTimeout(function() {
+          window.location.href = '/pages/auth/login.html?verified=1&email=' + encodeURIComponent(email);
+        }, 2500);
+      } else {
+        // Erreur
+        var msg = data.message || 'Code incorrect.';
+        errorMsg.textContent = msg;
+        inputs.forEach(function(i) { i.classList.add('error'); });
+        // Shake + clear si expiré
+        if (data.code === 'OTP_EXPIRED') {
+          setTimeout(function() { inputs.forEach(function(i) { i.value=''; i.classList.remove('error'); }); inputs[0].focus(); checkReady(); }, 600);
+        }
+        btnVerify.disabled   = false;
+        btnVerify.textContent = 'Vérifier mon compte →';
+      }
+    } catch(err) {
+      errorMsg.textContent  = 'Erreur réseau. Réessayez.';
+      btnVerify.disabled    = false;
+      btnVerify.textContent = 'Vérifier mon compte →';
+    }
+  }
+
+  btnVerify.addEventListener('click', verify);
+
+  // Appuyer Entrée = soumettre si code complet
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'Enter' && getCode().length === 6) verify();
+  });
+
+  // ── Timer + renvoi ────────────────────────────────────────
+  var btnResend    = document.getElementById('btn-resend');
+  var timerDisplay = document.getElementById('timer-display');
+  var countdown    = 60;
+
+  function startTimer() {
+    countdown = 60;
+    btnResend.disabled = true;
+    function tick() {
+      timerDisplay.textContent = countdown > 0
+        ? 'Nouveau code possible dans ' + countdown + 's'
+        : '';
+      if (countdown <= 0) { btnResend.disabled = false; return; }
+      countdown--;
+      setTimeout(tick, 1000);
+    }
+    tick();
+  }
+
+  startTimer();
+
+  btnResend.addEventListener('click', async function() {
+    this.disabled   = true;
+    this.textContent = '⏳';
+    errorMsg.textContent = '';
+
+    try {
+      await fetch(API_BASE + '/auth/resend-verification', {
+        method:  'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body:    JSON.stringify({ email }),
+      });
+    } catch(e) {}
+
+    this.textContent = 'Renvoyer';
+    // Clear les inputs
+    inputs.forEach(function(i) { i.value=''; i.classList.remove('error','filled'); });
+    inputs[0].focus(); checkReady();
+    errorMsg.textContent = '✅ Nouveau code envoyé !';
+    setTimeout(function() { if (errorMsg.textContent.includes('✅')) errorMsg.textContent=''; }, 3000);
+    startTimer();
+  });
+
+})();
+</script>
+</body>
+</html>
