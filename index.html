@@ -14,6 +14,15 @@
   <link rel="stylesheet" href="/css/brand.css">
   <link rel="stylesheet" href="/css/backgrounds.css">
   <link rel="stylesheet" href="/css/responsive-fixes.css">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://securedeal.fr/">
+  <meta property="og:title" content="SecureDeal — Commerce international sécurisé par escrow">
+  <meta property="og:description" content="Achetez et vendez en sécurité : véhicules, tracteurs, équipements, téléphones. Paiement bloqué en escrow jusqu'à réception. Transactions de 1 000 € à 10 M€.">
+  <meta property="og:image" content="https://securedeal.fr/images/og-image.jpg">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="SecureDeal — Escrow international">
+  <meta name="twitter:description" content="Paiement sécurisé par escrow pour vos transactions B2B et C2C.">
+  <link rel="canonical" href="https://securedeal.fr/">
 </head>
 <body>
 
@@ -170,7 +179,7 @@
             <span style="font-size:11px;color:rgba(255,255,255,0.40);font-weight:500">Montant sous escrow</span>
             <span style="font-family:'JetBrains Mono',monospace;font-size:18px;font-weight:700;color:#C9A227">€ 14 250</span>
           </div>
-          <div style="font-size:10px;color:rgba(255,255,255,0.25);margin-top:4px">Sécurisé par SecureDeal · Commission 1.2% incluse</div>
+          <div style="font-size:10px;color:rgba(255,255,255,0.25);margin-top:4px">Sécurisé par SecureDeal · Commission 2.6% incluse</div>
         </div>
       </div>
     </div>
@@ -309,12 +318,12 @@
       <div class="escrow-content reveal">
         <div class="section-label">Transparence totale</div>
         <h2 class="text-h2 mb-4">Calculez votre transaction en toute clarté</h2>
-        <p>SecureDeal pratique une commission transparente de 1,2% du montant total. Aucun frais caché, aucune surprise.</p>
+        <p>Frais dégressifs selon le montant. Dès 2,6% pour les petites transactions, jusqu'à 0,38% pour les grandes. Aucun frais caché.</p>
 
         <div class="escrow-list">
           <div class="escrow-list-item"><span class="escrow-check">✓</span> Fonds bloqués jusqu'à confirmation de livraison</div>
           <div class="escrow-list-item"><span class="escrow-check">✓</span> Acompte modulable entre 30% et 70%</div>
-          <div class="escrow-list-item"><span class="escrow-check">✓</span> Commission de 1,2% — la plus basse du marché</div>
+          <div class="escrow-list-item"><span class="escrow-check">✓</span> Frais dégressifs dès 2,6% — parmi les plus bas du marché</div>
           <div class="escrow-list-item"><span class="escrow-check">✓</span> Libération des fonds en moins de 24h après confirmation</div>
         </div>
 
@@ -348,7 +357,7 @@
           <div class="calc-row"><span>Prix total</span><span class="calc-row-value" id="r-total">—</span></div>
           <div class="calc-row"><span>Acompte</span><span class="calc-row-value" id="r-acompte">—</span></div>
           <div class="calc-row"><span>Solde à la livraison</span><span class="calc-row-value" id="r-reste">—</span></div>
-          <div class="calc-row"><span>Commission SecureDeal (1.2%)</span><span class="calc-row-value" id="r-commission">—</span></div>
+          <div class="calc-row"><span>Frais escrow <span id="r-fee-label-home" style="font-size:11px;opacity:0.7"></span></span><span class="calc-row-value" id="r-commission">—</span></div>
           <div class="calc-row calc-row--total"><span>Net pour le vendeur</span><span class="calc-row-value" id="r-net">—</span></div>
         </div>
       </div>
@@ -461,6 +470,7 @@
 <script src="/js/config.js"></script>
 <script src="/js/api.js"></script>
 <script src="/js/utils.js"></script>
+<script src="/js/tracking.js"></script>
 <script src="/js/icons.js"></script>
 <script>
 'use strict';
@@ -483,7 +493,7 @@
     const open = menu.classList.toggle('open');
     burger.classList.toggle('open', open);
     burger.setAttribute('aria-expanded', open);
-    document.body.style.overflow = open ? 'hidden' : '';
+    document.body.classList.toggle('menu-open', open);
   });
 
   menu.querySelectorAll('a').forEach(a => {
@@ -491,7 +501,7 @@
       menu.classList.remove('open');
       burger.classList.remove('open');
       burger.setAttribute('aria-expanded', 'false');
-      document.body.style.overflow = '';
+      document.body.classList.remove('menu-open');
     });
   });
 })();
@@ -585,9 +595,9 @@ window.idxCalc = function() {
     document.getElementById('r-total').textContent = '> 10 000 000 € — Sur devis';
     return;
   }
-  var feeLabel = 'Frais escrow (' + result.fmt.rate + ')';
+  var feeLabel = result.fmt.rate;
   if (result.minimumApplied) feeLabel += ' ⚠ min.';
-  document.getElementById('r-fee-label').textContent    = feeLabel;
+  var fl = document.getElementById('r-fee-label-home'); if(fl) fl.textContent = '(' + feeLabel + ')';
   document.getElementById('r-total').textContent        = result.fmt.amount;
   document.getElementById('r-commission').textContent   = result.fmt.baseFee;
   document.getElementById('r-acompte').textContent      = result.fmt.deposit;
